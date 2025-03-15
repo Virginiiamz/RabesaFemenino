@@ -18,6 +18,55 @@ const models = initModels(sequelize);
 const Usuario = models.usuario;
 
 class UsuarioController {
+  async login(req, res) {
+    const { correo, contrasena } = req.body;
+
+    try {
+      const user = await Usuario.findOne({ where: { correo } });
+      if (!user) {
+        return res
+          .status(401)
+          .json(Respuesta.error(null, "Usuario no encontrado"));
+      }
+
+      // Verificar la contraseña
+      const validPassword = await bcrypt.compare(contrasena, user.contrasena);
+      if (!validPassword) {
+        return res
+          .status(401)
+          .json(Respuesta.error(null, "Contraseña incorrecta"));
+      }
+
+      // Generar el token JWT
+      const token = jwt.sign(
+        {
+          sub: user.idusuario,
+          correo: user.correo,
+          rol: user.rol,
+        },
+        config.secretKey,
+        { expiresIn: "1h" }
+      );
+
+      // Configurar la cookie con el token
+      res.cookie("token", token, {
+        httpOnly: true, // Evita que JavaScript acceda a la cookie
+        secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
+        sameSite: process.env.NODE_ENV === "production" ? "strict" : "Lax", // Protección CSRF // Lax en desarrollo
+        maxAge: 3600000, // 1 hora en milisegundos
+        // domain: "localhost",
+      });
+
+      //Eliminar la contraseña del objeto de respuesta
+      delete user.dataValues.contrasena;
+
+      res.status(200).json(Respuesta.exito(user, "Inicio de sesión exitoso"));
+    } catch (err) {
+      console.error(err);
+      res.status(500).json(Respuesta.error(null, "Error interno del servidor"));
+    }
+  }
+  
   async createUsuario(req, res) {
     const { correo, contrasena, rol } = req.body;
 
