@@ -13,10 +13,9 @@ const path = require("path");
 const cors = require("cors");
 // Importar librería de manejo de cookies
 const cookieParser = require("cookie-parser");
+
 // Importar gestores de rutas
-// const platoRoutes = require("./routes/platoRoutes");
-// const pedidoRoutes = require("./routes/pedidoRoutes");
-// const userRoutes = require("./routes/userRoutes");
+const entrenadorRoutes = require("./routes/entrenadorRoutes");
 
 const app = express();
 
@@ -42,7 +41,7 @@ app.use(cookieParser());
 // Configurar rutas de la API Rest
 // app.use("/api/platos", platoRoutes);
 // app.use("/api/pedidos", pedidoRoutes);
-// app.use("/api/users", userRoutes);
+app.use("/api/entrenadores", entrenadorRoutes);
 
 //Ruta para manejar las solicitudes al archivo index.html
 
