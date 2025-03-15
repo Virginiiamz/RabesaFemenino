@@ -13,12 +13,12 @@ module.exports = function(sequelize, DataTypes) {
       unique: "correo"
     },
     contrasena: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(500),
       allowNull: false
     },
     rol: {
       type: DataTypes.STRING(20),
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,
