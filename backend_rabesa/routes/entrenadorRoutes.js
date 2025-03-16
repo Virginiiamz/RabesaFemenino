@@ -7,7 +7,7 @@ router.get('/', entrenadorController.getAllEntrenadores);
 // router.get('/:idplato', platoController.getPlatoById);
 router.post('/', entrenadorController.createEntrenador);
 router.delete('/:identrenador', entrenadorController.deleteEntrenador);
-// router.put('/:idplato', platoController.updatePlato);
+router.put('/:identrenador', entrenadorController.updateEntrenador);
 
 
 module.exports = router;

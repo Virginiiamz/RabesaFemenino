@@ -133,6 +133,56 @@ class EntrenadorController {
         );
     }
   }
+
+  async updateEntrenador(req, res) {
+    const datos = req.body; // Recuperamos datos para actualizar
+    const identrenador = req.params.identrenador; // dato de la ruta
+
+    if (identrenador != datos.identrenador) {
+      return res
+        .status(400)
+        .json(Respuesta.error(null, "El id del entrenador no coincide"));
+    }
+
+    try {
+      const numFilas = await Entrenador.update(
+        { ...datos },
+        { where: { identrenador } }
+      );
+
+      const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
+
+      await Usuario.update(
+        { correo: datos.correo, contrasena: hashedPassword },
+        { where: { idusuario: datos.idusuario } }
+      );
+
+      if (numFilas == 0) {
+        // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
+        res
+          .status(404)
+          .json(
+            Respuesta.error(
+              null,
+              "No encontrado o no modificado: " + identrenador
+            )
+          );
+      } else {
+        // Al dar status 204 no se devuelva nada
+        res.status(204).send();
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al actualizar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 }
 
 module.exports = new EntrenadorController();
