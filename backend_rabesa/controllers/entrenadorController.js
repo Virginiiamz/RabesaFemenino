@@ -35,6 +35,41 @@ class EntrenadorController {
     }
   }
 
+  async getEntrenadorById(req, res) {
+    const identrenador = req.params.identrenador;
+    try {
+      const entrenador = await Entrenador.findByPk(identrenador);
+
+      const usuario = await Usuario.findByPk(entrenador.idusuario);
+
+      const resultado = {
+        idusuario: entrenador.idusuario,
+        nombre: entrenador.nombre,
+        edad: entrenador.edad,
+        rol: entrenador.rol,
+        fecha_ingreso: entrenador.fecha_ingreso,
+        idclub: entrenador.idclub,
+        correo: usuario.correo,
+      }
+
+      if (resultado) {
+        res.json(Respuesta.exito(resultado, "Entrenador recuperado"));
+      } else {
+        res.status(404).json(Respuesta.error(null, "Entrenador no encontrado"));
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
   async createEntrenador(req, res) {
     const { correo, contrasena, nombre, edad, rol, fecha_ingreso, idclub } =
       req.body;
