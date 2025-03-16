@@ -18,6 +18,23 @@ const Entrenador = models.entrenadores;
 const Usuario = models.usuario;
 
 class EntrenadorController {
+  async getAllEntrenadores(req, res) {
+    try {
+      const data = await Entrenador.findAll();
+      res.json(Respuesta.exito(data, "Datos de entrenadores recuperados"));
+    } catch (err) {
+      // Handle errors during the model call
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos de los entrenadores: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
   async createEntrenador(req, res) {
     const { correo, contrasena, nombre, edad, rol, fecha_ingreso, idclub } =
       req.body;
