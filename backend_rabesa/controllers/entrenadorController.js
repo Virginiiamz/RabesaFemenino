@@ -52,7 +52,7 @@ class EntrenadorController {
       const idusuario = newUser.dataValues.idusuario;
 
       console.log("idUsuario: " + idusuario);
-      
+
       const entrenador = {
         nombre,
         edad,
@@ -63,7 +63,6 @@ class EntrenadorController {
       };
 
       console.log("entrenador", entrenador);
-      
 
       const nuevoEntrenador = await Entrenador.create(entrenador);
 
@@ -75,6 +74,46 @@ class EntrenadorController {
       res
         .status(500)
         .json(Respuesta.error(null, `Error al crear un entrenador nuevo`));
+    }
+  }
+
+  async deleteEntrenador(req, res) {
+    const identrenador = req.params.identrenador;
+
+    try {
+      const entrenador = await Entrenador.findByPk(identrenador);
+
+      if (entrenador) {
+        const numFilas = await Entrenador.destroy({
+          where: {
+            identrenador: identrenador,
+          },
+        });
+
+        await Usuario.destroy({
+          where: {
+            idusuario: entrenador.idusuario,
+          },
+        });
+        if (numFilas == 0) {
+          // No se ha encontrado lo que se quería borrar
+          res
+            .status(404)
+            .json(Respuesta.error(null, "No encontrado: " + identrenador));
+        } else {
+          res.status(204).send();
+        }
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al eliminar los datos: ${req.originalUrl}`
+          )
+        );
     }
   }
 }

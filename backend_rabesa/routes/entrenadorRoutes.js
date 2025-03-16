@@ -6,7 +6,7 @@ const entrenadorController = require('../controllers/entrenadorController');
 // router.get('/', platoController.getAllPlato);
 // router.get('/:idplato', platoController.getPlatoById);
 router.post('/', entrenadorController.createEntrenador);
-// router.delete('/:idplato', platoController.deletePlato);
+router.delete('/:identrenador', entrenadorController.deleteEntrenador);
 // router.put('/:idplato', platoController.updatePlato);
 
 
