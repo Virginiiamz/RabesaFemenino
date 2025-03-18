@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import Prueba from "./components/Prueba";
 // import PaginaError from "./pages/PaginaError";
 
 let router = createBrowserRouter([
@@ -16,13 +17,14 @@ let router = createBrowserRouter([
   {
     path: "/home", // Ruta independiente para la página de inicio
     element: <Home />,
+    children: [
+    {
+      path: "prueba",
+      element: <Prueba />
+    },
+  ],
   },
-  // children: [
-  //   {
-  //     path: "home",
-  //     element: <Home />
-  //   },
-  // ],
+  
 ]);
 
 createRoot(document.getElementById("root")).render(
