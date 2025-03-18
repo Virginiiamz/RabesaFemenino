@@ -3,12 +3,14 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
+import Login from "./components/Login";
+// import PaginaError from "./pages/PaginaError";
 
 let router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-    errorElement: <PaginaError />,
+    element: <Login />,
+    // errorElement: <PaginaError />,
     children: [
       {
         // path: "shows/:showId",

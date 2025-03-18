@@ -28,7 +28,7 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      'react/prop-types': 'off', // Desactiva la validación de PropTypes
+      // 'react/prop-types': 'off', // Desactiva la validación de PropTypes
     },
   },
 ]

@@ -1,4 +1,4 @@
-import Menu from "../components/Menu";
+import Menu from "./components/Menu";
 import { Box, Button, Typography } from "@mui/material";
 
 /**
