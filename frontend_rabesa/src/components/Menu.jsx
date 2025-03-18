@@ -47,7 +47,7 @@ function Menu(props) {
       <h7>Rabesa Femenino</h7>
       <Divider></Divider>
       <MenuItem>
-        <Link to="prueba">
+        <Link to="dashboard">
           <ListItemIcon>
             <SpaceDashboardIcon sx={{ color: "#00338e" }}></SpaceDashboardIcon>
             <Typography style={{ marginLeft: "0.5rem", color: "#00338e", fontWeight: "600" }}>Dashboard</Typography>
