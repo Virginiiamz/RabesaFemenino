@@ -1,20 +1,23 @@
 import { Outlet } from "react-router";
-
-/**
- * Componente de la página principal.
- * Muestra el menú y el contenido de las rutas hijas.
- * @returns {JSX.Element} - Componente de la página principal.
- */
-
 import Menu from "./Menu";
+import { Box } from "@mui/material";
 
 function Home() {
-
   return (
-    <>
-      <Menu />
-      <Outlet />
-    </>
+    <Box sx={{ display: "flex" }}>
+      <Menu /> {/* Menú lateral */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: "100%", // Ocupa todo el ancho
+          marginLeft: 0, // Elimina el margen izquierdo
+        }}
+      >
+        <Outlet /> {/* Contenido principal */}
+      </Box>
+    </Box>
   );
 }
 

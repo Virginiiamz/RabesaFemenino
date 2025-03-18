@@ -32,7 +32,7 @@ function Login() {
         
         alert(data.mensaje);
         setUser(data.datos);
-        navigate("home"); // Redirige tras el login exitoso
+        navigate("/home/dashboard"); // Redirige tras el login exitoso
       } else {
         alert(data.mensaje);
         // setErrors({ apiError: data.mensaje || "Credenciales incorrectas." });
