@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+// import { Outlet } from "react-router";
 // import Menu from "../components/Menu";
 
 /**
@@ -9,8 +9,9 @@ import { Outlet } from "react-router";
 function Home() {
   return (
     <>
+      <h1>Bienvenido</h1>
       {/* <Menu /> */}
-      <Outlet />
+      {/* <Outlet /> */}
     </>
   );
 }
