@@ -2,6 +2,7 @@ import { Box, Button, TextField } from "@mui/material";
 import { apiUrl } from "../config";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import useUserStore from "../stores/useUserStore";
 
 function Login() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ function Login() {
     contrasena: "",
   });
   const [errors, setErrors] = useState({});
+  const { setUser } = useUserStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,8 +29,9 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
+        
         alert(data.mensaje);
-        // setUser(data.datos); // Se guarda en el userStore los datos del usuario logueado
+        setUser(data.datos);
         navigate("home"); // Redirige tras el login exitoso
       } else {
         alert(data.mensaje);

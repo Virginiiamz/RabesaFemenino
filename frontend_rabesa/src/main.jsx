@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import Login from "./components/Login";
-import Home from "./pages/Home";
+import Home from "./components/Home";
 // import PaginaError from "./pages/PaginaError";
 
 let router = createBrowserRouter([
