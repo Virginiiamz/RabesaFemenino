@@ -6,7 +6,7 @@ const jugadoraController = require('../controllers/jugadoraController');
 router.get('/', jugadoraController.getAllJugadoras);
 // router.get('/:identrenador', jugadoraController.getEntrenadorById);
 router.post('/', jugadoraController.createJugadora);
-// router.delete('/:identrenador', jugadoraController.deleteEntrenador);
+router.delete('/:idjugadora', jugadoraController.deleteJugadora);
 // router.put('/:identrenador', jugadoraController.updateEntrenador);
 
 

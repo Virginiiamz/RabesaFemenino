@@ -141,45 +141,45 @@ class JugadoraController {
     }
   }
 
-  // async deleteEntrenador(req, res) {
-  //   const identrenador = req.params.identrenador;
+  async deleteJugadora(req, res) {
+    const idjugadora = req.params.idjugadora;
 
-  //   try {
-  //     const entrenador = await Entrenador.findByPk(identrenador);
+    try {
+      const jugadora = await Jugadora.findByPk(idjugadora);
 
-  //     if (entrenador) {
-  //       const numFilas = await Entrenador.destroy({
-  //         where: {
-  //           identrenador: identrenador,
-  //         },
-  //       });
+      if (jugadora) {
+        const numFilas = await Jugadora.destroy({
+          where: {
+            idjugadora: idjugadora,
+          },
+        });
 
-  //       await Usuario.destroy({
-  //         where: {
-  //           idusuario: entrenador.idusuario,
-  //         },
-  //       });
-  //       if (numFilas == 0) {
-  //         // No se ha encontrado lo que se quería borrar
-  //         res
-  //           .status(404)
-  //           .json(Respuesta.error(null, "No encontrado: " + identrenador));
-  //       } else {
-  //         res.status(204).send();
-  //       }
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al eliminar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+        await Usuario.destroy({
+          where: {
+            idusuario: jugadora.idusuario,
+          },
+        });
+        if (numFilas == 0) {
+          // No se ha encontrado lo que se quería borrar
+          res
+            .status(404)
+            .json(Respuesta.error(null, "No encontrado: " + idjugadora));
+        } else {
+          res.status(204).send();
+        }
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al eliminar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   // async updateEntrenador(req, res) {
   //   const datos = req.body; // Recuperamos datos para actualizar
