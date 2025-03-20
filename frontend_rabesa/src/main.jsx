@@ -6,6 +6,7 @@ import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Dashboard from "./components/Dashboard";
+import Team from "./components/Team";
 // import PaginaError from "./pages/PaginaError";
 
 let router = createBrowserRouter([
@@ -21,6 +22,10 @@ let router = createBrowserRouter([
     {
       path: "dashboard",
       element: <Dashboard />
+    },
+    {
+      path: "team",
+      element: <Team />
     },
   ],
   },

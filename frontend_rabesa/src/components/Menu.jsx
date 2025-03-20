@@ -73,7 +73,7 @@ function Menu(props) {
         </Link>
       </MenuItem>
       <MenuItem>
-        <Link to="/">
+        <Link to="team">
           <ListItemIcon>
             <ShieldIcon sx={{ color: "#00338e" }}></ShieldIcon>
             <Typography style={{ marginLeft: "0.5rem", color: "#00338e", fontWeight: "600" }}>Equipo</Typography>
