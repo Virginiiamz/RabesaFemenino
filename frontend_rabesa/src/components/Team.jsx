@@ -13,7 +13,8 @@ import { Link, useNavigate } from "react-router";
 import { apiUrl } from "../config";
 
 function Team() {
-  const [datos, setDatos] = useState([]);
+  const [datosEntrenadores, setDatosEntrenadores] = useState([]);
+  const [datosJugadoras, setDatosJugadoras] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,24 +29,40 @@ function Team() {
 
       if (response.ok) {
         let data = await response.json();
-        setDatos(data.datos);
+        setDatosEntrenadores(data.datos);
+      }
+    }
+
+    async function getJugadoras() {
+      let response = await fetch(apiUrl + "/jugadoras", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+      });
+
+      if (response.ok) {
+        let data = await response.json();
+        setDatosJugadoras(data.datos);
       }
     }
 
     getEntrenadores();
+    getJugadoras();
   }, []); // Se ejecuta solo en el primer renderizado
 
-  const handleDelete = async (identrenador) => {
+  const handleDeleteEntrenadores = async (identrenador) => {
     let response = await fetch(apiUrl + "/entrenadores/" + identrenador, {
       method: "DELETE",
     });
 
     if (response.ok) {
-      const entrenadoresTrasBorrado = datos.filter(
+      const entrenadoresTrasBorrado = datosEntrenadores.filter(
         (entrenador) => entrenador.identrenador != identrenador
       );
       // Establece los datos de nuevo para provocar un renderizado
-      setDatos(entrenadoresTrasBorrado);
+      setDatosEntrenadores(entrenadoresTrasBorrado);
     }
   };
 
@@ -72,7 +89,7 @@ function Team() {
             gap: 2,
           }}
         >
-          {datos.map((entrenador) => (
+          {datosEntrenadores.map((entrenador) => (
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
@@ -91,13 +108,68 @@ function Team() {
               <CardActions>
                 <Button
                   size="small"
-                  onClick={() => navigate("/home/modificar-entrenador/" + entrenador.identrenador)}
+                  onClick={() =>
+                    navigate(
+                      "/home/modificar-entrenador/" + entrenador.identrenador
+                    )
+                  }
                 >
                   Editar
                 </Button>
                 <Button
                   size="small"
-                  onClick={() => handleDelete(entrenador.identrenador)}
+                  onClick={() =>
+                    handleDeleteEntrenadores(entrenador.identrenador)
+                  }
+                >
+                  Eliminar
+                </Button>
+              </CardActions>
+            </Card>
+          ))}
+        </Box>
+        <Typography sx={{ marginBottom: 2 }}>Jugadoras</Typography>
+        <Box
+          sx={{
+            width: "100%",
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fill, minmax(min(300px, 100%), 1fr))",
+            gap: 2,
+          }}
+        >
+          {datosJugadoras.map((jugadora) => (
+            <Card sx={{ maxWidth: 345 }}>
+              <CardMedia
+                component="img"
+                alt={jugadora.nombre}
+                height="140"
+                image={jugadora.imagen}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {jugadora.nombre}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {jugadora.posicion}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size="small"
+                  onClick={() =>
+                    navigate(
+                      "/home/modificar-entrenador/" + jugadora.idjugadora
+                    )
+                  }
+                >
+                  Editar
+                </Button>
+                <Button
+                  size="small"
+                  onClick={() =>
+                    handleDeleteEntrenadores(jugadora.idjugadora)
+                  }
                 >
                   Eliminar
                 </Button>
