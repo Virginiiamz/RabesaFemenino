@@ -8,7 +8,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 const useUserStore = create(
   persist(
     (set, get) => ({
-      user: { role: "None" }, // Estado inicial sin usuario
+      user: { rol: "None" }, // Estado inicial sin usuario
 
       /**
        * Establece los datos del usuario.
@@ -19,7 +19,7 @@ const useUserStore = create(
       /**
        * Limpia los datos del usuario, estableciendo el rol a "None".
        */
-      clearUser: () => set({ user: { role: "None" } }),
+      clearUser: () => set({ user: { rol: "None" } }),
 
       // Métodos de validación
 
@@ -27,19 +27,19 @@ const useUserStore = create(
        * Verifica si el usuario ha iniciado sesión.
        * @returns {boolean} - Verdadero si el usuario ha iniciado sesión, falso en caso contrario.
        */
-      isLoggedIn: () => get().user?.role && get().user.role !== "None",
+      isLoggedIn: () => get().user?.rol && get().user.rol !== "None",
 
       /**
        * Verifica si el usuario tiene rol de administrador.
        * @returns {boolean} - Verdadero si el usuario es administrador, falso en caso contrario.
        */
-      isAdmin: () => get().user?.role === "Entrenador",
+      isAdmin: () => get().user?.rol === "Entrenador",
 
       /**
        * Verifica si el usuario tiene rol de usuario.
        * @returns {boolean} - Verdadero si el usuario es usuario, falso en caso contrario.
        */
-      isUser: () => get().user?.role === "Jugadora",
+      isUser: () => get().user?.rol === "Jugadora",
     }),
     {
       name: "user-storage", // Clave en sessionStorage
