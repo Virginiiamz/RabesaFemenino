@@ -79,6 +79,9 @@ function Team() {
         <Link to="/home/crear-entrenador">
           <Button variant="contained">Crear entrenador</Button>
         </Link>
+        <Link to="/home/crear-jugadora">
+          <Button variant="contained">Crear jugadora</Button>
+        </Link>
         <Typography sx={{ marginBottom: 2 }}>Entrenadores</Typography>
         <Box
           sx={{
