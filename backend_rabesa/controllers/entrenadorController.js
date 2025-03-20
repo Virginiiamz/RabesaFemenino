@@ -71,8 +71,16 @@ class EntrenadorController {
   }
 
   async createEntrenador(req, res) {
-    const { correo, contrasena, nombre, edad, rol, fecha_ingreso, imagen, idclub } =
-      req.body;
+    const {
+      correo,
+      contrasena,
+      nombre,
+      edad,
+      rol,
+      fecha_ingreso,
+      imagen,
+      idclub,
+    } = req.body;
     // const entrenador = req.body;
 
     try {
@@ -173,12 +181,14 @@ class EntrenadorController {
   async updateEntrenador(req, res) {
     const datos = req.body; // Recuperamos datos para actualizar
     const identrenador = req.params.identrenador; // dato de la ruta
+    console.log("Identrenador: " + identrenador);
+    console.log("Datos: " + datos);
 
-    if (identrenador != datos.identrenador) {
-      return res
-        .status(400)
-        .json(Respuesta.error(null, "El id del entrenador no coincide"));
-    }
+    // if (identrenador != datos) {
+    //   return res
+    //     .status(400)
+    //     .json(Respuesta.error(null, "El id del entrenador no coincide"));
+    // }
 
     try {
       const numFilas = await Entrenador.update(
@@ -186,14 +196,16 @@ class EntrenadorController {
         { where: { identrenador } }
       );
 
-      const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
+      // const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
 
-      await Usuario.update(
-        { correo: datos.correo, contrasena: hashedPassword },
-        { where: { idusuario: datos.idusuario } }
-      );
+      // await Usuario.update(
+      //   { correo: datos.correo, contrasena: hashedPassword },
+      //   { where: { idusuario: datos.idusuario } }
+      // );
 
       if (numFilas == 0) {
+        console.log("404");
+        
         // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
         res
           .status(404)
@@ -205,8 +217,11 @@ class EntrenadorController {
           );
       } else {
         // Al dar status 204 no se devuelva nada
+        console.log("204");
+        
         res.status(204).send();
       }
+      
     } catch (err) {
       logMensaje("Error :" + err);
       res

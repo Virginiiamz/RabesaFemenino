@@ -76,7 +76,7 @@ function Team() {
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
-                alt="green iguana"
+                alt={entrenador.nombre}
                 height="140"
                 image={entrenador.imagen}
               />
@@ -89,7 +89,12 @@ function Team() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">Editar</Button>
+                <Button
+                  size="small"
+                  onClick={() => navigate("/home/modificar-entrenador/" + entrenador.identrenador)}
+                >
+                  Editar
+                </Button>
                 <Button
                   size="small"
                   onClick={() => handleDelete(entrenador.identrenador)}

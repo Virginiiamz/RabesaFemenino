@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Dashboard from "./components/Dashboard";
 import Team from "./components/Team";
 import CreateTrainer from "./components/CreateTrainer";
+import ModifyTrainer from "./components/ModifyTrainer";
 // import PaginaError from "./pages/PaginaError";
 
 let router = createBrowserRouter([
@@ -31,6 +32,10 @@ let router = createBrowserRouter([
     {
       path: "/home/crear-entrenador",
       element: <CreateTrainer />
+    },
+    {
+      path: "/home/modificar-entrenador/:identrenador",
+      element: <ModifyTrainer />
     },
   ],
   },
