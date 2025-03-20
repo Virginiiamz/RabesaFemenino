@@ -7,6 +7,7 @@ import Login from "./components/Login";
 import Home from "./components/Home";
 import Dashboard from "./components/Dashboard";
 import Team from "./components/Team";
+import CreateTrainer from "./components/CreateTrainer";
 // import PaginaError from "./pages/PaginaError";
 
 let router = createBrowserRouter([
@@ -26,6 +27,10 @@ let router = createBrowserRouter([
     {
       path: "team",
       element: <Team />
+    },
+    {
+      path: "/home/crear-entrenador",
+      element: <CreateTrainer />
     },
   ],
   },

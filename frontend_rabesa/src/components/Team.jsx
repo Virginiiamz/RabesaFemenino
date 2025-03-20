@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { apiUrl } from "../config";
 
 function Team() {
@@ -59,6 +59,9 @@ function Team() {
         }}
       >
         <Toolbar />
+        <Link to="/home/crear-entrenador">
+          <Button variant="contained">Crear entrenador</Button>
+        </Link>
         <Typography sx={{ marginBottom: 2 }}>Entrenadores</Typography>
         <Box
           sx={{
@@ -79,15 +82,20 @@ function Team() {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                    {entrenador.nombre}
+                  {entrenador.nombre}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {entrenador.rol}
+                  {entrenador.rol}
                 </Typography>
               </CardContent>
               <CardActions>
                 <Button size="small">Editar</Button>
-                <Button size="small" onClick={() => handleDelete(entrenador.identrenador)}>Eliminar</Button>
+                <Button
+                  size="small"
+                  onClick={() => handleDelete(entrenador.identrenador)}
+                >
+                  Eliminar
+                </Button>
               </CardActions>
             </Card>
           ))}
