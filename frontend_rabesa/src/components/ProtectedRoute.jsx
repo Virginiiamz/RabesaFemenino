@@ -35,6 +35,7 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
     return <Navigate to="/unauthorized" replace />;
   }
 
+  <Outlet></Outlet>
   return element;
 };
 
