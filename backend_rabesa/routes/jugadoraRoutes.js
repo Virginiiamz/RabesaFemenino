@@ -7,7 +7,7 @@ router.get('/', jugadoraController.getAllJugadoras);
 router.get('/:idjugadora', jugadoraController.getJugadoraById);
 router.post('/', jugadoraController.createJugadora);
 router.delete('/:idjugadora', jugadoraController.deleteJugadora);
-// router.put('/:identrenador', jugadoraController.updateEntrenador);
+router.put('/:idjugadora', jugadoraController.updateJugadora);
 
 
 module.exports = router;

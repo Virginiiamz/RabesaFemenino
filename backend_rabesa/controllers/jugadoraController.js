@@ -184,55 +184,47 @@ class JugadoraController {
     }
   }
 
-  // async updateEntrenador(req, res) {
-  //   const datos = req.body; // Recuperamos datos para actualizar
-  //   const identrenador = req.params.identrenador; // dato de la ruta
-  //   console.log("Identrenador: " + identrenador);
-  //   console.log("Datos: " + datos);
+  async updateJugadora(req, res) {
+    const datos = req.body; // Recuperamos datos para actualizar
+    const idjugadora = req.params.idjugadora; // dato de la ruta
+    console.log("IdJugadora: " + idjugadora);
 
-  //   try {
-  //     const numFilas = await Entrenador.update(
-  //       { ...datos },
-  //       { where: { identrenador } }
-  //     );
+    try {
+      const numFilas = await Jugadora.update(
+        { ...datos },
+        { where: { idjugadora } }
+      );
 
-  //     // const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
+      if (numFilas == 0) {
+        console.log("404");
 
-  //     // await Usuario.update(
-  //     //   { correo: datos.correo, contrasena: hashedPassword },
-  //     //   { where: { idusuario: datos.idusuario } }
-  //     // );
+        // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
+        res
+          .status(404)
+          .json(
+            Respuesta.error(
+              null,
+              "No encontrado o no modificado: " + idjugadora
+            )
+          );
+      } else {
+        // Al dar status 204 no se devuelva nada
+        console.log("204");
 
-  //     if (numFilas == 0) {
-  //       console.log("404");
-
-  //       // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
-  //       res
-  //         .status(404)
-  //         .json(
-  //           Respuesta.error(
-  //             null,
-  //             "No encontrado o no modificado: " + identrenador
-  //           )
-  //         );
-  //     } else {
-  //       // Al dar status 204 no se devuelva nada
-  //       console.log("204");
-
-  //       res.status(204).send();
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al actualizar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+        res.status(204).send();
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al actualizar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 }
 
 module.exports = new JugadoraController();
