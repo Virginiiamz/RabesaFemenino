@@ -32,6 +32,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(50),
       allowNull: false
     },
+    imagen: {
+      type: DataTypes.STRING(4000),
+      allowNull: true
+    },
     idclub: {
       type: DataTypes.INTEGER,
       allowNull: false,

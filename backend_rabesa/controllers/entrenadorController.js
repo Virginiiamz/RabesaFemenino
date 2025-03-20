@@ -184,12 +184,6 @@ class EntrenadorController {
     console.log("Identrenador: " + identrenador);
     console.log("Datos: " + datos);
 
-    // if (identrenador != datos) {
-    //   return res
-    //     .status(400)
-    //     .json(Respuesta.error(null, "El id del entrenador no coincide"));
-    // }
-
     try {
       const numFilas = await Entrenador.update(
         { ...datos },

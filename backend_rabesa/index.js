@@ -16,6 +16,7 @@ const cookieParser = require("cookie-parser");
 
 // Importar gestores de rutas
 const entrenadorRoutes = require("./routes/entrenadorRoutes");
+const jugadoraRoutes = require("./routes/jugadoraRoutes");
 const usuarioRoutes = require("./routes/usuarioRoutes");
 
 const app = express();
@@ -44,6 +45,7 @@ app.use(cookieParser());
 // app.use("/api/pedidos", pedidoRoutes);
 app.use("/api/entrenadores", entrenadorRoutes);
 app.use("/api/usuario", usuarioRoutes);
+app.use("/api/jugadoras", jugadoraRoutes);
 
 //Ruta para manejar las solicitudes al archivo index.html
 
