@@ -35,40 +35,43 @@ class JugadoraController {
     }
   }
 
-  // async getEntrenadorById(req, res) {
-  //   const identrenador = req.params.identrenador;
-  //   try {
-  //     const entrenador = await Entrenador.findByPk(identrenador);
+  async getJugadoraById(req, res) {
+    const idjugadora = req.params.idjugadora;
+    try {
+      const jugadora = await Jugadora.findByPk(idjugadora);
 
-  //     const usuario = await Usuario.findByPk(entrenador.idusuario);
+      const usuario = await Usuario.findByPk(jugadora.idusuario);
 
-  //     const resultado = {
-  //       idusuario: entrenador.idusuario,
-  //       nombre: entrenador.nombre,
-  //       edad: entrenador.edad,
-  //       rol: entrenador.rol,
-  //       fecha_ingreso: entrenador.fecha_ingreso,
-  //       idclub: entrenador.idclub,
-  //       correo: usuario.correo,
-  //     };
+      const resultado = {
+        idusuario: jugadora.idusuario,
+        nombre: jugadora.nombre,
+        edad: jugadora.edad,
+        posicion: jugadora.posicion,
+        numero_camiseta: jugadora.numero_camiseta,
+        fecha_ingreso: jugadora.fecha_ingreso,
+        estado: jugadora.estado,
+        imagen: jugadora.imagen,
+        idclub: jugadora.idclub,
+        correo: usuario.correo,
+      };
 
-  //     if (resultado) {
-  //       res.json(Respuesta.exito(resultado, "Entrenador recuperado"));
-  //     } else {
-  //       res.status(404).json(Respuesta.error(null, "Entrenador no encontrado"));
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+      if (resultado) {
+        res.json(Respuesta.exito(resultado, "Jugadora recuperada"));
+      } else {
+        res.status(404).json(Respuesta.error(null, "Jugadora no encontrada"));
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   async createJugadora(req, res) {
     const {
