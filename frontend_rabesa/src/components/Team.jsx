@@ -66,6 +66,20 @@ function Team() {
     }
   };
 
+  const handleDeleteJugadoras = async (idjugadora) => {
+    let response = await fetch(apiUrl + "/jugadoras/" + idjugadora, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      const jugadorasTrasBorrado = datosJugadoras.filter(
+        (jugadora) => jugadora.idjugadora != idjugadora
+      );
+      // Establece los datos de nuevo para provocar un renderizado
+      setDatosJugadoras(jugadorasTrasBorrado);
+    }
+  };
+
   return (
     <>
       <Box
@@ -162,7 +176,7 @@ function Team() {
                   size="small"
                   onClick={() =>
                     navigate(
-                      "/home/modificar-entrenador/" + jugadora.idjugadora
+                      "/home/modificar-jugadora/" + jugadora.idjugadora
                     )
                   }
                 >
@@ -171,7 +185,7 @@ function Team() {
                 <Button
                   size="small"
                   onClick={() =>
-                    handleDeleteEntrenadores(jugadora.idjugadora)
+                    handleDeleteJugadoras(jugadora.idjugadora)
                   }
                 >
                   Eliminar

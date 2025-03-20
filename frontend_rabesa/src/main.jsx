@@ -10,6 +10,7 @@ import Team from "./components/Team";
 import CreateTrainer from "./components/CreateTrainer";
 import ModifyTrainer from "./components/ModifyTrainer";
 import CreatePlayer from "./components/CreatePlayer";
+import ModifyPlayer from "./components/ModifyPlayer";
 // import PaginaError from "./pages/PaginaError";
 
 let router = createBrowserRouter([
@@ -41,6 +42,10 @@ let router = createBrowserRouter([
     {
       path: "/home/crear-jugadora",
       element: <CreatePlayer />
+    },
+    {
+      path: "/home/modificar-jugadora/:idjugadora",
+      element: <ModifyPlayer />
     },
   ],
   },
