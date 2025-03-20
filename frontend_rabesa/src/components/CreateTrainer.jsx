@@ -11,6 +11,7 @@ function CreateTrainer() {
     nombre: "",
     edad: 0,
     rol: "",
+    imagen: "",
     fecha_ingreso: new Date(),
     idclub: 1,
   });
@@ -117,6 +118,15 @@ function CreateTrainer() {
             type="date"
             name="fecha_ingreso"
             value={formData.fecha_ingreso}
+            onChange={handleChange}
+          />
+          <TextField
+            id="outlined-basic"
+            label="Imagen"
+            variant="outlined"
+            type="text"
+            name="imagen"
+            value={formData.imagen}
             onChange={handleChange}
           />
           <Button variant="outlined" type="submit">

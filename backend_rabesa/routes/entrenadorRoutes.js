@@ -1,4 +1,4 @@
-// platoRoutes.js
+// entrenadorRoutes.js
 const express = require('express');
 const router = express.Router();
 const entrenadorController = require('../controllers/entrenadorController');

@@ -78,7 +78,7 @@ function Team() {
                 component="img"
                 alt="green iguana"
                 height="140"
-                image="https://yt3.googleusercontent.com/7srFAPlEmpNnZR_jnDC_K39vK-ZwX4IqDsbmBSjYmlOKRYw1BRwTL2nDnL9fZcBsMpSOIRhbjDM=s900-c-k-c0x00ffffff-no-rj"
+                image={entrenador.imagen}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">

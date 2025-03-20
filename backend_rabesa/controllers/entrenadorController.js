@@ -50,7 +50,7 @@ class EntrenadorController {
         fecha_ingreso: entrenador.fecha_ingreso,
         idclub: entrenador.idclub,
         correo: usuario.correo,
-      }
+      };
 
       if (resultado) {
         res.json(Respuesta.exito(resultado, "Entrenador recuperado"));
@@ -71,7 +71,7 @@ class EntrenadorController {
   }
 
   async createEntrenador(req, res) {
-    const { correo, contrasena, nombre, edad, rol, fecha_ingreso, idclub } =
+    const { correo, contrasena, nombre, edad, rol, fecha_ingreso, imagen, idclub } =
       req.body;
     // const entrenador = req.body;
 
@@ -110,6 +110,7 @@ class EntrenadorController {
         edad,
         rol,
         fecha_ingreso,
+        imagen,
         idclub,
         idusuario,
       };
