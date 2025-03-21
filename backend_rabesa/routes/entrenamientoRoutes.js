@@ -6,7 +6,7 @@ const entrenamientoController = require('../controllers/entrenamientoController'
 router.get('/', entrenamientoController.getAllEntrenamientos);
 // router.get('/:identrenador', entrenamientoController.getEntrenadorById);
 router.post('/', entrenamientoController.createEntrenamiento);
-// router.delete('/:identrenador', entrenamientoController.deleteEntrenador);
+router.delete('/:identrenamiento', entrenamientoController.deleteEntrenamiento);
 router.put('/:identrenamiento', entrenamientoController.updateEntrenamiento);
 
 

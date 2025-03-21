@@ -144,45 +144,40 @@ class EntrenamientoController {
     }
   }
 
-  // async deleteEntrenador(req, res) {
-  //   const identrenador = req.params.identrenador;
+  async deleteEntrenamiento(req, res) {
+    const identrenamiento = req.params.identrenamiento;
 
-  //   try {
-  //     const entrenador = await Entrenador.findByPk(identrenador);
+    try {
+      const entrenamiento = await Entrenamiento.findByPk(identrenamiento);
 
-  //     if (entrenador) {
-  //       const numFilas = await Entrenador.destroy({
-  //         where: {
-  //           identrenador: identrenador,
-  //         },
-  //       });
+      if (entrenamiento) {
+        const numFilas = await Entrenamiento.destroy({
+          where: {
+            identrenamiento: identrenamiento,
+          },
+        });
 
-  //       await Usuario.destroy({
-  //         where: {
-  //           idusuario: entrenador.idusuario,
-  //         },
-  //       });
-  //       if (numFilas == 0) {
-  //         // No se ha encontrado lo que se quería borrar
-  //         res
-  //           .status(404)
-  //           .json(Respuesta.error(null, "No encontrado: " + identrenador));
-  //       } else {
-  //         res.status(204).send();
-  //       }
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al eliminar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+        if (numFilas == 0) {
+          // No se ha encontrado lo que se quería borrar
+          res
+            .status(404)
+            .json(Respuesta.error(null, "No encontrado: " + identrenamiento));
+        } else {
+          res.status(204).send();
+        }
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al eliminar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   async updateEntrenamiento(req, res) {
     const datos = req.body; // Recuperamos datos para actualizar
