@@ -37,40 +37,30 @@ class EntrenamientoController {
     }
   }
 
-  // async getEntrenadorById(req, res) {
-  //   const identrenador = req.params.identrenador;
-  //   try {
-  //     const entrenador = await Entrenador.findByPk(identrenador);
+  async getEntrenamientoById(req, res) {
+    const identrenamiento = req.params.identrenamiento;
+    try {
+      const entrenamiento = await Entrenamiento.findByPk(identrenamiento);
 
-  //     const usuario = await Usuario.findByPk(entrenador.idusuario);
-
-  //     const resultado = {
-  //       idusuario: entrenador.idusuario,
-  //       nombre: entrenador.nombre,
-  //       edad: entrenador.edad,
-  //       rol: entrenador.rol,
-  //       fecha_ingreso: entrenador.fecha_ingreso,
-  //       idclub: entrenador.idclub,
-  //       correo: usuario.correo,
-  //     };
-
-  //     if (resultado) {
-  //       res.json(Respuesta.exito(resultado, "Entrenador recuperado"));
-  //     } else {
-  //       res.status(404).json(Respuesta.error(null, "Entrenador no encontrado"));
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+      if (entrenamiento) {
+        res.json(Respuesta.exito(entrenamiento, "Entrenamiento recuperado"));
+      } else {
+        res
+          .status(404)
+          .json(Respuesta.error(null, "Entrenamiento no encontrado"));
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   async createEntrenamiento(req, res) {
     const { fecha_entrenamiento, hora_inicio, hora_final, tipo, informacion } =
