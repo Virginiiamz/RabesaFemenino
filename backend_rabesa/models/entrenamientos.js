@@ -11,8 +11,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
-    duracion: {
-      type: DataTypes.INTEGER,
+    hora_inicio: {
+      type: DataTypes.TIME,
+      allowNull: false
+    },
+    hora_final: {
+      type: DataTypes.TIME,
       allowNull: false
     },
     tipo: {
