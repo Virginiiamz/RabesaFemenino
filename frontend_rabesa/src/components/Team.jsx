@@ -111,8 +111,8 @@ function Team() {
               <CardMedia
                 component="img"
                 alt={entrenador.nombre}
-                height="140"
-                image={entrenador.imagen}
+                height="300"
+                image={`http://localhost:3000/uploads/${entrenador.imagen}`}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
@@ -160,8 +160,8 @@ function Team() {
               <CardMedia
                 component="img"
                 alt={jugadora.nombre}
-                height="140"
-                image={jugadora.imagen}
+                height="300"
+                image={`http://localhost:3000/uploads/${jugadora.imagen}`}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">

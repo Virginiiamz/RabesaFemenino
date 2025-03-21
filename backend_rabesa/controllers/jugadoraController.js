@@ -83,7 +83,6 @@ class JugadoraController {
       numero_camiseta,
       fecha_ingreso,
       estado,
-      imagen,
       idclub,
     } = req.body;
 
@@ -116,6 +115,8 @@ class JugadoraController {
       const idusuario = newUser.dataValues.idusuario;
 
       console.log("idUsuario: " + idusuario);
+
+      const imagen = req.file ? req.file.filename : null;
 
       const jugadora = {
         nombre,

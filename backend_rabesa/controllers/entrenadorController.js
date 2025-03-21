@@ -78,7 +78,6 @@ class EntrenadorController {
       edad,
       rol,
       fecha_ingreso,
-      imagen,
       idclub,
     } = req.body;
     // const entrenador = req.body;
@@ -112,6 +111,8 @@ class EntrenadorController {
       const idusuario = newUser.dataValues.idusuario;
 
       console.log("idUsuario: " + idusuario);
+
+      const imagen = req.file ? req.file.filename : null;
 
       const entrenador = {
         nombre,

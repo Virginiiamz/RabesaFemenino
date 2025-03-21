@@ -14,21 +14,67 @@ function CreatePlayer() {
     numero_camiseta: 0,
     fecha_ingreso: new Date(),
     estado: "",
-    imagen: "",
+    imagen: null,
     idclub: 1,
   });
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const response = await fetch(apiUrl + "/jugadoras", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+  //       body: JSON.stringify(formData),
+  //     });
+
+  //     const data = await response.json();
+
+  //     if (response.ok) {
+  //       alert(data.mensaje);
+  //       navigate("/home/team"); // Redirige tras el login exitoso
+  //     } else {
+  //       alert(data.mensaje);
+  //       // setErrors({ apiError: data.mensaje || "Credenciales incorrectas." });
+  //     }
+  //   } catch (error) {
+  //     alert("Error de red. Inténtalo de nuevo más tarde.");
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Crear un objeto FormData
+    const formDataToSend = new FormData();
+
+    // Agregar los campos al FormData
+    formDataToSend.append("correo", formData.correo);
+    formDataToSend.append("contrasena", formData.contrasena);
+    formDataToSend.append("nombre", formData.nombre);
+    formDataToSend.append("edad", formData.edad);
+    formDataToSend.append("posicion", formData.posicion);
+    formDataToSend.append("numero_camiseta", formData.numero_camiseta);
+    formDataToSend.append(
+      "fecha_ingreso",
+      formData.fecha_ingreso.toISOString()
+    ); // Convertir fecha a string
+    formDataToSend.append("estado", formData.estado);
+    formDataToSend.append("idclub", formData.idclub);
+
+    // Agregar la imagen si existe
+    if (formData.imagen) {
+      formDataToSend.append("imagen", formData.imagen);
+    }
+
     try {
       const response = await fetch(apiUrl + "/jugadoras", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        body: formDataToSend, // Enviar el FormData
         credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
-        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
@@ -38,7 +84,6 @@ function CreatePlayer() {
         navigate("/home/team"); // Redirige tras el login exitoso
       } else {
         alert(data.mensaje);
-        // setErrors({ apiError: data.mensaje || "Credenciales incorrectas." });
       }
     } catch (error) {
       alert("Error de red. Inténtalo de nuevo más tarde.");
@@ -48,6 +93,11 @@ function CreatePlayer() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  // Nueva función para manejar la imagen
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, imagen: e.target.files[0] });
   };
 
   return (
@@ -141,13 +191,11 @@ function CreatePlayer() {
             onChange={handleChange}
           />
           <TextField
-            id="outlined-basic"
-            label="Imagen"
+            id="imagen"
             variant="outlined"
-            type="text"
+            type="file"
             name="imagen"
-            value={formData.imagen}
-            onChange={handleChange}
+            onChange={handleFileChange} // Usa la nueva función para manejar archivos
           />
           <Button variant="outlined" type="submit">
             Crear jugadora

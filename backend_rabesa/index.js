@@ -43,6 +43,7 @@ app.use(cookieParser());
 // Configurar rutas de la API Rest
 // app.use("/api/platos", platoRoutes);
 // app.use("/api/pedidos", pedidoRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/entrenadores", entrenadorRoutes);
 app.use("/api/usuario", usuarioRoutes);
 app.use("/api/jugadoras", jugadoraRoutes);
