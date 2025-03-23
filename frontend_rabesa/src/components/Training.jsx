@@ -12,7 +12,7 @@ function Training() {
         }}
       >
         <Toolbar />
-        <Link to="/home/crear-entrenador">
+        <Link to="/home/crear-entrenamiento">
           <Button variant="contained">Crear entrenamiento</Button>
         </Link>
         <Typography sx={{ marginBottom: 2 }}>Entrenamientos</Typography>

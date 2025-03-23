@@ -14,6 +14,7 @@ import ModifyPlayer from "./components/ModifyPlayer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./components/Unauthorized";
 import Training from "./components/Training";
+import CreateTraining from "./components/CreateTraining";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -79,6 +80,15 @@ let router = createBrowserRouter([
       {
         path: "training",
         element: <Training />,
+      },
+      {
+        path: "/home/crear-entrenamiento",
+        element: (
+          <ProtectedRoute
+            element={<CreateTraining />}
+            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+          />
+        ),
       },
     ],
   },
