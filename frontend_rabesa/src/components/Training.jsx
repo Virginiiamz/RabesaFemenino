@@ -1,4 +1,12 @@
-import { Box, Button, Card, CardActions, CardContent, Toolbar, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { apiUrl } from "../config";
@@ -25,6 +33,20 @@ function Training() {
 
     getEntrenamientos();
   }, []); // Se ejecuta solo en el primer renderizado
+
+  const handleDelete = async (identrenamiento) => {
+    let response = await fetch(apiUrl + "/entrenamientos/" + identrenamiento, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      const entrenamientoTrasBorrado = datosEntrenamientos.filter(
+        (entrenamiento) => entrenamiento.identrenamiento != identrenamiento
+      );
+      // Establece los datos de nuevo para provocar un renderizado
+      setDatosEntrenamientos(entrenamientoTrasBorrado);
+    }
+  };
 
   return (
     <>
@@ -78,7 +100,7 @@ function Training() {
                   size="small"
                   onClick={() =>
                     navigate(
-                      "/home/modificar-entrenador/" +
+                      "/home/modificar-entrenamiento/" +
                         entrenamiento.identrenamiento
                     )
                   }
@@ -87,9 +109,7 @@ function Training() {
                 </Button>
                 <Button
                   size="small"
-                  onClick={() =>
-                    handleDeleteEntrenadores(entrenamiento.identrenamiento)
-                  }
+                  onClick={() => handleDelete(entrenamiento.identrenamiento)}
                 >
                   Eliminar
                 </Button>
