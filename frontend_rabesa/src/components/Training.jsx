@@ -71,13 +71,7 @@ function Training() {
           }}
         >
           {datosEntrenamientos.map((entrenamiento) => (
-            <Card sx={{ maxWidth: 345 }}>
-              {/* <CardMedia
-                component="img"
-                alt={entrenador.nombre}
-                height="300"
-                image={`http://localhost:3000/uploads/${entrenador.imagen}`}
-              /> */}
+            <Card>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                   Entrenamiento

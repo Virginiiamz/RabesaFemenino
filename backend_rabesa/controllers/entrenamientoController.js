@@ -175,45 +175,45 @@ class EntrenamientoController {
     console.log("IdEntrenamiento: " + identrenamiento);
 
     try {
-      const existingEntrenamiento = await Entrenamiento.findOne({
-        where: { fecha_entrenamiento: datos.fecha_entrenamiento },
-      });
+      // const existingEntrenamiento = await Entrenamiento.findOne({
+      //   where: { fecha_entrenamiento: datos.fecha_entrenamiento },
+      // });
 
-      if (existingEntrenamiento) {
-        // Verificar si las horas se solapan
-        const solapamiento = await Entrenamiento.findOne({
-          where: {
-            fecha_entrenamiento: datos.fecha_entrenamiento,
-            [Op.or]: [
-              // Caso 1: El nuevo entrenamiento no cruza la medianoche
-              {
-                [Op.and]: [
-                  { hora_inicio: { [Op.lt]: datos.hora_final } },
-                  { hora_final: { [Op.gt]: datos.hora_inicio } },
-                ],
-              },
-              // Caso 2: El nuevo entrenamiento cruza la medianoche
-              {
-                [Op.and]: [
-                  { hora_inicio: { [Op.gte]: datos.hora_final } },
-                  { hora_final: { [Op.lte]: datos.hora_inicio } },
-                ],
-              },
-            ],
-          },
-        });
+      // if (existingEntrenamiento) {
+      //   // Verificar si las horas se solapan
+      //   const solapamiento = await Entrenamiento.findOne({
+      //     where: {
+      //       fecha_entrenamiento: datos.fecha_entrenamiento,
+      //       [Op.or]: [
+      //         // Caso 1: El nuevo entrenamiento no cruza la medianoche
+      //         {
+      //           [Op.and]: [
+      //             { hora_inicio: { [Op.lt]: datos.hora_final } },
+      //             { hora_final: { [Op.gt]: datos.hora_inicio } },
+      //           ],
+      //         },
+      //         // Caso 2: El nuevo entrenamiento cruza la medianoche
+      //         {
+      //           [Op.and]: [
+      //             { hora_inicio: { [Op.gte]: datos.hora_final } },
+      //             { hora_final: { [Op.lte]: datos.hora_inicio } },
+      //           ],
+      //         },
+      //       ],
+      //     },
+      //   });
 
-        if (solapamiento) {
-          return res
-            .status(400)
-            .json(
-              Respuesta.error(
-                null,
-                "Ya existe un entrenamiento en esa fecha y las horas se solapan."
-              )
-            );
-        }
-      }
+      //   if (solapamiento) {
+      //     return res
+      //       .status(400)
+      //       .json(
+      //         Respuesta.error(
+      //           null,
+      //           "Ya existe un entrenamiento en esa fecha y las horas se solapan."
+      //         )
+      //       );
+      //   }
+      // }
 
       const numFilas = await Entrenamiento.update(
         { ...datos },
