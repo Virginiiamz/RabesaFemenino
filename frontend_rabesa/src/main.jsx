@@ -13,6 +13,7 @@ import CreatePlayer from "./components/CreatePlayer";
 import ModifyPlayer from "./components/ModifyPlayer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./components/Unauthorized";
+import Training from "./components/Training";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -47,7 +48,6 @@ let router = createBrowserRouter([
             allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
           />
         ),
-        // element: <CreateTrainer />,
       },
       {
         path: "/home/modificar-entrenador/:identrenador",
@@ -57,7 +57,6 @@ let router = createBrowserRouter([
             allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
           />
         ),
-        // element: <ModifyTrainer />,
       },
       {
         path: "/home/crear-jugadora",
@@ -67,7 +66,6 @@ let router = createBrowserRouter([
             allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
           />
         ),
-        // element: <CreatePlayer />,
       },
       {
         path: "/home/modificar-jugadora/:idjugadora",
@@ -77,7 +75,10 @@ let router = createBrowserRouter([
             allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
           />
         ),
-        // element: <ModifyPlayer />,
+      },
+      {
+        path: "training",
+        element: <Training />,
       },
     ],
   },
