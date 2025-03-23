@@ -40,40 +40,6 @@ function CreateTraining() {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const formDataToSend = new FormData();
-  //   formDataToSend.append("correo", formData.correo);
-  //   formDataToSend.append("contrasena", formData.contrasena);
-  //   formDataToSend.append("nombre", formData.nombre);
-  //   formDataToSend.append("edad", formData.edad);
-  //   formDataToSend.append("rol", formData.rol);
-  //   formDataToSend.append("fecha_ingreso", formData.fecha_ingreso);
-  //   formDataToSend.append("idclub", formData.idclub);
-  //   if (formData.imagen) {
-  //     formDataToSend.append("imagen", formData.imagen); // Agrega la imagen
-  //   }
-
-  //   try {
-  //     const response = await fetch(apiUrl + "/entrenadores", {
-  //       method: "POST",
-  //       body: formDataToSend, // Enviamos FormData en lugar de JSON
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (response.ok) {
-  //       alert(data.mensaje);
-  //       navigate("/home/team");
-  //     } else {
-  //       alert(data.mensaje);
-  //     }
-  //   } catch (error) {
-  //     alert("Error de red. Inténtalo de nuevo más tarde.");
-  //   }
-  // };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
