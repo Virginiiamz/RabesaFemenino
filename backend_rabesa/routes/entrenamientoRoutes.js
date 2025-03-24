@@ -4,6 +4,7 @@ const router = express.Router();
 const entrenamientoController = require('../controllers/entrenamientoController');
 
 router.get('/', entrenamientoController.getAllEntrenamientos);
+router.get('/actuales', entrenamientoController.getAllEntrenamientosByFecha);
 router.get('/:identrenamiento', entrenamientoController.getEntrenamientoById);
 router.post('/', entrenamientoController.createEntrenamiento);
 router.delete('/:identrenamiento', entrenamientoController.deleteEntrenamiento);

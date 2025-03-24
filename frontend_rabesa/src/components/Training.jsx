@@ -10,14 +10,23 @@ import {
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { apiUrl } from "../config";
+import useUserStore from "../stores/useUserStore";
 
 function Training() {
   const [datosEntrenamientos, setDatosEntrenamientos] = useState([]);
+  const [datosJugadora, setDatosJugadora] = useState([]);
   const navigate = useNavigate();
 
+  const { user } = useUserStore();
+  let entrenador = false;
+
+  if (user.rol == "Entrenador") {
+    entrenador = true;
+  }
+
   useEffect(() => {
-    async function getEntrenamientos() {
-      let response = await fetch(apiUrl + "/entrenamientos", {
+    async function getEntrenamientosEntrenador() {
+      let response = await fetch(apiUrl + "/entrenamientos/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -31,8 +40,78 @@ function Training() {
       }
     }
 
-    getEntrenamientos();
+    async function getEntrenamientosJugadora() {
+      let response = await fetch(apiUrl + "/entrenamientos/actuales/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+      });
+
+      if (response.ok) {
+        let data = await response.json();
+        setDatosEntrenamientos(data.datos);
+      }
+    }
+
+    async function getJugadora() {
+      let response = await fetch(apiUrl + "/jugadoras/correo/" + user.correo, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+      });
+
+      if (response.ok) {
+        let data = await response.json();
+        setDatosJugadora(data.datos);
+      }
+    }
+
+    if (entrenador) {
+      getEntrenamientosEntrenador();
+    } else {
+      getEntrenamientosJugadora();
+      getJugadora();
+    }
   }, []); // Se ejecuta solo en el primer renderizado
+
+  const handleSubmit = async (identrenamiento, idjugadora) => {
+    // e.preventDefault();
+
+    console.log(identrenamiento);
+    console.log(idjugadora);
+
+    try {
+      const response = await fetch(
+        apiUrl +
+          "/entrenamientos/asistencias/" +
+          identrenamiento +
+          "/" +
+          idjugadora,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.mensaje);
+        navigate("/home/training");
+      } else {
+        alert(data.mensaje);
+      }
+    } catch (error) {
+      alert("Error de red. Inténtalo de nuevo más tarde.");
+    }
+  };
 
   const handleDelete = async (identrenamiento) => {
     let response = await fetch(apiUrl + "/entrenamientos/" + identrenamiento, {
@@ -58,9 +137,12 @@ function Training() {
         }}
       >
         <Toolbar />
-        <Link to="/home/crear-entrenamiento">
-          <Button variant="contained">Crear entrenamiento</Button>
-        </Link>
+        {entrenador ? (
+          <Link to="/home/crear-entrenamiento">
+            <Button variant="contained">Crear entrenamiento</Button>
+          </Link>
+        ) : null}
+
         <Typography sx={{ marginBottom: 2 }}>Entrenamientos</Typography>
         <Box
           sx={{
@@ -90,23 +172,46 @@ function Training() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button
-                  size="small"
-                  onClick={() =>
-                    navigate(
-                      "/home/modificar-entrenamiento/" +
-                        entrenamiento.identrenamiento
-                    )
-                  }
-                >
-                  Editar
-                </Button>
-                <Button
-                  size="small"
-                  onClick={() => handleDelete(entrenamiento.identrenamiento)}
-                >
-                  Eliminar
-                </Button>
+                {entrenador ? (
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      navigate(
+                        "/home/modificar-entrenamiento/" +
+                          entrenamiento.identrenamiento
+                      )
+                    }
+                  >
+                    Editar
+                  </Button>
+                ) : (
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      handleSubmit(
+                        entrenamiento.identrenamiento,
+                        datosJugadora.idjugadora
+                      )
+                    }
+                  >
+                    Aceptar
+                  </Button>
+                )}
+                {entrenador ? (
+                  <Button
+                    size="small"
+                    onClick={() => handleDelete(entrenamiento.identrenamiento)}
+                  >
+                    Eliminar
+                  </Button>
+                ) : (
+                  <Button
+                    size="small"
+                    onClick={() => navigate("/home/training")}
+                  >
+                    Rechazar
+                  </Button>
+                )}
               </CardActions>
             </Card>
           ))}

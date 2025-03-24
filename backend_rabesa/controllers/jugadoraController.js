@@ -35,6 +35,63 @@ class JugadoraController {
     }
   }
 
+  async getJugadoraByCorreo(req, res) {
+    const { correo } = req.params;
+
+    try {
+      // Primero buscar el usuario por correo
+      const usuario = await Usuario.findOne({
+        where: { correo: correo },
+      });
+
+      if (!usuario) {
+        return res
+          .status(404)
+          .json(Respuesta.error(null, "Usuario no encontrado"));
+      }
+
+      // Luego buscar la jugadora asociada a ese usuario
+      const jugadora = await Jugadora.findOne({
+        where: { idusuario: usuario.idusuario },
+      });
+
+      if (!jugadora) {
+        return res
+          .status(404)
+          .json(
+            Respuesta.error(null, "Jugadora no encontrada para este usuario")
+          );
+      }
+
+      // Construir el resultado combinado
+      const resultado = {
+        idjugadora: jugadora.idjugadora,
+        idusuario: jugadora.idusuario,
+        nombre: jugadora.nombre,
+        edad: jugadora.edad,
+        posicion: jugadora.posicion,
+        numero_camiseta: jugadora.numero_camiseta,
+        fecha_ingreso: jugadora.fecha_ingreso,
+        estado: jugadora.estado,
+        imagen: jugadora.imagen,
+        idclub: jugadora.idclub,
+        correo: usuario.correo,
+      };
+
+      res.json(Respuesta.exito(resultado, "Jugadora recuperada por correo"));
+    } catch (err) {
+      console.error("Error:", err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
   async getJugadoraById(req, res) {
     const idjugadora = req.params.idjugadora;
     try {

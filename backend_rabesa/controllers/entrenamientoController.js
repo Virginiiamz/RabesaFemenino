@@ -37,6 +37,38 @@ class EntrenamientoController {
     }
   }
 
+  async getAllEntrenamientosByFecha(req, res) {
+    try {
+      // Obtener la fecha actual del sistema (sin hora, solo fecha)
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0); // Establecer a medianoche para incluir todo el día
+
+      const data = await Entrenamiento.findAll({
+        where: {
+          fecha_entrenamiento: {
+            [Op.gte]: hoy, // Mayor o igual a hoy
+          },
+        },
+        order: [["fecha_entrenamiento", "ASC"]], // Opcional: ordenar por fecha ascendente
+      });
+
+      res.json(
+        Respuesta.exito(data, "Datos de entrenamientos futuros recuperados")
+      );
+    } catch (err) {
+      // Manejar errores durante la consulta
+      console.error(err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos de los entrenamientos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
   async getEntrenamientoById(req, res) {
     const identrenamiento = req.params.identrenamiento;
     try {
@@ -188,7 +220,6 @@ class EntrenamientoController {
         entrenamientoSeleccionado.hora_final !== datos.hora_final;
 
       if (haCambiadoHorario) {
-
         const solapamiento = await Entrenamiento.findOne({
           where: {
             fecha_entrenamiento: datos.fecha_entrenamiento,
