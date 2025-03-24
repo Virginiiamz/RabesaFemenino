@@ -18,7 +18,7 @@ function ModifyTraining() {
     hora_inicio: "00:00", // Sin segundos
     hora_final: "00:00", // Sin segundos
     tipo: "",
-    // informacion: "",
+    informacion: "",
   });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ function ModifyTraining() {
           body: JSON.stringify(formData),
         }
       );
-      
+
       if (response.status === 400) {
         let errorData = await response.json();
         alert("Error: " + errorData.mensaje);
@@ -140,7 +140,7 @@ function ModifyTraining() {
             value={formData.tipo}
             onChange={handleChange}
           />
-          {/* <TextareaAutosize
+          <TextareaAutosize
             id="outlined-basic"
             variant="outlined"
             aria-label="empty textarea"
@@ -148,7 +148,7 @@ function ModifyTraining() {
             name="informacion"
             value={formData.informacion}
             onChange={handleChange}
-          /> */}
+          />
           <Button variant="outlined" type="submit">
             Modificar entrenamiento
           </Button>
