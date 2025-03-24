@@ -170,76 +170,73 @@ class EntrenamientoController {
   }
 
   async updateEntrenamiento(req, res) {
-    const datos = req.body; // Recuperamos datos para actualizar
-    const identrenamiento = req.params.identrenamiento; // dato de la ruta
-    console.log("IdEntrenamiento: " + identrenamiento);
+    const datos = req.body;
+    const identrenamiento = req.params.identrenamiento;
+
+    console.log("📥 Datos recibidos en el backend:", datos); // 👈 DEBUG
 
     try {
-      // const existingEntrenamiento = await Entrenamiento.findOne({
-      //   where: { fecha_entrenamiento: datos.fecha_entrenamiento },
-      // });
+      const entrenamientoSeleccionado = await Entrenamiento.findByPk(
+        identrenamiento
+      );
 
-      // if (existingEntrenamiento) {
-      //   // Verificar si las horas se solapan
-      //   const solapamiento = await Entrenamiento.findOne({
-      //     where: {
-      //       fecha_entrenamiento: datos.fecha_entrenamiento,
-      //       [Op.or]: [
-      //         // Caso 1: El nuevo entrenamiento no cruza la medianoche
-      //         {
-      //           [Op.and]: [
-      //             { hora_inicio: { [Op.lt]: datos.hora_final } },
-      //             { hora_final: { [Op.gt]: datos.hora_inicio } },
-      //           ],
-      //         },
-      //         // Caso 2: El nuevo entrenamiento cruza la medianoche
-      //         {
-      //           [Op.and]: [
-      //             { hora_inicio: { [Op.gte]: datos.hora_final } },
-      //             { hora_final: { [Op.lte]: datos.hora_inicio } },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //   });
+      // Comprobamos si la fecha o las horas han cambiado
+      const haCambiadoHorario =
+        entrenamientoSeleccionado.fecha_entrenamiento !==
+          datos.fecha_entrenamiento ||
+        entrenamientoSeleccionado.hora_inicio !== datos.hora_inicio ||
+        entrenamientoSeleccionado.hora_final !== datos.hora_final;
 
-      //   if (solapamiento) {
-      //     return res
-      //       .status(400)
-      //       .json(
-      //         Respuesta.error(
-      //           null,
-      //           "Ya existe un entrenamiento en esa fecha y las horas se solapan."
-      //         )
-      //       );
-      //   }
-      // }
+      if (haCambiadoHorario) {
 
-      const numFilas = await Entrenamiento.update(
+        const solapamiento = await Entrenamiento.findOne({
+          where: {
+            fecha_entrenamiento: datos.fecha_entrenamiento,
+            identrenamiento: { [Op.ne]: identrenamiento }, // Excluir el mismo entrenamiento
+            [Op.or]: [
+              // Caso 1: Se solapa por inicio o fin
+              {
+                hora_inicio: { [Op.lt]: datos.hora_final },
+                hora_final: { [Op.gt]: datos.hora_inicio },
+              },
+              // Caso 2: El nuevo horario engloba completamente otro
+              {
+                hora_inicio: { [Op.gte]: datos.hora_inicio },
+                hora_final: { [Op.lte]: datos.hora_final },
+              },
+            ],
+          },
+        });
+
+        if (solapamiento) {
+          console.log("Conflicto detectado con otro entrenamiento.");
+          return res
+            .status(400)
+            .json(
+              Respuesta.error(
+                null,
+                "Las horas se solapan con otro entrenamiento en esa fecha."
+              )
+            );
+        }
+      }
+
+      // Si todo está bien, actualizar el entrenamiento
+      const [numFilas] = await Entrenamiento.update(
         { ...datos },
         { where: { identrenamiento } }
       );
 
-      if (numFilas == 0) {
-        console.log("404");
-
-        // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
-        res
+      if (numFilas === 0) {
+        console.log("⚠️ No se realizó ninguna modificación.");
+        return res
           .status(404)
-          .json(
-            Respuesta.error(
-              null,
-              "No encontrado o no modificado: " + identrenamiento
-            )
-          );
-      } else {
-        // Al dar status 204 no se devuelva nada
-        console.log("204");
-
-        res.status(204).send();
+          .json(Respuesta.error(null, "No encontrado o no modificado."));
       }
+
+      res.status(204).send();
     } catch (err) {
-      logMensaje("Error :" + err);
+      console.error("Error en la actualización:", err);
       res
         .status(500)
         .json(

@@ -14,9 +14,9 @@ function ModifyTraining() {
   const navigate = useNavigate();
   const params = useParams();
   const [formData, setFormData] = useState({
-    fecha_entrenamiento: new Date(),
-    hora_inicio: "00:00",
-    hora_final: "00:00",
+    fecha_entrenamiento: new Date().toISOString().split("T")[0],
+    hora_inicio: "00:00", // Sin segundos
+    hora_final: "00:00", // Sin segundos
     tipo: "",
     // informacion: "",
   });
@@ -42,6 +42,8 @@ function ModifyTraining() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("📤 Enviando datos:", formData); // 👈 DEBUG
+
     try {
       const response = await fetch(
         apiUrl + "/entrenamientos/" + params.identrenamiento,
@@ -54,6 +56,11 @@ function ModifyTraining() {
           body: JSON.stringify(formData),
         }
       );
+      
+      if (response.status === 400) {
+        let errorData = await response.json();
+        alert("Error: " + errorData.mensaje);
+      }
 
       if (response.status == 204) {
         alert("Entrenamiento modificado correctamente.");
@@ -66,7 +73,14 @@ function ModifyTraining() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    let formattedValue = value;
+
+    // Si es una hora, aseguramos formato HH:mm:ss
+    if (name === "hora_inicio" || name === "hora_final") {
+      formattedValue = value.length === 5 ? value + ":00" : value; // Si es HH:mm, añadimos ":00"
+    }
+
+    setFormData({ ...formData, [name]: formattedValue });
   };
 
   return (
@@ -79,7 +93,9 @@ function ModifyTraining() {
         }}
       >
         <Toolbar />
-        <Typography sx={{ marginBottom: 2 }}>Modificar entrenamiento</Typography>
+        <Typography sx={{ marginBottom: 2 }}>
+          Modificar entrenamiento
+        </Typography>
         <Box
           component="form"
           sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
