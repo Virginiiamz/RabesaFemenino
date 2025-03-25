@@ -8,16 +8,12 @@ const sequelize = require("../config/sequelize.js");
 
 const { Op } = require("sequelize");
 
-// Para comparar contraseñas cifradas
-// const bcrypt = require("bcrypt");
-// Librería de manejo de JWT
-// const jwt = require("jsonwebtoken");
-
 // Cargar las definiciones del modelo en sequelize
 const models = initModels(sequelize);
 // Recuperar el modelo plato
 const Entrenamiento = models.entrenamientos;
-// const Usuario = models.usuario;
+const Asistencia = models.asistenciaEntrenamientos;
+const Jugadora = models.jugadoras;
 
 class EntrenamientoController {
   async getAllEntrenamientos(req, res) {

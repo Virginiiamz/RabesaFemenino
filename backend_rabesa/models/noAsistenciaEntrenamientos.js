@@ -1,8 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('convocatorias', {
-    idconvocatoria: {
-      autoIncrement: true,
+  return sequelize.define('noAsistenciaEntrenamientos', {
+    idnoasistencia: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -13,19 +12,21 @@ module.exports = function(sequelize, DataTypes) {
       references: {
         model: 'jugadoras',
         key: 'idjugadora'
-      }
+      },
+      unique: "no_asistencia_entrenamientos_ibfk_1"
     },
-    idpartido: {
+    identrenamiento: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'partidos',
-        key: 'idpartido'
-      }
+        model: 'entrenamientos',
+        key: 'identrenamiento'
+      },
+      unique: "no_asistencia_entrenamientos_ibfk_2"
     }
   }, {
     sequelize,
-    tableName: 'convocatorias',
+    tableName: 'no_asistencia_entrenamientos',
     timestamps: false,
     indexes: [
       {
@@ -33,21 +34,23 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "idconvocatoria" },
+          { name: "idnoasistencia" },
         ]
       },
       {
         name: "idjugadora",
+        unique: true,
         using: "BTREE",
         fields: [
           { name: "idjugadora" },
         ]
       },
       {
-        name: "idpartido",
+        name: "identrenamiento",
+        unique: true,
         using: "BTREE",
         fields: [
-          { name: "idpartido" },
+          { name: "identrenamiento" },
         ]
       },
     ]

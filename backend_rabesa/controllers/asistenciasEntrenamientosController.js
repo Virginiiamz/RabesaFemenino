@@ -12,9 +12,48 @@ const { Op } = require("sequelize");
 const models = initModels(sequelize);
 // Recuperar el modelo plato
 const Asistencias = models.asistenciaEntrenamientos;
-// const Usuario = models.usuario;
+const Entrenamiento = models.entrenamientos;
 
 class AsistenciasEntrenamientoController {
+  async getEntrenamientosNoConfirmados(req, res) {
+    const { idjugadora } = req.params;
+
+    console.log("IDJUGADORA: ", idjugadora);
+
+    try {
+      const resultados = await Entrenamiento.findAll({
+        where: {
+          identrenamiento: {
+            [Op.notIn]: sequelize.literal(
+              `(SELECT identrenamiento FROM asistencia_entrenamientos WHERE idjugadora = ${sequelize.escape(
+                idjugadora
+              )})`
+            ),
+          },
+        },
+        order: [["fecha_entrenamiento", "DESC"]],
+      });
+
+      console.log(resultados);
+
+      res.json(
+        Respuesta.exito(
+          resultados,
+          "Entrenamientos no asistidos recuperados correctamente"
+        )
+      );
+    } catch (error) {
+      console.error("Error detallado:", error);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            "Error al obtener entrenamientos sin asistencia",
+            error.message
+          )
+        );
+    }
+  }
   // async getAllEntrenamientos(req, res) {
   //   try {
   //     const data = await Entrenamiento.findAll();
@@ -98,7 +137,6 @@ class AsistenciasEntrenamientoController {
         identrenamiento,
         idjugadora,
       };
-      
 
       const nuevaAsistencia = await Asistencias.create(asistencia);
 

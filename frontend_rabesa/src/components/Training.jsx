@@ -31,7 +31,7 @@ function Training() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -40,47 +40,50 @@ function Training() {
       }
     }
 
-    async function getEntrenamientosJugadora() {
-      let response = await fetch(apiUrl + "/entrenamientos/actuales/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
-      });
+    async function getDatosJugadora() {
+      if (entrenador) {
+        await getEntrenamientosEntrenador();
+      } else {
+        const jugadoraResponse = await fetch(
+          apiUrl + "/jugadoras/correo/" + user.correo,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          }
+        );
 
-      if (response.ok) {
-        let data = await response.json();
-        setDatosEntrenamientos(data.datos);
+        if (jugadoraResponse.ok) {
+          const jugadoraData = await jugadoraResponse.json();
+          setDatosJugadora(jugadoraData.datos);
+
+          const entrenamientosResponse = await fetch(
+            apiUrl +
+              "/entrenamientos/asistencias/noconfirmados/" +
+              jugadoraData.datos.idjugadora,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+            }
+          );
+
+          if (entrenamientosResponse.ok) {
+            const entrenamientosData = await entrenamientosResponse.json();
+            setDatosEntrenamientos(entrenamientosData.datos);
+          }
+        }
       }
     }
 
-    async function getJugadora() {
-      let response = await fetch(apiUrl + "/jugadoras/correo/" + user.correo, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
-      });
-
-      if (response.ok) {
-        let data = await response.json();
-        setDatosJugadora(data.datos);
-      }
-    }
-
-    if (entrenador) {
-      getEntrenamientosEntrenador();
-    } else {
-      getEntrenamientosJugadora();
-      getJugadora();
-    }
-  }, []); // Se ejecuta solo en el primer renderizado
+    getDatosJugadora();
+  }, []);
 
   const handleSubmit = async (identrenamiento, idjugadora) => {
-    // e.preventDefault();
-
     console.log(identrenamiento);
     console.log(idjugadora);
 
@@ -104,7 +107,7 @@ function Training() {
 
       if (response.ok) {
         alert(data.mensaje);
-        navigate("/home/training");
+        navigate(0);
       } else {
         alert(data.mensaje);
       }
