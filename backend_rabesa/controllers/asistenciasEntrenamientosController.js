@@ -6,7 +6,7 @@ const initModels = require("../models/init-models.js").initModels;
 // Crear la instancia de sequelize con la conexión a la base de datos
 const sequelize = require("../config/sequelize.js");
 
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 // Cargar las definiciones del modelo en sequelize
 const models = initModels(sequelize);
@@ -39,7 +39,7 @@ class AsistenciasEntrenamientoController {
       res.json(
         Respuesta.exito(
           resultados,
-          "Entrenamientos no asistidos recuperados correctamente"
+          "Entrenamientos no confirmados recuperados correctamente"
         )
       );
     } catch (error) {
@@ -48,8 +48,35 @@ class AsistenciasEntrenamientoController {
         .status(500)
         .json(
           Respuesta.error(
-            "Error al obtener entrenamientos sin asistencia",
+            "Error al obtener entrenamientos no confirmados",
             error.message
+          )
+        );
+    }
+  }
+
+  async getAllEntrenamientosAsistidosByJugadora(req, res) {
+    const { idjugadora } = req.params;
+
+    console.log("IDJUGADORA: ", idjugadora);
+
+    try {
+      const data = await Asistencias.findAll({
+        where: { idjugadora: idjugadora },
+      });
+      res.json(
+        Respuesta.exito(
+          data,
+          "Datos de entrenamientos asistidos recuperados correctamente"
+        )
+      );
+    } catch (err) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos de los entrenamientos asistidos: ${req.originalUrl}`
           )
         );
     }
