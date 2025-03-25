@@ -61,8 +61,20 @@ class AsistenciasEntrenamientoController {
     console.log("IDJUGADORA: ", idjugadora);
 
     try {
-      const data = await Asistencias.findAll({
-        where: { idjugadora: idjugadora },
+      // const data = await Asistencias.findAll({
+      //   where: { idjugadora: idjugadora },
+      // });
+
+      const data = await Entrenamiento.findAll({
+        include: [
+          {
+            model: Asistencias,
+            as: "asistencia_entrenamientos",
+            where: { idjugadora: idjugadora },
+            required: true, // INNER JOIN (solo entrenamientos con asistencia de esta jugadora)
+          },
+        ],
+        order: [["fecha_entrenamiento", "DESC"]],
       });
       res.json(
         Respuesta.exito(

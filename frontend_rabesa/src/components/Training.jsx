@@ -144,9 +144,20 @@ function Training() {
           <Link to="/home/crear-entrenamiento">
             <Button variant="contained">Crear entrenamiento</Button>
           </Link>
-        ) : null}
+        ) : (
+          <Link to="/home/training/asistidos">
+            <Button variant="contained">Entrenamientos confirmados</Button>
+          </Link>
+        )}
 
-        <Typography sx={{ marginBottom: 2 }}>Entrenamientos</Typography>
+        {entrenador ? (
+          <Typography sx={{ marginBottom: 2 }}>Entrenamientos</Typography>
+        ) : (
+          <Typography sx={{ marginBottom: 2 }}>
+            Entrenamientos no confirmados
+          </Typography>
+        )}
+
         <Box
           sx={{
             width: "100%",
