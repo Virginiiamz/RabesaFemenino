@@ -17,6 +17,7 @@ import Training from "./components/Training";
 import CreateTraining from "./components/CreateTraining";
 import ModifyTraining from "./components/ModifyTraining";
 import AssistedTraining from "./components/AssistedTraining";
+import NoAssistedTraining from "./components/NoAssistedTraining";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -86,6 +87,10 @@ let router = createBrowserRouter([
       {
         path: "/home/training/asistidos",
         element: <AssistedTraining />,
+      },
+      {
+        path: "/home/training/no-asistidos",
+        element: <NoAssistedTraining />,
       },
       {
         path: "/home/crear-entrenamiento",

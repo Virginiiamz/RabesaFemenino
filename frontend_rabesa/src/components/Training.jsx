@@ -83,7 +83,7 @@ function Training() {
     getDatosJugadora();
   }, []);
 
-  const handleSubmit = async (identrenamiento, idjugadora) => {
+  const handleSubmitAsistencia = async (identrenamiento, idjugadora) => {
     console.log(identrenamiento);
     console.log(idjugadora);
 
@@ -91,6 +91,39 @@ function Training() {
       const response = await fetch(
         apiUrl +
           "/entrenamientos/asistencias/" +
+          identrenamiento +
+          "/" +
+          idjugadora,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.mensaje);
+        navigate(0);
+      } else {
+        alert(data.mensaje);
+      }
+    } catch (error) {
+      alert("Error de red. Inténtalo de nuevo más tarde.");
+    }
+  };
+
+  const handleSubmitNoAsistencia = async (identrenamiento, idjugadora) => {
+    console.log(identrenamiento);
+    console.log(idjugadora);
+
+    try {
+      const response = await fetch(
+        apiUrl +
+          "/entrenamientos/no-asistencias/" +
           identrenamiento +
           "/" +
           idjugadora,
@@ -150,6 +183,12 @@ function Training() {
           </Link>
         )}
 
+        {entrenador ? null : (
+          <Link to="/home/training/no-asistidos">
+            <Button variant="contained">Entrenamientos no asistidos</Button>
+          </Link>
+        )}
+
         {entrenador ? (
           <Typography sx={{ marginBottom: 2 }}>Entrenamientos</Typography>
         ) : (
@@ -202,7 +241,7 @@ function Training() {
                   <Button
                     size="small"
                     onClick={() =>
-                      handleSubmit(
+                      handleSubmitAsistencia(
                         entrenamiento.identrenamiento,
                         datosJugadora.idjugadora
                       )
@@ -221,7 +260,12 @@ function Training() {
                 ) : (
                   <Button
                     size="small"
-                    onClick={() => navigate("/home/training")}
+                    onClick={() =>
+                      handleSubmitNoAsistencia(
+                        entrenamiento.identrenamiento,
+                        datosJugadora.idjugadora
+                      )
+                    }
                   >
                     Rechazar
                   </Button>

@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('noAsistenciaEntrenamientos', {
     idnoasistencia: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -12,8 +13,7 @@ module.exports = function(sequelize, DataTypes) {
       references: {
         model: 'jugadoras',
         key: 'idjugadora'
-      },
-      unique: "no_asistencia_entrenamientos_ibfk_1"
+      }
     },
     identrenamiento: {
       type: DataTypes.INTEGER,
@@ -21,8 +21,7 @@ module.exports = function(sequelize, DataTypes) {
       references: {
         model: 'entrenamientos',
         key: 'identrenamiento'
-      },
-      unique: "no_asistencia_entrenamientos_ibfk_2"
+      }
     }
   }, {
     sequelize,
@@ -39,7 +38,6 @@ module.exports = function(sequelize, DataTypes) {
       },
       {
         name: "idjugadora",
-        unique: true,
         using: "BTREE",
         fields: [
           { name: "idjugadora" },
@@ -47,7 +45,6 @@ module.exports = function(sequelize, DataTypes) {
       },
       {
         name: "identrenamiento",
-        unique: true,
         using: "BTREE",
         fields: [
           { name: "identrenamiento" },

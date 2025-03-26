@@ -11,114 +11,88 @@ const { Op, where } = require("sequelize");
 // Cargar las definiciones del modelo en sequelize
 const models = initModels(sequelize);
 // Recuperar el modelo plato
-const Asistencias = models.asistenciaEntrenamientos;
+const NoAsistencias = models.noAsistenciaEntrenamientos;
 const Entrenamiento = models.entrenamientos;
 
-class AsistenciasEntrenamientoController {
-  async getEntrenamientosNoConfirmados(req, res) {
-    const { idjugadora } = req.params;
+class NoAsistenciasEntrenamientoController {
+  // async getEntrenamientosNoConfirmados(req, res) {
+  //   const { idjugadora } = req.params;
 
-    console.log("IDJUGADORA: ", idjugadora);
+  //   console.log("IDJUGADORA: ", idjugadora);
 
-    try {
-      // const resultados = await Entrenamiento.findAll({
-      //   where: {
-      //     identrenamiento: {
-      //       [Op.notIn]: sequelize.literal(
-      //         `(SELECT identrenamiento FROM asistencia_entrenamientos WHERE idjugadora = ${sequelize.escape(
-      //           idjugadora
-      //         )})`
-      //       ),
-      //     },
-      //   },
-      //   order: [["fecha_entrenamiento", "DESC"]],
-      // });
+  //   try {
+  //     const resultados = await Entrenamiento.findAll({
+  //       where: {
+  //         identrenamiento: {
+  //           [Op.notIn]: sequelize.literal(
+  //             `(SELECT identrenamiento FROM asistencia_entrenamientos WHERE idjugadora = ${sequelize.escape(
+  //               idjugadora
+  //             )})`
+  //           ),
+  //         },
+  //       },
+  //       order: [["fecha_entrenamiento", "DESC"]],
+  //     });
 
-      const resultados = await Entrenamiento.findAll({
-        where: {
-          [Op.and]: [
-            {
-              identrenamiento: {
-                [Op.notIn]: sequelize.literal(
-                  `(SELECT identrenamiento FROM asistencia_entrenamientos WHERE idjugadora = ${sequelize.escape(
-                    idjugadora
-                  )})`
-                ),
-              },
-            },
-            {
-              identrenamiento: {
-                [Op.notIn]: sequelize.literal(
-                  `(SELECT identrenamiento FROM no_asistencia_entrenamientos WHERE idjugadora = ${sequelize.escape(
-                    idjugadora
-                  )})`
-                ),
-              },
-            },
-          ],
-        },
-        order: [["fecha_entrenamiento", "DESC"]],
-      });
+  //     console.log(resultados);
 
-      console.log(resultados);
+  //     res.json(
+  //       Respuesta.exito(
+  //         resultados,
+  //         "Entrenamientos no confirmados recuperados correctamente"
+  //       )
+  //     );
+  //   } catch (error) {
+  //     console.error("Error detallado:", error);
+  //     res
+  //       .status(500)
+  //       .json(
+  //         Respuesta.error(
+  //           "Error al obtener entrenamientos no confirmados",
+  //           error.message
+  //         )
+  //       );
+  //   }
+  // }
 
-      res.json(
-        Respuesta.exito(
-          resultados,
-          "Entrenamientos no confirmados recuperados correctamente"
-        )
-      );
-    } catch (error) {
-      console.error("Error detallado:", error);
-      res
-        .status(500)
-        .json(
-          Respuesta.error(
-            "Error al obtener entrenamientos no confirmados",
-            error.message
-          )
-        );
-    }
-  }
+  // async getAllEntrenamientosAsistidosByJugadora(req, res) {
+  //   const { idjugadora } = req.params;
 
-  async getAllEntrenamientosAsistidosByJugadora(req, res) {
-    const { idjugadora } = req.params;
+  //   console.log("IDJUGADORA: ", idjugadora);
 
-    console.log("IDJUGADORA: ", idjugadora);
+  //   try {
+  //     // const data = await Asistencias.findAll({
+  //     //   where: { idjugadora: idjugadora },
+  //     // });
 
-    try {
-      // const data = await Asistencias.findAll({
-      //   where: { idjugadora: idjugadora },
-      // });
-
-      const data = await Entrenamiento.findAll({
-        include: [
-          {
-            model: Asistencias,
-            as: "asistencia_entrenamientos",
-            where: { idjugadora: idjugadora },
-            required: true, // INNER JOIN (solo entrenamientos con asistencia de esta jugadora)
-          },
-        ],
-        order: [["fecha_entrenamiento", "DESC"]],
-      });
-      res.json(
-        Respuesta.exito(
-          data,
-          "Datos de entrenamientos asistidos recuperados correctamente"
-        )
-      );
-    } catch (err) {
-      res
-        .status(500)
-        .json(
-          Respuesta.error(
-            null,
-            `Error al recuperar los datos de los entrenamientos asistidos: ${req.originalUrl}`
-          )
-        );
-    }
-  }
+  //     const data = await Entrenamiento.findAll({
+  //       include: [
+  //         {
+  //           model: Asistencias,
+  //           as: "asistencia_entrenamientos",
+  //           where: { idjugadora: idjugadora },
+  //           required: true, // INNER JOIN (solo entrenamientos con asistencia de esta jugadora)
+  //         },
+  //       ],
+  //       order: [["fecha_entrenamiento", "DESC"]],
+  //     });
+  //     res.json(
+  //       Respuesta.exito(
+  //         data,
+  //         "Datos de entrenamientos asistidos recuperados correctamente"
+  //       )
+  //     );
+  //   } catch (err) {
+  //     res
+  //       .status(500)
+  //       .json(
+  //         Respuesta.error(
+  //           null,
+  //           `Error al recuperar los datos de los entrenamientos asistidos: ${req.originalUrl}`
+  //         )
+  //       );
+  //   }
+  // }
   // async getAllEntrenamientos(req, res) {
   //   try {
   //     const data = await Entrenamiento.findAll();
@@ -193,24 +167,28 @@ class AsistenciasEntrenamientoController {
   //   }
   // }
 
-  async createAsistencia(req, res) {
+  async createNoAsistencia(req, res) {
     const identrenamiento = req.params.identrenamiento;
     const idjugadora = req.params.idjugadora;
 
+    console.log("IDENTRENAMIENTO:", identrenamiento);
+    console.log("IDJUGADORA:", idjugadora);
+    
+
     try {
-      let asistencia = {
+      let noAsistencia = {
         identrenamiento,
         idjugadora,
       };
 
-      const nuevaAsistencia = await Asistencias.create(asistencia);
+      const nuevaNoAsistencia = await NoAsistencias.create(noAsistencia);
 
       res
         .status(201)
         .json(
           Respuesta.exito(
-            nuevaAsistencia,
-            "Asistencia de entrenamiento creado con éxito"
+            nuevaNoAsistencia,
+            "Se ha confirmado que no vas asistir al entrenamiento"
           )
         );
     } catch (err) {
@@ -220,7 +198,7 @@ class AsistenciasEntrenamientoController {
         .json(
           Respuesta.error(
             null,
-            `Error al crear una nueva asistencia de entrenamiento`
+            `Error al confirmar que no vas asistir al entrenamiento`
           )
         );
     }
@@ -296,6 +274,7 @@ class AsistenciasEntrenamientoController {
     const idasistencia = req.params.idasistencia;
 
     console.log("IDASISTENCIA: ", idasistencia);
+    
 
     try {
       const asistencia = await Asistencias.findByPk(idasistencia);
@@ -408,4 +387,4 @@ class AsistenciasEntrenamientoController {
   // }
 }
 
-module.exports = new AsistenciasEntrenamientoController();
+module.exports = new NoAsistenciasEntrenamientoController();

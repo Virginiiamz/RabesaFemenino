@@ -27,11 +27,11 @@ function initModels(sequelize) {
   asistenciaEntrenamientos.belongsTo(entrenamientos, { as: "identrenamiento_entrenamiento", foreignKey: "identrenamiento"});
   entrenamientos.hasMany(asistenciaEntrenamientos, { as: "asistencia_entrenamientos", foreignKey: "identrenamiento"});
   noAsistenciaEntrenamientos.belongsTo(entrenamientos, { as: "identrenamiento_entrenamiento", foreignKey: "identrenamiento"});
-  entrenamientos.hasOne(noAsistenciaEntrenamientos, { as: "no_asistencia_entrenamiento", foreignKey: "identrenamiento"});
+  entrenamientos.hasMany(noAsistenciaEntrenamientos, { as: "no_asistencia_entrenamientos", foreignKey: "identrenamiento"});
   asistenciaEntrenamientos.belongsTo(jugadoras, { as: "idjugadora_jugadora", foreignKey: "idjugadora"});
   jugadoras.hasMany(asistenciaEntrenamientos, { as: "asistencia_entrenamientos", foreignKey: "idjugadora"});
   noAsistenciaEntrenamientos.belongsTo(jugadoras, { as: "idjugadora_jugadora", foreignKey: "idjugadora"});
-  jugadoras.hasOne(noAsistenciaEntrenamientos, { as: "no_asistencia_entrenamiento", foreignKey: "idjugadora"});
+  jugadoras.hasMany(noAsistenciaEntrenamientos, { as: "no_asistencia_entrenamientos", foreignKey: "idjugadora"});
   entrenadores.belongsTo(usuario, { as: "idusuario_usuario", foreignKey: "idusuario"});
   usuario.hasMany(entrenadores, { as: "entrenadores", foreignKey: "idusuario"});
   jugadoras.belongsTo(usuario, { as: "idusuario_usuario", foreignKey: "idusuario"});
