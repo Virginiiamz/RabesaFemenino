@@ -60,6 +60,22 @@ function AssistedTraining() {
     getEntrenamientosConfirmados();
   }, []);
 
+  const handleDelete = async (idasistencia) => {
+
+    let response = await fetch(apiUrl + "/entrenamientos/asistencias/" + idasistencia, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      const asistenciaTrasBorrado = datosConfirmados.filter(
+        (asistencia) => asistencia.idasistencia != idasistencia
+      );
+      // Establece los datos de nuevo para provocar un renderizado
+      setDatosConfirmados(asistenciaTrasBorrado);
+      navigate(0);
+    }
+  };
+
   return (
     <>
       <Box
@@ -87,7 +103,6 @@ function AssistedTraining() {
                 <Typography gutterBottom variant="h5" component="div">
                   Entrenamiento
                 </Typography>
-                {console.log(entrenamiento)}
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   {entrenamiento.fecha_entrenamiento}
                 </Typography>
@@ -102,7 +117,7 @@ function AssistedTraining() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small" onClick={() => navigate("/home/training")}>
+                <Button size="small" onClick={() => handleDelete(entrenamiento.asistencia_entrenamientos[0].idasistencia)}>
                   Cancelar
                 </Button>
               </CardActions>

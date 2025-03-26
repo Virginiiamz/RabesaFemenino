@@ -266,40 +266,43 @@ class AsistenciasEntrenamientoController {
     // }
   }
 
-  // async deleteEntrenamiento(req, res) {
-  //   const identrenamiento = req.params.identrenamiento;
+  async deleteAsistencia(req, res) {
+    const idasistencia = req.params.idasistencia;
 
-  //   try {
-  //     const entrenamiento = await Entrenamiento.findByPk(identrenamiento);
+    console.log("IDASISTENCIA: ", idasistencia);
+    
 
-  //     if (entrenamiento) {
-  //       const numFilas = await Entrenamiento.destroy({
-  //         where: {
-  //           identrenamiento: identrenamiento,
-  //         },
-  //       });
+    try {
+      const asistencia = await Asistencias.findByPk(idasistencia);
 
-  //       if (numFilas == 0) {
-  //         // No se ha encontrado lo que se quería borrar
-  //         res
-  //           .status(404)
-  //           .json(Respuesta.error(null, "No encontrado: " + identrenamiento));
-  //       } else {
-  //         res.status(204).send();
-  //       }
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al eliminar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+      if (asistencia) {
+        const numFilas = await Asistencias.destroy({
+          where: {
+            idasistencia: idasistencia,
+          },
+        });
+
+        if (numFilas == 0) {
+          // No se ha encontrado lo que se quería borrar
+          res
+            .status(404)
+            .json(Respuesta.error(null, "No encontrado: " + idasistencia));
+        } else {
+          res.status(204).send();
+        }
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al eliminar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   // async updateEntrenamiento(req, res) {
   //   const datos = req.body;
