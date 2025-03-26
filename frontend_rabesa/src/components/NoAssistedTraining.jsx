@@ -60,20 +60,20 @@ function NoAssistedTraining() {
     getEntrenamientosNoConfirmados();
   }, []);
 
-  const handleDelete = async (idasistencia) => {
+  const handleDelete = async (idnoasistencia) => {
     let response = await fetch(
-      apiUrl + "/entrenamientos/asistencias/" + idasistencia,
+      apiUrl + "/entrenamientos/no-asistencias/" + idnoasistencia,
       {
         method: "DELETE",
       }
     );
 
     if (response.ok) {
-      const asistenciaTrasBorrado = datosNoConfirmados.filter(
-        (asistencia) => asistencia.idasistencia != idasistencia
+      const noAsistenciaTrasBorrado = datosNoConfirmados.filter(
+        (noAsistencia) => noAsistencia.idnoasistencia != idnoasistencia
       );
       // Establece los datos de nuevo para provocar un renderizado
-      setDatosNoConfirmados(asistenciaTrasBorrado);
+      setDatosNoConfirmados(noAsistenciaTrasBorrado);
       navigate(0);
     }
   };
@@ -123,16 +123,16 @@ function NoAssistedTraining() {
                 </Typography>
               </CardContent>
               <CardActions>
-                {/* <Button
+                <Button
                   size="small"
                   onClick={() =>
                     handleDelete(
-                      entrenamiento.asistencia_entrenamientos[0].idasistencia
+                      entrenamiento.no_asistencia_entrenamientos[0].idnoasistencia
                     )
                   }
                 >
                   Cancelar
-                </Button> */}
+                </Button>
               </CardActions>
             </Card>
           ))}

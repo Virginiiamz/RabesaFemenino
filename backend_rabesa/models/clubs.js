@@ -20,6 +20,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false
     },
+    puntos: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     fecha_fundacion: {
       type: DataTypes.DATEONLY,
       allowNull: false

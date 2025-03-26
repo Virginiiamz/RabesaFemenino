@@ -269,18 +269,18 @@ class NoAsistenciasEntrenamientoController {
     // }
   }
 
-  async deleteAsistencia(req, res) {
-    const idasistencia = req.params.idasistencia;
+  async deleteNoAsistencia(req, res) {
+    const idnoasistencia = req.params.idnoasistencia;
 
-    console.log("IDASISTENCIA: ", idasistencia);
+    console.log("IDNOASISTENCIA: ", idnoasistencia);
 
     try {
-      const asistencia = await Asistencias.findByPk(idasistencia);
+      const noAsistencia = await NoAsistencias.findByPk(idnoasistencia);
 
-      if (asistencia) {
-        const numFilas = await Asistencias.destroy({
+      if (noAsistencia) {
+        const numFilas = await NoAsistencias.destroy({
           where: {
-            idasistencia: idasistencia,
+            idnoasistencia: idnoasistencia,
           },
         });
 
@@ -288,7 +288,7 @@ class NoAsistenciasEntrenamientoController {
           // No se ha encontrado lo que se quería borrar
           res
             .status(404)
-            .json(Respuesta.error(null, "No encontrado: " + idasistencia));
+            .json(Respuesta.error(null, "No encontrado: " + idnoasistencia));
         } else {
           res.status(204).send();
         }

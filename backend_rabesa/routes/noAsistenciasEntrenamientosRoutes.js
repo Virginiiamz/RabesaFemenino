@@ -7,7 +7,7 @@ const noAsistenciasController = require('../controllers/noAsistenciasEntrenamien
 router.get('/jugadora/:idjugadora', noAsistenciasController.getAllEntrenamientosNoAsistidosByJugadora);
 // router.get('/noconfirmados/:idjugadora', asistenciasController.getEntrenamientosNoConfirmados);
 router.post('/:identrenamiento/:idjugadora', noAsistenciasController.createNoAsistencia);
-// router.delete('/:idasistencia', asistenciasController.deleteAsistencia);
+router.delete('/:idnoasistencia', noAsistenciasController.deleteNoAsistencia);
 // router.put('/:identrenamiento', entrenamientoController.updateEntrenamiento);
 
 
