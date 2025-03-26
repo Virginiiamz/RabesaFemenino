@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { apiUrl } from "../config";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useUserStore from "../stores/useUserStore";
 
 function AssistedTraining() {
@@ -61,10 +61,12 @@ function AssistedTraining() {
   }, []);
 
   const handleDelete = async (idasistencia) => {
-
-    let response = await fetch(apiUrl + "/entrenamientos/asistencias/" + idasistencia, {
-      method: "DELETE",
-    });
+    let response = await fetch(
+      apiUrl + "/entrenamientos/asistencias/" + idasistencia,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (response.ok) {
       const asistenciaTrasBorrado = datosConfirmados.filter(
@@ -86,6 +88,9 @@ function AssistedTraining() {
         }}
       >
         <Toolbar />
+        <Link to="/home/training">
+          <Button variant="contained">Volver atras</Button>
+        </Link>
         <Typography sx={{ marginBottom: 2 }}>
           Entrenamientos confirmados
         </Typography>
@@ -117,7 +122,14 @@ function AssistedTraining() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small" onClick={() => handleDelete(entrenamiento.asistencia_entrenamientos[0].idasistencia)}>
+                <Button
+                  size="small"
+                  onClick={() =>
+                    handleDelete(
+                      entrenamiento.asistencia_entrenamientos[0].idasistencia
+                    )
+                  }
+                >
                   Cancelar
                 </Button>
               </CardActions>
