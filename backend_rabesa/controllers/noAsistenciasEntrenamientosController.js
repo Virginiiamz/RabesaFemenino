@@ -55,44 +55,44 @@ class NoAsistenciasEntrenamientoController {
   //   }
   // }
 
-  // async getAllEntrenamientosAsistidosByJugadora(req, res) {
-  //   const { idjugadora } = req.params;
+  async getAllEntrenamientosNoAsistidosByJugadora(req, res) {
+    const { idjugadora } = req.params;
 
-  //   console.log("IDJUGADORA: ", idjugadora);
+    console.log("IDJUGADORA: ", idjugadora);
 
-  //   try {
-  //     // const data = await Asistencias.findAll({
-  //     //   where: { idjugadora: idjugadora },
-  //     // });
+    try {
+      const data = await Entrenamiento.findAll({
+        include: [
+          {
+            model: NoAsistencias,
+            as: "no_asistencia_entrenamientos",
+            where: { idjugadora: idjugadora },
+            required: true, // INNER JOIN (solo entrenamientos con asistencia de esta jugadora)
+          },
+        ],
+        order: [["fecha_entrenamiento", "DESC"]],
+      });
 
-  //     const data = await Entrenamiento.findAll({
-  //       include: [
-  //         {
-  //           model: Asistencias,
-  //           as: "asistencia_entrenamientos",
-  //           where: { idjugadora: idjugadora },
-  //           required: true, // INNER JOIN (solo entrenamientos con asistencia de esta jugadora)
-  //         },
-  //       ],
-  //       order: [["fecha_entrenamiento", "DESC"]],
-  //     });
-  //     res.json(
-  //       Respuesta.exito(
-  //         data,
-  //         "Datos de entrenamientos asistidos recuperados correctamente"
-  //       )
-  //     );
-  //   } catch (err) {
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos de los entrenamientos asistidos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+      console.log(data);
+
+      res.json(
+        Respuesta.exito(
+          data,
+          "Datos de entrenamientos no asistidos recuperados correctamente"
+        )
+      );
+    } catch (err) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos de los entrenamientos no asistidos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
   // async getAllEntrenamientos(req, res) {
   //   try {
   //     const data = await Entrenamiento.findAll();
@@ -173,7 +173,6 @@ class NoAsistenciasEntrenamientoController {
 
     console.log("IDENTRENAMIENTO:", identrenamiento);
     console.log("IDJUGADORA:", idjugadora);
-    
 
     try {
       let noAsistencia = {
@@ -274,7 +273,6 @@ class NoAsistenciasEntrenamientoController {
     const idasistencia = req.params.idasistencia;
 
     console.log("IDASISTENCIA: ", idasistencia);
-    
 
     try {
       const asistencia = await Asistencias.findByPk(idasistencia);

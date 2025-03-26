@@ -13,14 +13,14 @@ import { Link, useNavigate } from "react-router";
 import useUserStore from "../stores/useUserStore";
 
 function NoAssistedTraining() {
-  const [datosConfirmados, setDatosConfirmados] = useState([]);
+  const [datosNoConfirmados, setDatosNoConfirmados] = useState([]);
   const [datosJugadora, setDatosJugadora] = useState([]);
   const navigate = useNavigate();
 
   const { user } = useUserStore();
 
   useEffect(() => {
-    async function getEntrenamientosConfirmados() {
+    async function getEntrenamientosNoConfirmados() {
       const jugadoraResponse = await fetch(
         apiUrl + "/jugadoras/correo/" + user.correo,
         {
@@ -36,9 +36,9 @@ function NoAssistedTraining() {
         const jugadoraData = await jugadoraResponse.json();
         setDatosJugadora(jugadoraData.datos);
 
-        const entrenamientosConfirmadosResponse = await fetch(
+        const entrenamientosNoConfirmadosResponse = await fetch(
           apiUrl +
-            "/entrenamientos/asistencias/jugadora/" +
+            "/entrenamientos/no-asistencias/jugadora/" +
             jugadoraData.datos.idjugadora,
           {
             method: "GET",
@@ -49,15 +49,15 @@ function NoAssistedTraining() {
           }
         );
 
-        if (entrenamientosConfirmadosResponse.ok) {
-          const entrenamientosConfirmadosData =
-            await entrenamientosConfirmadosResponse.json();
-          setDatosConfirmados(entrenamientosConfirmadosData.datos);
+        if (entrenamientosNoConfirmadosResponse.ok) {
+          const entrenamientosNoConfirmadosData =
+            await entrenamientosNoConfirmadosResponse.json();
+          setDatosNoConfirmados(entrenamientosNoConfirmadosData.datos);
         }
       }
     }
 
-    getEntrenamientosConfirmados();
+    getEntrenamientosNoConfirmados();
   }, []);
 
   const handleDelete = async (idasistencia) => {
@@ -69,11 +69,11 @@ function NoAssistedTraining() {
     );
 
     if (response.ok) {
-      const asistenciaTrasBorrado = datosConfirmados.filter(
+      const asistenciaTrasBorrado = datosNoConfirmados.filter(
         (asistencia) => asistencia.idasistencia != idasistencia
       );
       // Establece los datos de nuevo para provocar un renderizado
-      setDatosConfirmados(asistenciaTrasBorrado);
+      setDatosNoConfirmados(asistenciaTrasBorrado);
       navigate(0);
     }
   };
@@ -102,7 +102,8 @@ function NoAssistedTraining() {
             gap: 2,
           }}
         >
-          {datosConfirmados.map((entrenamiento) => (
+          {console.log(datosNoConfirmados)}
+          {datosNoConfirmados.map((entrenamiento) => (
             <Card>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
@@ -122,7 +123,7 @@ function NoAssistedTraining() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button
+                {/* <Button
                   size="small"
                   onClick={() =>
                     handleDelete(
@@ -131,7 +132,7 @@ function NoAssistedTraining() {
                   }
                 >
                   Cancelar
-                </Button>
+                </Button> */}
               </CardActions>
             </Card>
           ))}
