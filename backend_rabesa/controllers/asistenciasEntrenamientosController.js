@@ -55,6 +55,11 @@ class AsistenciasEntrenamientoController {
                 ),
               },
             },
+            {
+              fecha_entrenamiento: {
+                [Op.gte]: new Date(), // Filtra fechas >= hoy
+              },
+            },
           ],
         },
         order: [["fecha_entrenamiento", "DESC"]],
