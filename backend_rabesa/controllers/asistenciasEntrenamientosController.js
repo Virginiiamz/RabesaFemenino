@@ -114,20 +114,8 @@ class AsistenciasEntrenamientoController {
   }
   async getAllAsistenciaByEntrenamiento(req, res) {
     const identrenamiento = req.params.identrenamiento;
-    // const idjugadora = req.params.jugadora;
 
     try {
-      // const data = await Asistencias.findAll({
-      //   where: { identrenamiento: identrenamiento },
-      //   include: [
-      //     {
-      //       model: Jugadora,
-      //       as: "idjugadora_jugadora",
-      //       where: { idjugadora: idjugadora },
-      //       required: true,
-      //     },
-      //   ],
-      // });
 
       const data = await Asistencias.findAll({
         where: { identrenamiento: identrenamiento }, // Todas las asistencias de este entrenamiento

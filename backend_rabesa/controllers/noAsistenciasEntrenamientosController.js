@@ -13,6 +13,7 @@ const models = initModels(sequelize);
 // Recuperar el modelo plato
 const NoAsistencias = models.noAsistenciaEntrenamientos;
 const Entrenamiento = models.entrenamientos;
+const Jugadora = models.jugadoras;
 
 class NoAsistenciasEntrenamientoController {
   // async getEntrenamientosNoConfirmados(req, res) {
@@ -67,7 +68,7 @@ class NoAsistenciasEntrenamientoController {
             model: NoAsistencias,
             as: "no_asistencia_entrenamientos",
             where: { idjugadora: idjugadora },
-            required: true, // INNER JOIN (solo entrenamientos con asistencia de esta jugadora)
+            required: true,
           },
         ],
         order: [["fecha_entrenamiento", "DESC"]],
@@ -88,6 +89,38 @@ class NoAsistenciasEntrenamientoController {
           Respuesta.error(
             null,
             `Error al recuperar los datos de los entrenamientos no asistidos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
+  async getAllNoAsistenciaByEntrenamiento(req, res) {
+    const identrenamiento = req.params.identrenamiento;
+
+    try {
+      const data = await NoAsistencias.findAll({
+        where: { identrenamiento: identrenamiento }, // Todas las no asistencias de este entrenamiento
+        include: [
+          {
+            model: Jugadora,
+            as: "idjugadora_jugadora",
+            required: true, // Solo incluye jugadoras que no van asistir al entrenamiento
+          },
+        ],
+      });
+      res.json(
+        Respuesta.exito(
+          data,
+          "Datos de las jugadoras que no van asistir al entrenamiento"
+        )
+      );
+    } catch (err) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar no-asistencias: ${err.message}`
           )
         );
     }
