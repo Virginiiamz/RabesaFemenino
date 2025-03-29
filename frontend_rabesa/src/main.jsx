@@ -18,6 +18,7 @@ import CreateTraining from "./components/CreateTraining";
 import ModifyTraining from "./components/ModifyTraining";
 import AssistedTraining from "./components/AssistedTraining";
 import NoAssistedTraining from "./components/NoAssistedTraining";
+import ShowTraining from "./components/ShowTraining";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -38,13 +39,6 @@ let router = createBrowserRouter([
       {
         path: "team",
         element: <Team />,
-        // path: "team",
-        // element: (
-        //   <ProtectedRoute
-        //     element={<Team />}
-        //     allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
-        //   />
-        // ),
       },
       {
         path: "/home/crear-entrenador",
@@ -111,6 +105,10 @@ let router = createBrowserRouter([
             allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
           />
         ),
+      },
+      {
+        path: "/home/training/mostrar-entrenamiento/:identrenamiento",
+        element: <ShowTraining />,
       },
     ],
   },

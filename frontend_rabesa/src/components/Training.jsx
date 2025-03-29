@@ -21,9 +21,9 @@ function Training() {
     if (!fecha) return "";
 
     const opciones = {
-      weekday: "long", 
-      year: "numeric", 
-      month: "long", 
+      weekday: "long",
+      year: "numeric",
+      month: "long",
       day: "numeric",
     };
 
@@ -228,72 +228,76 @@ function Training() {
           }}
         >
           {datosEntrenamientos.map((entrenamiento) => (
-            <Card>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Entrenamiento
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {formatearFecha(entrenamiento.fecha_entrenamiento)}
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {entrenamiento.hora_inicio} - {entrenamiento.hora_final}
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {entrenamiento.tipo}
-                </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {entrenamiento.informacion}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                {entrenador ? (
-                  <Button
-                    size="small"
-                    onClick={() =>
-                      navigate(
-                        "/home/modificar-entrenamiento/" +
-                          entrenamiento.identrenamiento
-                      )
-                    }
-                  >
-                    Editar
-                  </Button>
-                ) : (
-                  <Button
-                    size="small"
-                    onClick={() =>
-                      handleSubmitAsistencia(
-                        entrenamiento.identrenamiento,
-                        datosJugadora.idjugadora
-                      )
-                    }
-                  >
-                    Aceptar
-                  </Button>
-                )}
-                {entrenador ? (
-                  <Button
-                    size="small"
-                    onClick={() => handleDelete(entrenamiento.identrenamiento)}
-                  >
-                    Eliminar
-                  </Button>
-                ) : (
-                  <Button
-                    size="small"
-                    onClick={() =>
-                      handleSubmitNoAsistencia(
-                        entrenamiento.identrenamiento,
-                        datosJugadora.idjugadora
-                      )
-                    }
-                  >
-                    Rechazar
-                  </Button>
-                )}
-              </CardActions>
-            </Card>
+            <Link to={`/home/training/mostrar-entrenamiento/${entrenamiento.identrenamiento}`}>
+              <Card>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Entrenamiento
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {formatearFecha(entrenamiento.fecha_entrenamiento)}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {entrenamiento.hora_inicio} - {entrenamiento.hora_final}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {entrenamiento.tipo}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {entrenamiento.informacion}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  {entrenador ? (
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        navigate(
+                          "/home/modificar-entrenamiento/" +
+                            entrenamiento.identrenamiento
+                        )
+                      }
+                    >
+                      Editar
+                    </Button>
+                  ) : (
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        handleSubmitAsistencia(
+                          entrenamiento.identrenamiento,
+                          datosJugadora.idjugadora
+                        )
+                      }
+                    >
+                      Aceptar
+                    </Button>
+                  )}
+                  {entrenador ? (
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        handleDelete(entrenamiento.identrenamiento)
+                      }
+                    >
+                      Eliminar
+                    </Button>
+                  ) : (
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        handleSubmitNoAsistencia(
+                          entrenamiento.identrenamiento,
+                          datosJugadora.idjugadora
+                        )
+                      }
+                    >
+                      Rechazar
+                    </Button>
+                  )}
+                </CardActions>
+              </Card>
+            </Link>
           ))}
         </Box>
       </Box>
