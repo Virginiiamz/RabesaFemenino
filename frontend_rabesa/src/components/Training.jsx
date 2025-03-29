@@ -17,6 +17,28 @@ function Training() {
   const [datosJugadora, setDatosJugadora] = useState([]);
   const navigate = useNavigate();
 
+  const formatearFecha = (fecha) => {
+    if (!fecha) return "";
+
+    const opciones = {
+      weekday: "long", 
+      year: "numeric", 
+      month: "long", 
+      day: "numeric",
+    };
+
+    let fechaStr = new Date(fecha).toLocaleDateString("es-ES", opciones);
+
+    fechaStr = fechaStr.replace(/\b\w/g, (letra, indice) => {
+      if (indice === 0 || fechaStr.substring(indice - 3, indice) === "de ") {
+        return letra.toUpperCase();
+      }
+      return letra;
+    });
+
+    return fechaStr;
+  };
+
   const { user } = useUserStore();
   let entrenador = false;
 
@@ -212,7 +234,7 @@ function Training() {
                   Entrenamiento
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {entrenamiento.fecha_entrenamiento}
+                  {formatearFecha(entrenamiento.fecha_entrenamiento)}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.secondary" }}>
                   {entrenamiento.hora_inicio} - {entrenamiento.hora_final}
