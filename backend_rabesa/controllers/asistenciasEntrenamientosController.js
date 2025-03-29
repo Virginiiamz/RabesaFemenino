@@ -13,6 +13,7 @@ const models = initModels(sequelize);
 // Recuperar el modelo plato
 const Asistencias = models.asistenciaEntrenamientos;
 const Entrenamiento = models.entrenamientos;
+const Jugadora = models.jugadoras;
 
 class AsistenciasEntrenamientoController {
   async getEntrenamientosNoConfirmados(req, res) {
@@ -21,19 +22,6 @@ class AsistenciasEntrenamientoController {
     console.log("IDJUGADORA: ", idjugadora);
 
     try {
-      // const resultados = await Entrenamiento.findAll({
-      //   where: {
-      //     identrenamiento: {
-      //       [Op.notIn]: sequelize.literal(
-      //         `(SELECT identrenamiento FROM asistencia_entrenamientos WHERE idjugadora = ${sequelize.escape(
-      //           idjugadora
-      //         )})`
-      //       ),
-      //     },
-      //   },
-      //   order: [["fecha_entrenamiento", "DESC"]],
-      // });
-
       const resultados = await Entrenamiento.findAll({
         where: {
           [Op.and]: [
@@ -124,22 +112,51 @@ class AsistenciasEntrenamientoController {
         );
     }
   }
-  // async getAllEntrenamientos(req, res) {
-  //   try {
-  //     const data = await Entrenamiento.findAll();
-  //     res.json(Respuesta.exito(data, "Datos de entrenamientos recuperados"));
-  //   } catch (err) {
-  //     // Handle errors during the model call
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos de los entrenamientos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+  async getAllAsistenciaByEntrenamiento(req, res) {
+    const identrenamiento = req.params.identrenamiento;
+    // const idjugadora = req.params.jugadora;
+
+    try {
+      // const data = await Asistencias.findAll({
+      //   where: { identrenamiento: identrenamiento },
+      //   include: [
+      //     {
+      //       model: Jugadora,
+      //       as: "idjugadora_jugadora",
+      //       where: { idjugadora: idjugadora },
+      //       required: true,
+      //     },
+      //   ],
+      // });
+
+      const data = await Asistencias.findAll({
+        where: { identrenamiento: identrenamiento }, // Todas las asistencias de este entrenamiento
+        include: [
+          {
+            model: Jugadora,
+            as: "idjugadora_jugadora",
+            required: true, // Solo incluye jugadoras con asistencia registrada
+          },
+        ],
+      });
+      res.json(
+        Respuesta.exito(
+          data,
+          "Datos de asistencias por un entrenamiento recuperado correctamente"
+        )
+      );
+    } catch (err) {
+      // Handle errors during the model call
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar las asistencias de un entrenamiento: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   // async getAllEntrenamientosByFecha(req, res) {
   //   try {
