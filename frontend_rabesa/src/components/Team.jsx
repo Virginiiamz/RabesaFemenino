@@ -11,11 +11,19 @@ import {
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { apiUrl } from "../config";
+import useUserStore from "../stores/useUserStore";
 
 function Team() {
   const [datosEntrenadores, setDatosEntrenadores] = useState([]);
   const [datosJugadoras, setDatosJugadoras] = useState([]);
   const navigate = useNavigate();
+
+  const { user } = useUserStore();
+  let esEntrenador = false;
+
+  if (user.rol == "Entrenador") {
+    esEntrenador = true;
+  }
 
   useEffect(() => {
     async function getEntrenadores() {
@@ -90,12 +98,17 @@ function Team() {
         }}
       >
         <Toolbar />
-        <Link to="/home/crear-entrenador">
-          <Button variant="contained">Crear entrenador</Button>
-        </Link>
-        <Link to="/home/crear-jugadora">
-          <Button variant="contained">Crear jugadora</Button>
-        </Link>
+        {esEntrenador ? (
+          <Link to="/home/crear-entrenador">
+            <Button variant="contained">Crear entrenador</Button>
+          </Link>
+        ) : null}
+        {esEntrenador ? (
+          <Link to="/home/crear-jugadora">
+            <Button variant="contained">Crear jugadora</Button>
+          </Link>
+        ) : null}
+
         <Typography sx={{ marginBottom: 2 }}>Entrenadores</Typography>
         <Box
           sx={{
@@ -122,26 +135,28 @@ function Team() {
                   {entrenador.rol}
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Button
-                  size="small"
-                  onClick={() =>
-                    navigate(
-                      "/home/modificar-entrenador/" + entrenador.identrenador
-                    )
-                  }
-                >
-                  Editar
-                </Button>
-                <Button
-                  size="small"
-                  onClick={() =>
-                    handleDeleteEntrenadores(entrenador.identrenador)
-                  }
-                >
-                  Eliminar
-                </Button>
-              </CardActions>
+              {esEntrenador ? (
+                <CardActions>
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      navigate(
+                        "/home/modificar-entrenador/" + entrenador.identrenador
+                      )
+                    }
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      handleDeleteEntrenadores(entrenador.identrenador)
+                    }
+                  >
+                    Eliminar
+                  </Button>
+                </CardActions>
+              ) : null}
             </Card>
           ))}
         </Box>
@@ -171,26 +186,26 @@ function Team() {
                   {jugadora.posicion}
                 </Typography>
               </CardContent>
-              <CardActions>
-                <Button
-                  size="small"
-                  onClick={() =>
-                    navigate(
-                      "/home/modificar-jugadora/" + jugadora.idjugadora
-                    )
-                  }
-                >
-                  Editar
-                </Button>
-                <Button
-                  size="small"
-                  onClick={() =>
-                    handleDeleteJugadoras(jugadora.idjugadora)
-                  }
-                >
-                  Eliminar
-                </Button>
-              </CardActions>
+              {esEntrenador ? (
+                <CardActions>
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      navigate(
+                        "/home/modificar-jugadora/" + jugadora.idjugadora
+                      )
+                    }
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={() => handleDeleteJugadoras(jugadora.idjugadora)}
+                  >
+                    Eliminar
+                  </Button>
+                </CardActions>
+              ) : null}
             </Card>
           ))}
         </Box>

@@ -37,12 +37,14 @@ let router = createBrowserRouter([
       },
       {
         path: "team",
-        element: (
-          <ProtectedRoute
-            element={<Team />}
-            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
-          />
-        ),
+        element: <Team />,
+        // path: "team",
+        // element: (
+        //   <ProtectedRoute
+        //     element={<Team />}
+        //     allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+        //   />
+        // ),
       },
       {
         path: "/home/crear-entrenador",
