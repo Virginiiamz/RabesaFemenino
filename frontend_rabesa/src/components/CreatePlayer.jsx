@@ -58,10 +58,7 @@ function CreatePlayer() {
     formDataToSend.append("edad", formData.edad);
     formDataToSend.append("posicion", formData.posicion);
     formDataToSend.append("numero_camiseta", formData.numero_camiseta);
-    formDataToSend.append(
-      "fecha_ingreso",
-      formData.fecha_ingreso.toISOString()
-    ); // Convertir fecha a string
+    formDataToSend.append("fecha_ingreso", formData.fecha_ingreso);
     formDataToSend.append("estado", formData.estado);
     formDataToSend.append("idclub", formData.idclub);
 
