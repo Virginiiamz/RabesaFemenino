@@ -4,6 +4,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  ImageListItem,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -132,21 +133,22 @@ function ShowTraining() {
                 sx={{
                   display: "flex",
                   flexDirection: "row",
-                  alignContent: "center",
+                  alignItems: "center",
                   gap: 1,
                 }}
               >
-                <CardMedia
-                  component="img"
-                  alt={asistencia.idjugadora_jugadora.nombre}
-                  height="100"
-                  image={`http://localhost:3000/uploads/${asistencia.idjugadora_jugadora.imagen}`}
-                />
-                <CardContent>
-                  <Typography gutterBottom component="div">
-                    {asistencia.idjugadora_jugadora.nombre}
-                  </Typography>
-                </CardContent>
+                <img
+                  src={`http://localhost:3000/uploads/${asistencia.idjugadora_jugadora.imagen}`}
+                  style={{
+                    borderRadius: "70%",
+                    height: "100px",
+                    width: "100px",
+                    margin: "1rem",
+                  }}
+                ></img>
+                <Typography gutterBottom component="div">
+                  {asistencia.idjugadora_jugadora.nombre}
+                </Typography>
                 <CardActions></CardActions>
               </Card>
             ))}
@@ -167,20 +169,22 @@ function ShowTraining() {
                 sx={{
                   display: "flex",
                   flexDirection: "row",
+                  alignItems: "center",
                   gap: 1,
                 }}
               >
-                <CardMedia
-                  component="img"
-                  alt={noAsistencia.idjugadora_jugadora.nombre}
-                  height="100"
-                  image={`http://localhost:3000/uploads/${noAsistencia.idjugadora_jugadora.imagen}`}
-                />
-                <CardContent>
-                  <Typography gutterBottom component="div">
-                    {noAsistencia.idjugadora_jugadora.nombre}
-                  </Typography>
-                </CardContent>
+                <img
+                  src={`http://localhost:3000/uploads/${noAsistencia.idjugadora_jugadora.imagen}`}
+                  style={{
+                    borderRadius: "70%",
+                    height: "100px",
+                    width: "100px",
+                    margin: "1rem",
+                  }}
+                ></img>
+                <Typography gutterBottom component="div">
+                  {noAsistencia.idjugadora_jugadora.nombre}
+                </Typography>
                 <CardActions></CardActions>
               </Card>
             ))}
