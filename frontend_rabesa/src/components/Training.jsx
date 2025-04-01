@@ -105,9 +105,10 @@ function Training() {
     getDatosJugadora();
   }, []);
 
-  const handleSubmitAsistencia = async (identrenamiento, idjugadora) => {
+  const handleSubmitAsistencia = async (identrenamiento, idjugadora, estado) => {
     console.log(identrenamiento);
     console.log(idjugadora);
+    console.log(estado);
 
     try {
       const response = await fetch(
@@ -115,7 +116,7 @@ function Training() {
           "/entrenamientos/asistencias/" +
           identrenamiento +
           "/" +
-          idjugadora,
+          idjugadora + "/" + estado,
         {
           method: "POST",
           headers: {
@@ -138,38 +139,38 @@ function Training() {
     }
   };
 
-  const handleSubmitNoAsistencia = async (identrenamiento, idjugadora) => {
-    console.log(identrenamiento);
-    console.log(idjugadora);
+  // const handleSubmitNoAsistencia = async (identrenamiento, idjugadora) => {
+  //   console.log(identrenamiento);
+  //   console.log(idjugadora);
 
-    try {
-      const response = await fetch(
-        apiUrl +
-          "/entrenamientos/no-asistencias/" +
-          identrenamiento +
-          "/" +
-          idjugadora,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
-        }
-      );
+  //   try {
+  //     const response = await fetch(
+  //       apiUrl +
+  //         "/entrenamientos/no-asistencias/" +
+  //         identrenamiento +
+  //         "/" +
+  //         idjugadora,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+  //       }
+  //     );
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      if (response.ok) {
-        alert(data.mensaje);
-        navigate(0);
-      } else {
-        alert(data.mensaje);
-      }
-    } catch (error) {
-      alert("Error de red. Inténtalo de nuevo más tarde.");
-    }
-  };
+  //     if (response.ok) {
+  //       alert(data.mensaje);
+  //       navigate(0);
+  //     } else {
+  //       alert(data.mensaje);
+  //     }
+  //   } catch (error) {
+  //     alert("Error de red. Inténtalo de nuevo más tarde.");
+  //   }
+  // };
 
   const handleDelete = async (identrenamiento) => {
     let response = await fetch(apiUrl + "/entrenamientos/" + identrenamiento, {
@@ -266,7 +267,7 @@ function Training() {
                       onClick={() =>
                         handleSubmitAsistencia(
                           entrenamiento.identrenamiento,
-                          datosJugadora.idjugadora
+                          datosJugadora.idjugadora, true
                         )
                       }
                     >
@@ -286,9 +287,9 @@ function Training() {
                     <Button
                       size="small"
                       onClick={() =>
-                        handleSubmitNoAsistencia(
+                        handleSubmitAsistencia(
                           entrenamiento.identrenamiento,
-                          datosJugadora.idjugadora
+                          datosJugadora.idjugadora, false
                         )
                       }
                     >

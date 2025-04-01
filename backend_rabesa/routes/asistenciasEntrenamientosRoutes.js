@@ -6,7 +6,7 @@ const asistenciasController = require('../controllers/asistenciasEntrenamientosC
 router.get('/:identrenamiento', asistenciasController.getAllAsistenciaByEntrenamiento);
 router.get('/jugadora/:idjugadora', asistenciasController.getAllEntrenamientosAsistidosByJugadora);
 router.get('/noconfirmados/:idjugadora', asistenciasController.getEntrenamientosNoConfirmados);
-router.post('/:identrenamiento/:idjugadora', asistenciasController.createAsistencia);
+router.post('/:identrenamiento/:idjugadora/:estado', asistenciasController.createAsistencia);
 router.delete('/:idasistencia', asistenciasController.deleteAsistencia);
 // router.put('/:identrenamiento', entrenamientoController.updateEntrenamiento);
 

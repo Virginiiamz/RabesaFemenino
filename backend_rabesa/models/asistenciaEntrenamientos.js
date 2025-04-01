@@ -22,6 +22,10 @@ module.exports = function(sequelize, DataTypes) {
         model: 'entrenamientos',
         key: 'identrenamiento'
       }
+    },
+    estado: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
     }
   }, {
     sequelize,

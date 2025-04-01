@@ -206,11 +206,13 @@ class AsistenciasEntrenamientoController {
   async createAsistencia(req, res) {
     const identrenamiento = req.params.identrenamiento;
     const idjugadora = req.params.idjugadora;
+    const estado = req.params.estado;
 
     try {
       let asistencia = {
-        identrenamiento,
         idjugadora,
+        identrenamiento,
+        estado,
       };
 
       const nuevaAsistencia = await Asistencias.create(asistencia);
@@ -220,7 +222,7 @@ class AsistenciasEntrenamientoController {
         .json(
           Respuesta.exito(
             nuevaAsistencia,
-            "Asistencia de entrenamiento creado con éxito"
+            "Se ha guardado tu informacion sobre la asistencia al entrenamiento"
           )
         );
     } catch (err) {
