@@ -10,7 +10,10 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     // Generar un nombre único con la fecha + nombre original
-    const uniqueSuffix = file.originalname;
+    const uniqueSuffix = `${Date.now()}-${file.originalname.replace(
+      /\s+/g,
+      "_"
+    )}`;
     cb(null, uniqueSuffix);
   },
 });

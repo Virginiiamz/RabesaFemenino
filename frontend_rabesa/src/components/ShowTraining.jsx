@@ -1,15 +1,27 @@
 import {
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
   ImageListItem,
+  Modal,
   Toolbar,
   Typography,
 } from "@mui/material";
+import {
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+} from "mdb-react-ui-kit";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { apiUrl } from "../config";
 
 function ShowTraining() {
@@ -17,6 +29,7 @@ function ShowTraining() {
   const [datosEntrenamiento, setDatosEntrenamiento] = useState([]);
   const [datosAsistencia, setDatosAsistencia] = useState([]);
   const [datosNoAsistencia, setDatosNoAsistencia] = useState([]);
+  const [basicModal, setBasicModal] = useState(false);
 
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
@@ -94,6 +107,8 @@ function ShowTraining() {
     getAllInformacionByIdEntrenamiento();
   }, []);
 
+  const toggleOpen = () => setBasicModal(!basicModal);
+
   return (
     <>
       <Box
@@ -109,6 +124,15 @@ function ShowTraining() {
           Entrenamiento:{" "}
           {formatearFecha(datosEntrenamiento.fecha_entrenamiento)}
         </Typography>
+
+        <Link onClick={toggleOpen}>
+          <Button variant="contained">Añadir asistencia</Button>
+        </Link>
+
+        <Link to="/home/crear-entrenamiento">
+          <Button variant="contained">Añadir no asistencia</Button>
+        </Link>
+
         <Box
           sx={{
             width: "100%",
@@ -191,6 +215,33 @@ function ShowTraining() {
           </Box>
         </Box>
       </Box>
+
+      <MDBModal
+        open={basicModal}
+        onClose={() => setBasicModal(false)}
+        tabIndex="-1"
+      >
+        <MDBModalDialog centered>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Modal title</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={toggleOpen}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>...</MDBModalBody>
+
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={toggleOpen}>
+                Close
+              </MDBBtn>
+              <MDBBtn>Save changes</MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
     </>
   );
 }

@@ -19,6 +19,7 @@ import ModifyTraining from "./components/ModifyTraining";
 import AssistedTraining from "./components/AssistedTraining";
 import NoAssistedTraining from "./components/NoAssistedTraining";
 import ShowTraining from "./components/ShowTraining";
+import CreateAssited from "./components/CreateAssisted";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -111,6 +112,15 @@ let router = createBrowserRouter([
         element: (
           <ProtectedRoute
             element={<ShowTraining />}
+            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+          />
+        ),
+      },
+      {
+        path: "/home/crear-asistencia/:identrenamiento",
+        element: (
+          <ProtectedRoute
+            element={<CreateAssited />}
             allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
           />
         ),
