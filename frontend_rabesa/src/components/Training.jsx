@@ -83,7 +83,7 @@ function Training() {
 
           const entrenamientosResponse = await fetch(
             apiUrl +
-              "/entrenamientos/asistencias/noconfirmados/" +
+              "/entrenamientos/tipo/noconfirmados/" +
               jugadoraData.datos.idjugadora,
             {
               method: "GET",
@@ -113,7 +113,7 @@ function Training() {
     try {
       const response = await fetch(
         apiUrl +
-          "/entrenamientos/asistencias/" +
+          "/entrenamientos/tipo/" +
           identrenamiento +
           "/" +
           idjugadora + "/" + estado,

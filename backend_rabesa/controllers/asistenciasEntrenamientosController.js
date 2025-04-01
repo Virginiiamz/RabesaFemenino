@@ -34,15 +34,15 @@ class AsistenciasEntrenamientoController {
                 ),
               },
             },
-            {
-              identrenamiento: {
-                [Op.notIn]: sequelize.literal(
-                  `(SELECT identrenamiento FROM no_asistencia_entrenamientos WHERE idjugadora = ${sequelize.escape(
-                    idjugadora
-                  )})`
-                ),
-              },
-            },
+            // {
+            //   identrenamiento: {
+            //     [Op.notIn]: sequelize.literal(
+            //       `(SELECT identrenamiento FROM no_asistencia_entrenamientos WHERE idjugadora = ${sequelize.escape(
+            //         idjugadora
+            //       )})`
+            //     ),
+            //   },
+            // },
             {
               fecha_entrenamiento: {
                 [Op.gte]: new Date(), // Filtra fechas >= hoy
@@ -80,16 +80,12 @@ class AsistenciasEntrenamientoController {
     console.log("IDJUGADORA: ", idjugadora);
 
     try {
-      // const data = await Asistencias.findAll({
-      //   where: { idjugadora: idjugadora },
-      // });
-
       const data = await Entrenamiento.findAll({
         include: [
           {
             model: Asistencias,
             as: "asistencia_entrenamientos",
-            where: { idjugadora: idjugadora },
+            where: { idjugadora: idjugadora, estado: true },
             required: true, // INNER JOIN (solo entrenamientos con asistencia de esta jugadora)
           },
         ],
@@ -112,11 +108,46 @@ class AsistenciasEntrenamientoController {
         );
     }
   }
+
+  async getAllEntrenamientosNoAsistidosByJugadora(req, res) {
+    const { idjugadora } = req.params;
+
+    console.log("IDJUGADORA: ", idjugadora);
+
+    try {
+      const data = await Entrenamiento.findAll({
+        include: [
+          {
+            model: Asistencias,
+            as: "asistencia_entrenamientos",
+            where: { idjugadora: idjugadora, estado: false },
+            required: true, // INNER JOIN (solo entrenamientos con asistencia de esta jugadora)
+          },
+        ],
+        order: [["fecha_entrenamiento", "DESC"]],
+      });
+      res.json(
+        Respuesta.exito(
+          data,
+          "Datos de entrenamientos no asistidos recuperados correctamente"
+        )
+      );
+    } catch (err) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos de los entrenamientos asistidos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
   async getAllAsistenciaByEntrenamiento(req, res) {
     const identrenamiento = req.params.identrenamiento;
 
     try {
-
       const data = await Asistencias.findAll({
         where: { identrenamiento: identrenamiento }, // Todas las asistencias de este entrenamiento
         include: [

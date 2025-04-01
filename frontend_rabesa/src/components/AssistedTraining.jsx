@@ -38,7 +38,7 @@ function AssistedTraining() {
 
         const entrenamientosConfirmadosResponse = await fetch(
           apiUrl +
-            "/entrenamientos/asistencias/jugadora/" +
+            "/entrenamientos/tipo/asistidos/jugadora/" +
             jugadoraData.datos.idjugadora,
           {
             method: "GET",
@@ -62,7 +62,7 @@ function AssistedTraining() {
 
   const handleDelete = async (idasistencia) => {
     let response = await fetch(
-      apiUrl + "/entrenamientos/asistencias/" + idasistencia,
+      apiUrl + "/entrenamientos/tipo/" + idasistencia,
       {
         method: "DELETE",
       }

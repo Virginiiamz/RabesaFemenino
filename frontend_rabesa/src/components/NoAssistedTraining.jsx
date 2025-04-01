@@ -38,7 +38,7 @@ function NoAssistedTraining() {
 
         const entrenamientosNoConfirmadosResponse = await fetch(
           apiUrl +
-            "/entrenamientos/no-asistencias/jugadora/" +
+            "/entrenamientos/tipo/no-asistidos/jugadora/" +
             jugadoraData.datos.idjugadora,
           {
             method: "GET",
@@ -62,7 +62,7 @@ function NoAssistedTraining() {
 
   const handleDelete = async (idnoasistencia) => {
     let response = await fetch(
-      apiUrl + "/entrenamientos/no-asistencias/" + idnoasistencia,
+      apiUrl + "/entrenamientos/tipo/" + idnoasistencia,
       {
         method: "DELETE",
       }
@@ -127,7 +127,7 @@ function NoAssistedTraining() {
                   size="small"
                   onClick={() =>
                     handleDelete(
-                      entrenamiento.no_asistencia_entrenamientos[0].idnoasistencia
+                      entrenamiento.asistencia_entrenamientos[0].idasistencia
                     )
                   }
                 >
