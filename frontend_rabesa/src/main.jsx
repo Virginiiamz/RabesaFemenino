@@ -108,7 +108,12 @@ let router = createBrowserRouter([
       },
       {
         path: "/home/training/mostrar-entrenamiento/:identrenamiento",
-        element: <ShowTraining />,
+        element: (
+          <ProtectedRoute
+            element={<ShowTraining />}
+            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+          />
+        ),
       },
     ],
   },

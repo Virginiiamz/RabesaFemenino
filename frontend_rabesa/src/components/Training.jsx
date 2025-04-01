@@ -105,7 +105,11 @@ function Training() {
     getDatosJugadora();
   }, []);
 
-  const handleSubmitAsistencia = async (identrenamiento, idjugadora, estado) => {
+  const handleSubmitAsistencia = async (
+    identrenamiento,
+    idjugadora,
+    estado
+  ) => {
     console.log(identrenamiento);
     console.log(idjugadora);
     console.log(estado);
@@ -116,7 +120,9 @@ function Training() {
           "/entrenamientos/tipo/" +
           identrenamiento +
           "/" +
-          idjugadora + "/" + estado,
+          idjugadora +
+          "/" +
+          estado,
         {
           method: "POST",
           headers: {
@@ -229,76 +235,88 @@ function Training() {
           }}
         >
           {datosEntrenamientos.map((entrenamiento) => (
-            <Link to={`/home/training/mostrar-entrenamiento/${entrenamiento.identrenamiento}`}>
-              <Card>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Entrenamiento
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {formatearFecha(entrenamiento.fecha_entrenamiento)}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {entrenamiento.hora_inicio} - {entrenamiento.hora_final}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {entrenamiento.tipo}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {entrenamiento.informacion}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  {entrenador ? (
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        navigate(
-                          "/home/modificar-entrenamiento/" +
-                            entrenamiento.identrenamiento
-                        )
-                      }
-                    >
-                      Editar
-                    </Button>
-                  ) : (
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        handleSubmitAsistencia(
-                          entrenamiento.identrenamiento,
-                          datosJugadora.idjugadora, true
-                        )
-                      }
-                    >
-                      Aceptar
-                    </Button>
-                  )}
-                  {entrenador ? (
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        handleDelete(entrenamiento.identrenamiento)
-                      }
-                    >
-                      Eliminar
-                    </Button>
-                  ) : (
-                    <Button
-                      size="small"
-                      onClick={() =>
-                        handleSubmitAsistencia(
-                          entrenamiento.identrenamiento,
-                          datosJugadora.idjugadora, false
-                        )
-                      }
-                    >
-                      Rechazar
-                    </Button>
-                  )}
-                </CardActions>
-              </Card>
-            </Link>
+            <Card>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Entrenamiento
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {formatearFecha(entrenamiento.fecha_entrenamiento)}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {entrenamiento.hora_inicio} - {entrenamiento.hora_final}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {entrenamiento.tipo}
+                </Typography>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  {entrenamiento.informacion}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                {entrenador ? (
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      navigate(
+                        "/home/training/mostrar-entrenamiento/" +
+                          entrenamiento.identrenamiento
+                      )
+                    }
+                  >
+                    Ver informacion
+                  </Button>
+                ) : null}
+
+                {entrenador ? (
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      navigate(
+                        "/home/modificar-entrenamiento/" +
+                          entrenamiento.identrenamiento
+                      )
+                    }
+                  >
+                    Editar
+                  </Button>
+                ) : (
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      handleSubmitAsistencia(
+                        entrenamiento.identrenamiento,
+                        datosJugadora.idjugadora,
+                        true
+                      )
+                    }
+                  >
+                    Aceptar
+                  </Button>
+                )}
+                {entrenador ? (
+                  <Button
+                    size="small"
+                    onClick={() => handleDelete(entrenamiento.identrenamiento)}
+                  >
+                    Eliminar
+                  </Button>
+                ) : (
+                  <Button
+                    size="small"
+                    onClick={() =>
+                      handleSubmitAsistencia(
+                        entrenamiento.identrenamiento,
+                        datosJugadora.idjugadora,
+                        false
+                      )
+                    }
+                  >
+                    Rechazar
+                  </Button>
+                )}
+              </CardActions>
+            </Card>
           ))}
         </Box>
       </Box>

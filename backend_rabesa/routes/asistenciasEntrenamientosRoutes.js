@@ -4,6 +4,7 @@ const router = express.Router();
 const asistenciasController = require('../controllers/asistenciasEntrenamientosController');
 
 router.get('/:identrenamiento', asistenciasController.getAllAsistenciaByEntrenamiento);
+router.get('/no-asistidos/:identrenamiento', asistenciasController.getAllNoAsistenciaByEntrenamiento);
 router.get('/asistidos/jugadora/:idjugadora', asistenciasController.getAllEntrenamientosAsistidosByJugadora);
 router.get('/no-asistidos/jugadora/:idjugadora', asistenciasController.getAllEntrenamientosNoAsistidosByJugadora);
 router.get('/noconfirmados/:idjugadora', asistenciasController.getEntrenamientosNoConfirmados);

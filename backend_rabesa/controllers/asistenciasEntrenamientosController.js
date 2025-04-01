@@ -149,7 +149,7 @@ class AsistenciasEntrenamientoController {
 
     try {
       const data = await Asistencias.findAll({
-        where: { identrenamiento: identrenamiento }, // Todas las asistencias de este entrenamiento
+        where: { identrenamiento: identrenamiento, estado: true }, // Todas las asistencias de este entrenamiento
         include: [
           {
             model: Jugadora,
@@ -172,6 +172,39 @@ class AsistenciasEntrenamientoController {
           Respuesta.error(
             null,
             `Error al recuperar las asistencias de un entrenamiento: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
+  async getAllNoAsistenciaByEntrenamiento(req, res) {
+    const identrenamiento = req.params.identrenamiento;
+
+    try {
+      const data = await Asistencias.findAll({
+        where: { identrenamiento: identrenamiento, estado: false }, // Todas las asistencias de este entrenamiento
+        include: [
+          {
+            model: Jugadora,
+            as: "idjugadora_jugadora",
+            required: true, // Solo incluye jugadoras con asistencia registrada
+          },
+        ],
+      });
+      res.json(
+        Respuesta.exito(
+          data,
+          "Datos de no asistencias por un entrenamiento recuperado correctamente"
+        )
+      );
+    } catch (err) {
+      // Handle errors during the model call
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar las no asistencias de un entrenamiento: ${req.originalUrl}`
           )
         );
     }
