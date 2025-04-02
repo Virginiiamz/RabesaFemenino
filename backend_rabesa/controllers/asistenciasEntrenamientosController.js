@@ -210,6 +210,46 @@ class AsistenciasEntrenamientoController {
     }
   }
 
+  async getAllJugadoraNoConfirmadasByEntrenamiento(req, res) {
+    const { identrenamiento } = req.params;
+
+    try {
+      const jugadorasNoConfirmadas = await Jugadora.findAll({
+        include: [
+          {
+            model: Asistencias,
+            as: "asistencia_entrenamientos",
+            where: {
+              identrenamiento: identrenamiento, // Solo asistencias de este entrenamiento
+            },
+            required: false,
+          },
+        ],
+        where: {
+          [Op.or]: [
+            { "$asistencia_entrenamientos.idasistencia$": null }, // Sin registro de asistencia
+          ],
+        },
+      });
+
+      res.json(
+        Respuesta.exito(
+          jugadorasNoConfirmadas,
+          "Jugadoras no confirmadas recuperadas correctamente"
+        )
+      );
+    } catch (err) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar jugadoras no confirmadas: ${err.message}`
+          )
+        );
+    }
+  }
+
   // async getAllEntrenamientosByFecha(req, res) {
   //   try {
   //     // Obtener la fecha actual del sistema (sin hora, solo fecha)

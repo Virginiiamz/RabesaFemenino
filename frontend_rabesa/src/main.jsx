@@ -19,7 +19,8 @@ import ModifyTraining from "./components/ModifyTraining";
 import AssistedTraining from "./components/AssistedTraining";
 import NoAssistedTraining from "./components/NoAssistedTraining";
 import ShowTraining from "./components/ShowTraining";
-import CreateAssited from "./components/CreateAssisted";
+import CreateAssited from "./components/CreateVerification";
+import CreateVerification from "./components/CreateVerification";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -103,7 +104,7 @@ let router = createBrowserRouter([
         element: (
           <ProtectedRoute
             element={<ModifyTraining />}
-            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+            allowedRoles={["Entrenador"]} 
           />
         ),
       },
@@ -112,16 +113,16 @@ let router = createBrowserRouter([
         element: (
           <ProtectedRoute
             element={<ShowTraining />}
-            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+            allowedRoles={["Entrenador"]} 
           />
         ),
       },
       {
-        path: "/home/crear-asistencia/:identrenamiento",
+        path: "/home/crear-confirmacion/:identrenamiento/:tipoconfirmacion",
         element: (
           <ProtectedRoute
-            element={<CreateAssited />}
-            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+            element={<CreateVerification />}
+            allowedRoles={["Entrenador"]} 
           />
         ),
       },
