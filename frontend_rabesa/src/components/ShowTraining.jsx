@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { apiUrl } from "../config";
 
 function ShowTraining() {
@@ -19,6 +19,7 @@ function ShowTraining() {
   const [datosEntrenamiento, setDatosEntrenamiento] = useState([]);
   const [datosAsistencia, setDatosAsistencia] = useState([]);
   const [datosNoAsistencia, setDatosNoAsistencia] = useState([]);
+  const navigate = useNavigate();
 
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
@@ -96,6 +97,25 @@ function ShowTraining() {
     getAllInformacionByIdEntrenamiento();
   }, []);
 
+  const handleDelete = async (idasistencia) => {
+    let response = await fetch(
+      apiUrl + "/entrenamientos/tipo/" + idasistencia,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (response.ok) {
+      const asistenciaTrasBorrado = datosAsistencia.filter(
+        (asistencia) => asistencia.idasistencia != idasistencia
+      );
+      // Establece los datos de nuevo para provocar un renderizado
+      setDatosAsistencia(asistenciaTrasBorrado);
+      setDatosNoAsistencia(asistenciaTrasBorrado);
+      navigate(0);
+    }
+  };
+
   return (
     <>
       <Box
@@ -160,7 +180,14 @@ function ShowTraining() {
                 <Typography gutterBottom component="div">
                   {asistencia.idjugadora_jugadora.nombre}
                 </Typography>
-                <CardActions></CardActions>
+                <CardActions>
+                  <Button
+                    size="small"
+                    onClick={() => handleDelete(asistencia.idasistencia)}
+                  >
+                    Cancelar
+                  </Button>
+                </CardActions>
               </Card>
             ))}
           </Box>
@@ -196,7 +223,14 @@ function ShowTraining() {
                 <Typography gutterBottom component="div">
                   {noAsistencia.idjugadora_jugadora.nombre}
                 </Typography>
-                <CardActions></CardActions>
+                <CardActions>
+                  <Button
+                    size="small"
+                    onClick={() => handleDelete(noAsistencia.idasistencia)}
+                  >
+                    Cancelar
+                  </Button>
+                </CardActions>
               </Card>
             ))}
           </Box>
