@@ -20,6 +20,7 @@ const jugadoraRoutes = require("./routes/jugadoraRoutes");
 const usuarioRoutes = require("./routes/usuarioRoutes");
 const entrenamientoRoutes = require("./routes/entrenamientoRoutes");
 const asistenciaEntrenRoutes = require("./routes/asistenciasEntrenamientosRoutes");
+const partidoRoutes = require("./routes/partidosRoutes");
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use("/api/usuario", usuarioRoutes);
 app.use("/api/jugadoras", jugadoraRoutes);
 app.use("/api/entrenamientos", entrenamientoRoutes);
 app.use("/api/entrenamientos/tipo", asistenciaEntrenRoutes);
+app.use("/api/partidos", partidoRoutes);
 
 //Ruta para manejar las solicitudes al archivo index.html
 

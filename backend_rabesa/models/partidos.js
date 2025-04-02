@@ -19,12 +19,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(30),
       allowNull: false
     },
-    goles_favor: {
-      type: DataTypes.INTEGER,
+    ubicacion: {
+      type: DataTypes.STRING(500),
       allowNull: false
     },
-    goles_contra: {
-      type: DataTypes.INTEGER,
+    hora: {
+      type: DataTypes.TIME,
       allowNull: false
     },
     fecha_partido: {
