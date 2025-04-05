@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const partidosController = require('../controllers/partidosController');
 
-// router.get('/', entrenamientoController.getAllEntrenamientos);
+router.get('/', partidosController.getAllPartidosOrderByFecha);
 // router.get('/actuales', entrenamientoController.getAllEntrenamientosByFecha);
 // router.get('/:identrenamiento', entrenamientoController.getEntrenamientoById);
 router.post('/', partidosController.createPartido);

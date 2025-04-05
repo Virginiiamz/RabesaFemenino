@@ -17,22 +17,24 @@ const Jugadora = models.jugadoras;
 const Partido = models.partidos;
 
 class PartidosController {
-  // async getAllEntrenamientos(req, res) {
-  //   try {
-  //     const data = await Entrenamiento.findAll();
-  //     res.json(Respuesta.exito(data, "Datos de entrenamientos recuperados"));
-  //   } catch (err) {
-  //     // Handle errors during the model call
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos de los entrenamientos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+  async getAllPartidosOrderByFecha(req, res) {
+    try {
+      const data = await Partido.findAll({
+        order: [["fecha_partido", "ASC"]], // Ordenar por fecha ascendente
+      });
+      res.json(Respuesta.exito(data, "Datos de partidos recuperados"));
+    } catch (err) {
+      // Handle errors during the model call
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos de los partidos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   // async getAllEntrenamientosByFecha(req, res) {
   //   try {
@@ -95,18 +97,43 @@ class PartidosController {
     const { idrival, resultado, ubicacion, hora, fecha_partido } = req.body;
 
     try {
-      const partidosExistente = await Partido.findAll({
+      const partidosMismoRival = await Partido.findAll({
         where: { idrival: idrival },
         attributes: ["idpartido"],
       });
 
-      if (partidosExistente.length >= 2) {
+      if (partidosMismoRival.length >= 2) {
         return res
           .status(400)
           .json(
             Respuesta.error(
               null,
               "No se puede crear más de 2 partidos contra el mismo rival."
+            )
+          );
+      }
+
+      const nuevaFecha = new Date(fecha_partido);
+      const inicioSemana = new Date(nuevaFecha);
+      inicioSemana.setDate(nuevaFecha.getDate() - 7); // Una semana antes
+      const finSemana = new Date(nuevaFecha);
+      finSemana.setDate(nuevaFecha.getDate() + 7); // Una semana después
+
+      const partidoEnMismaSemana = await Partido.findOne({
+        where: {
+          fecha_partido: {
+            [Op.between]: [inicioSemana, finSemana], // Busca partidos en ese rango
+          },
+        },
+      });
+
+      if (partidoEnMismaSemana) {
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              "Ya hay un partido programado para esta semana. Elige una fecha al menos una semana después."
             )
           );
       }
