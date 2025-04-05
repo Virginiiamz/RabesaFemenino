@@ -10,6 +10,7 @@ const sequelize = require("../config/sequelize.js");
 const bcrypt = require("bcrypt");
 // Librería de manejo de JWT
 const jwt = require("jsonwebtoken");
+const { where } = require("sequelize");
 
 // Cargar las definiciones del modelo en sequelize
 const models = initModels(sequelize);
@@ -130,6 +131,76 @@ class JugadoraController {
     }
   }
 
+  // async createJugadora(req, res) {
+  //   const {
+  //     correo,
+  //     contrasena,
+  //     nombre,
+  //     edad,
+  //     posicion,
+  //     numero_camiseta,
+  //     fecha_ingreso,
+  //     estado,
+  //     idclub,
+  //   } = req.body;
+
+  //   try {
+  //     const existingUser = await Usuario.findOne({ where: { correo } });
+  //     if (existingUser) {
+  //       return res
+  //         .status(400)
+  //         .json(
+  //           Respuesta.error(
+  //             null,
+  //             "Ya existe un usuario con ese correo electrónico."
+  //           )
+  //         );
+  //     }
+  //       // Cifrar la contraseña
+  //       const hashedPassword = await bcrypt.hash(contrasena, 10); // 10 es el nivel de "salting" (puedes ajustarlo)
+
+  //       // Crear el nuevo usuario
+  //       const newUser = await Usuario.create({
+  //         correo,
+  //         contrasena: hashedPassword, // Guardamos la contraseña cifrada
+  //         rol: "Jugadora",
+  //       });
+
+  //       // Responder con éxito
+  //       delete newUser.dataValues.contrasena; // Eliminar la contraseña del objeto de respuesta
+
+  //       const idusuario = newUser.dataValues.idusuario;
+
+  //       console.log("idUsuario: " + idusuario);
+
+  //       const imagen = req.file ? req.file.filename : "null.webp";
+
+  //       const jugadora = {
+  //         nombre,
+  //         edad,
+  //         posicion,
+  //         numero_camiseta,
+  //         fecha_ingreso,
+  //         estado,
+  //         imagen,
+  //         idclub,
+  //         idusuario,
+  //       };
+
+  //       console.log("jugadora", jugadora);
+
+  //       const nuevaJugadora = await Jugadora.create(jugadora);
+
+  //       res
+  //         .status(201)
+  //         .json(Respuesta.exito(nuevaJugadora, "Jugadora creada con éxito"));
+  //   } catch (err) {
+  //     logMensaje("Error :" + err);
+  //     res
+  //       .status(500)
+  //       .json(Respuesta.error(null, `Error al crear una jugadora nueva`));
+  //   }
+  // }
   async createJugadora(req, res) {
     const {
       correo,
@@ -143,9 +214,55 @@ class JugadoraController {
       idclub,
     } = req.body;
 
+    // Iniciar transacción
+    const transaction = await sequelize.transaction();
+
     try {
-      const existingUser = await Usuario.findOne({ where: { correo } });
+      const fechaIngreso = new Date(fecha_ingreso);
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+
+      if (isNaN(fechaIngreso.getTime())) {
+        return res
+          .status(400)
+          .json(Respuesta.error(null, "La fecha de ingreso no es válida."));
+      }
+
+      if (fechaIngreso > hoy) {
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              "La fecha de ingreso no puede ser mayor al día actual."
+            )
+          );
+      }
+
+      const existingNumeroCamiseta = await Jugadora.findOne({
+        where: { numero_camiseta },
+        transaction,
+      });
+
+      if (existingNumeroCamiseta) {
+        await transaction.rollback(); // Rollback explícito (aunque no hay cambios aún)
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              "Ya existe una jugadora con ese numero de camiseta."
+            )
+          );
+      }
+
+      const existingUser = await Usuario.findOne({
+        where: { correo },
+        transaction, // Incluir la transacción en la consulta
+      });
+
       if (existingUser) {
+        await transaction.rollback(); // Rollback explícito (aunque no hay cambios aún)
         return res
           .status(400)
           .json(
@@ -156,49 +273,58 @@ class JugadoraController {
           );
       }
 
-      // Cifrar la contraseña
-      const hashedPassword = await bcrypt.hash(contrasena, 10); // 10 es el nivel de "salting" (puedes ajustarlo)
+      // 2. Cifrar la contraseña
+      const hashedPassword = await bcrypt.hash(contrasena, 10);
 
-      // Crear el nuevo usuario
-      const newUser = await Usuario.create({
-        correo,
-        contrasena: hashedPassword, // Guardamos la contraseña cifrada
-        rol: "Jugadora",
-      });
+      // 3. Crear usuario (dentro de la transacción)
+      const newUser = await Usuario.create(
+        {
+          correo,
+          contrasena: hashedPassword,
+          rol: "Jugadora",
+        },
+        { transaction }
+      );
 
-      // Responder con éxito
-      delete newUser.dataValues.contrasena; // Eliminar la contraseña del objeto de respuesta
+      // 4. Crear jugadora (dentro de la transacción)
+      const imagen = req.file ? req.file.filename : "null.webp";
+      const nuevaJugadora = await Jugadora.create(
+        {
+          nombre,
+          edad,
+          posicion,
+          numero_camiseta,
+          fecha_ingreso,
+          estado,
+          imagen,
+          idclub,
+          idusuario: newUser.idusuario,
+        },
+        { transaction }
+      );
 
-      const idusuario = newUser.dataValues.idusuario;
+      // Si todo sale bien, confirmar la transacción
+      await transaction.commit();
 
-      console.log("idUsuario: " + idusuario);
-
-      const imagen = req.file ? req.file.filename : null;
-
-      const jugadora = {
-        nombre,
-        edad,
-        posicion,
-        numero_camiseta,
-        fecha_ingreso,
-        estado,
-        imagen,
-        idclub,
-        idusuario,
-      };
-
-      console.log("jugadora", jugadora);
-
-      const nuevaJugadora = await Jugadora.create(jugadora);
+      // Eliminar contraseña de la respuesta
+      delete newUser.dataValues.contrasena;
 
       res
         .status(201)
         .json(Respuesta.exito(nuevaJugadora, "Jugadora creada con éxito"));
     } catch (err) {
-      logMensaje("Error :" + err);
+      // Si hay un error, revertir la transacción
+      await transaction.rollback();
+      logMensaje("Error en createJugadora: " + err);
+
       res
         .status(500)
-        .json(Respuesta.error(null, `Error al crear una jugadora nueva`));
+        .json(
+          Respuesta.error(
+            null,
+            "Error al crear la jugadora. Ningún registro fue guardado."
+          )
+        );
     }
   }
 
