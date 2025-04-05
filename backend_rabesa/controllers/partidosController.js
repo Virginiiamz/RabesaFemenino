@@ -15,6 +15,7 @@ const Entrenamiento = models.entrenamientos;
 const Asistencia = models.asistenciaEntrenamientos;
 const Jugadora = models.jugadoras;
 const Partido = models.partidos;
+const Club = models.clubs;
 
 class PartidosController {
   async getAllPartidosOrderByFecha(req, res) {
@@ -36,62 +37,35 @@ class PartidosController {
     }
   }
 
-  // async getAllEntrenamientosByFecha(req, res) {
-  //   try {
-  //     // Obtener la fecha actual del sistema (sin hora, solo fecha)
-  //     const hoy = new Date();
-  //     hoy.setHours(0, 0, 0, 0); // Establecer a medianoche para incluir todo el día
+  async getPartidoById(req, res) {
+    const idpartido = req.params.idpartido;
+    try {
+      const partido = await Partido.findByPk(idpartido, {
+        include: [
+          {
+            model: Club,
+            as: "idrival_club",
+          },
+        ],
+      });
 
-  //     const data = await Entrenamiento.findAll({
-  //       where: {
-  //         fecha_entrenamiento: {
-  //           [Op.gte]: hoy, // Mayor o igual a hoy
-  //         },
-  //       },
-  //       order: [["fecha_entrenamiento", "ASC"]], // Opcional: ordenar por fecha ascendente
-  //     });
-
-  //     res.json(
-  //       Respuesta.exito(data, "Datos de entrenamientos futuros recuperados")
-  //     );
-  //   } catch (err) {
-  //     // Manejar errores durante la consulta
-  //     console.error(err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos de los entrenamientos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
-
-  // async getEntrenamientoById(req, res) {
-  //   const identrenamiento = req.params.identrenamiento;
-  //   try {
-  //     const entrenamiento = await Entrenamiento.findByPk(identrenamiento);
-
-  //     if (entrenamiento) {
-  //       res.json(Respuesta.exito(entrenamiento, "Entrenamiento recuperado"));
-  //     } else {
-  //       res
-  //         .status(404)
-  //         .json(Respuesta.error(null, "Entrenamiento no encontrado"));
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+      if (partido) {
+        res.json(Respuesta.exito(partido, "Partido recuperado"));
+      } else {
+        res.status(404).json(Respuesta.error(null, "Partido no encontrado"));
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   async getPartidoBySemana(req, res) {
     try {
