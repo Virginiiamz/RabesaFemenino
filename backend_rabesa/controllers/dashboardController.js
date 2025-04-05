@@ -19,7 +19,9 @@ class DashboardController {
     try {
       const totalJugadoras = await Jugadora.count();
 
-      res.json(Respuesta.exito(totalJugadoras, "Total de jugadoras en el club"));
+      res.json(
+        Respuesta.exito(totalJugadoras, "Total de jugadoras en el club")
+      );
     } catch (err) {
       res
         .status(500)
@@ -27,6 +29,27 @@ class DashboardController {
           Respuesta.error(
             null,
             `Error al recuperar los datos del total de juagdoras: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
+  async getTotalPuntosEquipo(req, res) {
+    try {
+      const totalPuntos = await Club.findByPk(1, {
+        attributes: ["puntos"],
+      });
+
+      res.json(
+        Respuesta.exito(totalPuntos, "Total de puntos en el club")
+      );
+    } catch (err) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos del total de puntos: ${req.originalUrl}`
           )
         );
     }
