@@ -6,7 +6,7 @@ const clubsController = require('../controllers/clubController');
 router.get('/', clubsController.getAllClubs);
 // router.get('/actuales', entrenamientoController.getAllEntrenamientosByFecha);
 // router.get('/:identrenamiento', entrenamientoController.getEntrenamientoById);
-// router.post('/', partidosController.createPartido);
+router.post('/', clubsController.createClub);
 // router.delete('/:identrenamiento', entrenamientoController.deleteEntrenamiento);
 // router.put('/:identrenamiento', entrenamientoController.updateEntrenamiento);
 

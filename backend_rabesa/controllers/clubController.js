@@ -6,7 +6,7 @@ const initModels = require("../models/init-models.js").initModels;
 // Crear la instancia de sequelize con la conexión a la base de datos
 const sequelize = require("../config/sequelize.js");
 
-const { Op } = require("sequelize");
+const { Op, STRING } = require("sequelize");
 
 // Cargar las definiciones del modelo en sequelize
 const models = initModels(sequelize);
@@ -87,44 +87,56 @@ class ClubController {
   //   }
   // }
 
-  // async createPartido(req, res) {
-  //   const { idrival, resultado, ubicacion, hora, fecha_partido } = req.body;
+  async createClub(req, res) {
+    const { nombre, ciudad, estadio, puntos, fecha_fundacion } = req.body;
 
-  //   try {
-  //     const partidosExistente = await Partido.findAll({
-  //       where: { idrival: idrival },
-  //       attributes: ["idpartido"],
-  //     });
+    try {
+      const nombreSinEspacios = nombre.trim();
 
-  //     if (partidosExistente.length >= 2) {
-  //       return res
-  //         .status(400)
-  //         .json(
-  //           Respuesta.error(
-  //             null,
-  //             "No se puede crear más de 2 partidos contra el mismo rival."
-  //           )
-  //         );
-  //     }
+      const fechaFundacion = new Date(fecha_fundacion);
+      const fechaLimite = new Date(new Date().getFullYear() - 1, 5, 1); // 1 de junio del año pasado (mes 5 = junio)
 
-  //     const nuevoPartido = await Partido.create({
-  //       idrival,
-  //       resultado,
-  //       ubicacion,
-  //       hora,
-  //       fecha_partido,
-  //     });
+      if (fechaFundacion >= fechaLimite) {
+        return res.status(400).json({
+          error: `La fecha de fundación debe ser anterior a junio del ${fechaLimite.getFullYear()}.`,
+        });
+      }
 
-  //     res
-  //       .status(201)
-  //       .json(Respuesta.exito(nuevoPartido, "Partido creado exitosamente"));
-  //   } catch (err) {
-  //     console.error("Error al crear partido:", err);
-  //     res
-  //       .status(500)
-  //       .json(Respuesta.error(null, "Error interno al crear el partido"));
-  //   }
-  // }
+      const existingClub = await Club.findOne({
+        where: { nombre: nombreSinEspacios },
+      });
+
+      if (existingClub) {
+        return res
+          .status(400)
+          .json(Respuesta.error(null, "Ya existe un club con ese nombre."));
+      } else {
+        const imagen = req.file ? req.file.filename : "null.webp";
+
+        const club = {
+          nombre: nombreSinEspacios,
+          ciudad,
+          estadio,
+          puntos,
+          imagen,
+          fecha_fundacion,
+        };
+
+        console.log("club: ", club);
+
+        const nuevoClub = await Club.create(club);
+
+        res
+          .status(201)
+          .json(Respuesta.exito(nuevoClub, "Club creado con éxito"));
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(Respuesta.error(null, `Error al crear un club nuevo`));
+    }
+  }
 
   // async deleteEntrenamiento(req, res) {
   //   const identrenamiento = req.params.identrenamiento;
