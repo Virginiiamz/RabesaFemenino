@@ -4,7 +4,7 @@ const router = express.Router();
 const partidosController = require('../controllers/partidosController');
 
 router.get('/', partidosController.getAllPartidosOrderByFecha);
-// router.get('/actuales', entrenamientoController.getAllEntrenamientosByFecha);
+router.get('/siguiente', partidosController.getPartidoBySemana);
 // router.get('/:identrenamiento', entrenamientoController.getEntrenamientoById);
 router.post('/', partidosController.createPartido);
 // router.delete('/:identrenamiento', entrenamientoController.deleteEntrenamiento);

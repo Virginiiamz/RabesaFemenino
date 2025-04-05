@@ -93,6 +93,50 @@ class PartidosController {
   //   }
   // }
 
+  async getPartidoBySemana(req, res) {
+    try {
+      const hoy = new Date();
+      const diaActual = hoy.getDay(); // 0 (Domingo) a 6 (Sábado)
+
+      // Ajustar para que la semana empiece en Lunes (1) y termine en Domingo (0)
+      const inicioSemana = new Date(hoy);
+      inicioSemana.setDate(
+        hoy.getDate() - (diaActual === 0 ? 6 : diaActual - 1)
+      ); // Lunes
+      inicioSemana.setHours(0, 0, 0, 0); // Inicio del día (00:00:00)
+
+      const finSemana = new Date(inicioSemana);
+      finSemana.setDate(inicioSemana.getDate() + 6); // Domingo
+      finSemana.setHours(23, 59, 59, 999); // Fin del día (23:59:59.999)
+
+      const partidosSemana = await Partido.findAll({
+        where: {
+          fecha_partido: {
+            [Op.between]: [inicioSemana, finSemana],
+          },
+        },
+        // order: [["fecha_partido", "ASC"]], // Orden ascendente por fecha
+      });
+
+      res.json(
+        Respuesta.exito(
+          partidosSemana,
+          "Partidos de la semana actual recuperado"
+        )
+      );
+    } catch (err) {
+      console.error("Error al obtener partido de la semana:", err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar el partido de la semana: ${err.message}`
+          )
+        );
+    }
+  }
+
   async createPartido(req, res) {
     const { idrival, resultado, ubicacion, hora, fecha_partido } = req.body;
 
@@ -113,27 +157,35 @@ class PartidosController {
           );
       }
 
-      const nuevaFecha = new Date(fecha_partido);
-      const inicioSemana = new Date(nuevaFecha);
-      inicioSemana.setDate(nuevaFecha.getDate() - 7); // Una semana antes
-      const finSemana = new Date(nuevaFecha);
-      finSemana.setDate(nuevaFecha.getDate() + 7); // Una semana después
+      const fechaPartido = new Date(fecha_partido);
+      const diaSemana = fechaPartido.getDay(); // 0 (domingo) a 6 (sábado)
 
-      const partidoEnMismaSemana = await Partido.findOne({
+      // Calcular inicio (lunes) y fin (domingo) de la semana
+      const inicioSemana = new Date(fechaPartido);
+      inicioSemana.setDate(
+        fechaPartido.getDate() - (diaSemana === 0 ? 6 : diaSemana - 1)
+      );
+      inicioSemana.setHours(0, 0, 0, 0);
+
+      const finSemana = new Date(inicioSemana);
+      finSemana.setDate(inicioSemana.getDate() + 6);
+      finSemana.setHours(23, 59, 59, 999);
+
+      const partidoEnSemana = await Partido.findOne({
         where: {
           fecha_partido: {
-            [Op.between]: [inicioSemana, finSemana], // Busca partidos en ese rango
+            [Op.between]: [inicioSemana, finSemana],
           },
         },
       });
 
-      if (partidoEnMismaSemana) {
+      if (partidoEnSemana) {
         return res
           .status(400)
           .json(
             Respuesta.error(
               null,
-              "Ya hay un partido programado para esta semana. Elige una fecha al menos una semana después."
+              "Ya existe un partido programado en esta semana (lunes a domingo)."
             )
           );
       }
