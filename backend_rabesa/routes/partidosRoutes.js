@@ -7,8 +7,8 @@ router.get('/', partidosController.getAllPartidosOrderByFecha);
 router.get('/siguiente', partidosController.getPartidoBySemana);
 router.get('/:idpartido', partidosController.getPartidoById);
 router.post('/', partidosController.createPartido);
-// router.delete('/:identrenamiento', entrenamientoController.deleteEntrenamiento);
-// router.put('/:identrenamiento', entrenamientoController.updateEntrenamiento);
+router.delete('/:idpartido', partidosController.deletePartido);
+router.put('/:idpartido', partidosController.updatePartido);
 
 
 module.exports = router;

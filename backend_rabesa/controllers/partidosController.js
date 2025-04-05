@@ -183,118 +183,82 @@ class PartidosController {
     }
   }
 
-  // async deleteEntrenamiento(req, res) {
-  //   const identrenamiento = req.params.identrenamiento;
+  async deletePartido(req, res) {
+    const idpartido = req.params.idpartido;
 
-  //   try {
-  //     const entrenamiento = await Entrenamiento.findByPk(identrenamiento);
+    try {
+      const partido = await Partido.findByPk(idpartido);
 
-  //     if (entrenamiento) {
-  //       const numFilas = await Entrenamiento.destroy({
-  //         where: {
-  //           identrenamiento: identrenamiento,
-  //         },
-  //       });
+      if (partido) {
+        const numFilas = await Partido.destroy({
+          where: {
+            idpartido: idpartido,
+          },
+        });
 
-  //       if (numFilas == 0) {
-  //         // No se ha encontrado lo que se quería borrar
-  //         res
-  //           .status(404)
-  //           .json(Respuesta.error(null, "No encontrado: " + identrenamiento));
-  //       } else {
-  //         res.status(204).send();
-  //       }
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al eliminar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+        if (numFilas == 0) {
+          // No se ha encontrado lo que se quería borrar
+          res
+            .status(404)
+            .json(Respuesta.error(null, "No encontrado: " + idpartido));
+        } else {
+          res.status(204).send();
+        }
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al eliminar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
-  // async updateEntrenamiento(req, res) {
-  //   const datos = req.body;
-  //   const identrenamiento = req.params.identrenamiento;
+  async updatePartido(req, res) {
+    const datos = req.body; // Recuperamos datos para actualizar
+    const idpartido = req.params.idpartido; // dato de la ruta
+    console.log("IDPARTIDO: " + idpartido);
 
-  //   console.log("📥 Datos recibidos en el backend:", datos); // 👈 DEBUG
+    try {
+      const numFilas = await Partido.update(
+        { ...datos },
+        { where: { idpartido } }
+      );
 
-  //   try {
-  //     const entrenamientoSeleccionado = await Entrenamiento.findByPk(
-  //       identrenamiento
-  //     );
+      if (numFilas == 0) {
+        console.log("404");
 
-  //     // Comprobamos si la fecha o las horas han cambiado
-  //     const haCambiadoHorario =
-  //       entrenamientoSeleccionado.fecha_entrenamiento !==
-  //         datos.fecha_entrenamiento ||
-  //       entrenamientoSeleccionado.hora_inicio !== datos.hora_inicio ||
-  //       entrenamientoSeleccionado.hora_final !== datos.hora_final;
+        // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
+        res
+          .status(404)
+          .json(
+            Respuesta.error(
+              null,
+              "No encontrado o no modificado: " + idpartido
+            )
+          );
+      } else {
+        // Al dar status 204 no se devuelva nada
+        console.log("204");
 
-  //     if (haCambiadoHorario) {
-  //       const solapamiento = await Entrenamiento.findOne({
-  //         where: {
-  //           fecha_entrenamiento: datos.fecha_entrenamiento,
-  //           identrenamiento: { [Op.ne]: identrenamiento }, // Excluir el mismo entrenamiento
-  //           [Op.or]: [
-  //             // Caso 1: Se solapa por inicio o fin
-  //             {
-  //               hora_inicio: { [Op.lt]: datos.hora_final },
-  //               hora_final: { [Op.gt]: datos.hora_inicio },
-  //             },
-  //             // Caso 2: El nuevo horario engloba completamente otro
-  //             {
-  //               hora_inicio: { [Op.gte]: datos.hora_inicio },
-  //               hora_final: { [Op.lte]: datos.hora_final },
-  //             },
-  //           ],
-  //         },
-  //       });
-
-  //       if (solapamiento) {
-  //         console.log("Conflicto detectado con otro entrenamiento.");
-  //         return res
-  //           .status(400)
-  //           .json(
-  //             Respuesta.error(
-  //               null,
-  //               "Las horas se solapan con otro entrenamiento en esa fecha."
-  //             )
-  //           );
-  //       }
-  //     }
-
-  //     // Si todo está bien, actualizar el entrenamiento
-  //     const [numFilas] = await Entrenamiento.update(
-  //       { ...datos },
-  //       { where: { identrenamiento } }
-  //     );
-
-  //     if (numFilas === 0) {
-  //       console.log("⚠️ No se realizó ninguna modificación.");
-  //       return res
-  //         .status(404)
-  //         .json(Respuesta.error(null, "No encontrado o no modificado."));
-  //     }
-
-  //     res.status(204).send();
-  //   } catch (err) {
-  //     console.error("Error en la actualización:", err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al actualizar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+        res.status(204).send();
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al actualizar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 }
 
 module.exports = new PartidosController();
