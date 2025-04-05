@@ -71,20 +71,41 @@ class EntrenadorController {
   }
 
   async createEntrenador(req, res) {
-    const {
-      correo,
-      contrasena,
-      nombre,
-      edad,
-      rol,
-      fecha_ingreso,
-      idclub,
-    } = req.body;
-    // const entrenador = req.body;
+    const { correo, contrasena, nombre, edad, rol, fecha_ingreso, idclub } =
+      req.body;
+
+    // Iniciar transacción
+    const transaction = await sequelize.transaction();
 
     try {
-      const existingUser = await Usuario.findOne({ where: { correo } });
+      const fechaIngreso = new Date(fecha_ingreso);
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+
+      if (isNaN(fechaIngreso.getTime())) {
+        return res
+          .status(400)
+          .json(Respuesta.error(null, "La fecha de ingreso no es válida."));
+      }
+
+      if (fechaIngreso > hoy) {
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              "La fecha de ingreso no puede ser mayor al día actual."
+            )
+          );
+      }
+
+      const existingUser = await Usuario.findOne({
+        where: { correo },
+        transaction,
+      });
+
       if (existingUser) {
+        await transaction.rollback();
         return res
           .status(400)
           .json(
@@ -106,13 +127,12 @@ class EntrenadorController {
       });
 
       // Responder con éxito
-      delete newUser.dataValues.contrasena; // Eliminar la contraseña del objeto de respuesta
 
       const idusuario = newUser.dataValues.idusuario;
 
       console.log("idUsuario: " + idusuario);
 
-      const imagen = req.file ? req.file.filename : null;
+      const imagen = req.file ? req.file.filename : "null.webp";
 
       const entrenador = {
         nombre,
@@ -126,7 +146,13 @@ class EntrenadorController {
 
       console.log("entrenador", entrenador);
 
-      const nuevoEntrenador = await Entrenador.create(entrenador);
+      const nuevoEntrenador = await Entrenador.create(entrenador, {
+        transaction,
+      });
+
+      await transaction.commit();
+
+      delete newUser.dataValues.contrasena; // Eliminar la contraseña del objeto de respuesta
 
       res
         .status(201)
@@ -200,7 +226,7 @@ class EntrenadorController {
 
       if (numFilas == 0) {
         console.log("404");
-        
+
         // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
         res
           .status(404)
@@ -213,10 +239,9 @@ class EntrenadorController {
       } else {
         // Al dar status 204 no se devuelva nada
         console.log("204");
-        
+
         res.status(204).send();
       }
-      
     } catch (err) {
       logMensaje("Error :" + err);
       res
