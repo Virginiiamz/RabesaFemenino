@@ -13,6 +13,7 @@ const models = initModels(sequelize);
 // Recuperar el modelo plato
 const Club = models.clubs;
 const Jugadora = models.jugadoras;
+const Entrenamiento = models.entrenamientos;
 
 class DashboardController {
   async getTotalJugadoras(req, res) {
@@ -40,9 +41,7 @@ class DashboardController {
         attributes: ["puntos"],
       });
 
-      res.json(
-        Respuesta.exito(totalPuntos, "Total de puntos en el club")
-      );
+      res.json(Respuesta.exito(totalPuntos, "Total de puntos en el club"));
     } catch (err) {
       res
         .status(500)
@@ -51,6 +50,38 @@ class DashboardController {
             null,
             `Error al recuperar los datos del total de puntos: ${req.originalUrl}`
           )
+        );
+    }
+  }
+
+  async getProximoEntrenamiento(req, res) {
+    try {
+      const hoy = new Date();
+
+      const proximoEntrenamiento = await Entrenamiento.findOne({
+        where: {
+          fecha_entrenamiento: {
+            [Op.gt]: hoy, // Fecha mayor o igual a hoy
+          },
+        },
+        order: [['fecha_entrenamiento', 'ASC'], ['hora_inicio', 'ASC']] // Ordenar por fecha y hora
+      });
+
+      if (!proximoEntrenamiento) {
+        return res
+          .status(404)
+          .json(
+            Respuesta.error(null, "No hay entrenamientos programados a futuro")
+          );
+      }
+
+      res.json(Respuesta.exito(proximoEntrenamiento, "Próximo entrenamiento"));
+    } catch (err) {
+      console.error("Error al obtener próximo entrenamiento:", err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(null, "Error al buscar el próximo entrenamiento")
         );
     }
   }
