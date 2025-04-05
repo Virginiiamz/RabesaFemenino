@@ -218,6 +218,22 @@ class JugadoraController {
     const transaction = await sequelize.transaction();
 
     try {
+      const totalJugadoras = await Jugadora.count({
+        transaction,
+      });
+
+      if (totalJugadoras >= 25) {
+        await transaction.rollback();
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              "No se pueden registrar más de 25 jugadoras en el club."
+            )
+          );
+      }
+
       const fechaIngreso = new Date(fecha_ingreso);
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
