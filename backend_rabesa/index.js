@@ -22,6 +22,7 @@ const entrenamientoRoutes = require("./routes/entrenamientoRoutes");
 const asistenciaEntrenRoutes = require("./routes/asistenciasEntrenamientosRoutes");
 const partidoRoutes = require("./routes/partidosRoutes");
 const clubRoutes = require("./routes/clubsRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use("/api/entrenamientos", entrenamientoRoutes);
 app.use("/api/entrenamientos/tipo", asistenciaEntrenRoutes);
 app.use("/api/partidos", partidoRoutes);
 app.use("/api/clubs", clubRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 //Ruta para manejar las solicitudes al archivo index.html
 
