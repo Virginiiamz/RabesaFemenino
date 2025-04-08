@@ -14,6 +14,7 @@ const models = initModels(sequelize);
 const Club = models.clubs;
 const Jugadora = models.jugadoras;
 const Entrenamiento = models.entrenamientos;
+const Partido = models.partidos;
 
 class DashboardController {
   async getTotalJugadoras(req, res) {
@@ -64,7 +65,10 @@ class DashboardController {
             [Op.gt]: hoy, // Fecha mayor o igual a hoy
           },
         },
-        order: [['fecha_entrenamiento', 'ASC'], ['hora_inicio', 'ASC']] // Ordenar por fecha y hora
+        order: [
+          ["fecha_entrenamiento", "ASC"],
+          ["hora_inicio", "ASC"],
+        ], // Ordenar por fecha y hora
       });
 
       if (!proximoEntrenamiento) {
@@ -86,226 +90,66 @@ class DashboardController {
     }
   }
 
-  // async getAllEntrenamientosByFecha(req, res) {
-  //   try {
-  //     // Obtener la fecha actual del sistema (sin hora, solo fecha)
-  //     const hoy = new Date();
-  //     hoy.setHours(0, 0, 0, 0); // Establecer a medianoche para incluir todo el día
+  async getPartidoDeLaSemana(req, res) {
+    try {
+      // 1. Obtener fechas de inicio y fin de la semana actual
+      const hoy = new Date();
+      const inicioSemana = new Date(hoy);
+      inicioSemana.setHours(0, 0, 0, 0);
+      // Ir al lunes de esta semana
+      inicioSemana.setDate(
+        hoy.getDate() - hoy.getDay() + (hoy.getDay() === 0 ? -6 : 1)
+      );
 
-  //     const data = await Entrenamiento.findAll({
-  //       where: {
-  //         fecha_entrenamiento: {
-  //           [Op.gte]: hoy, // Mayor o igual a hoy
-  //         },
-  //       },
-  //       order: [["fecha_entrenamiento", "ASC"]], // Opcional: ordenar por fecha ascendente
-  //     });
+      const finSemana = new Date(inicioSemana);
+      finSemana.setDate(inicioSemana.getDate() + 6); // Domingo
+      finSemana.setHours(23, 59, 59, 999);
 
-  //     res.json(
-  //       Respuesta.exito(data, "Datos de entrenamientos futuros recuperados")
-  //     );
-  //   } catch (err) {
-  //     // Manejar errores durante la consulta
-  //     console.error(err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos de los entrenamientos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+      console.log("Rango semanal:", inicioSemana, "a", finSemana);
 
-  // async getEntrenamientoById(req, res) {
-  //   const identrenamiento = req.params.identrenamiento;
-  //   try {
-  //     const entrenamiento = await Entrenamiento.findByPk(identrenamiento);
+      // 2. Buscar partidos en este rango
+      const partidos = await Partido.findAll({
+        where: {
+          fecha_partido: {
+            [Op.between]: [inicioSemana, finSemana],
+          },
+        },
+        order: [["fecha_partido", "ASC"]], // Ordenar por fecha más cercana
+        include: [
+          { model: Club, as: "idrival_club" },
+        ],
+      });
 
-  //     if (entrenamiento) {
-  //       res.json(Respuesta.exito(entrenamiento, "Entrenamiento recuperado"));
-  //     } else {
-  //       res
-  //         .status(404)
-  //         .json(Respuesta.error(null, "Entrenamiento no encontrado"));
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+      // 3. Seleccionar el partido más próximo (partido de la semana)
+      const partidoDeLaSemana = partidos.length > 0 ? partidos[0] : null;
 
-  // async createClub(req, res) {
-  //   const { nombre, ciudad, estadio, puntos, fecha_fundacion } = req.body;
+      // 4. Responder
+      if (!partidoDeLaSemana) {
+        return res
+          .status(200)
+          .json(
+            Respuesta.exito(
+              null,
+              "No hay partidos programados para esta semana"
+            )
+          );
+      }
 
-  //   try {
-  //     const nombreSinEspacios = nombre.trim();
-
-  //     const fechaFundacion = new Date(fecha_fundacion);
-  //     const fechaLimite = new Date(new Date().getFullYear() - 1, 5, 1); // 1 de junio del año pasado (mes 5 = junio)
-
-  //     if (fechaFundacion >= fechaLimite) {
-  //       return res.status(400).json({
-  //         error: `La fecha de fundación debe ser anterior a junio del ${fechaLimite.getFullYear()}.`,
-  //       });
-  //     }
-
-  //     const existingClub = await Club.findOne({
-  //       where: { nombre: nombreSinEspacios },
-  //     });
-
-  //     if (existingClub) {
-  //       return res
-  //         .status(400)
-  //         .json(Respuesta.error(null, "Ya existe un club con ese nombre."));
-  //     } else {
-  //       const imagen = req.file ? req.file.filename : "null.webp";
-
-  //       const club = {
-  //         nombre: nombreSinEspacios,
-  //         ciudad,
-  //         estadio,
-  //         puntos,
-  //         imagen,
-  //         fecha_fundacion,
-  //       };
-
-  //       console.log("club: ", club);
-
-  //       const nuevoClub = await Club.create(club);
-
-  //       res
-  //         .status(201)
-  //         .json(Respuesta.exito(nuevoClub, "Club creado con éxito"));
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(Respuesta.error(null, `Error al crear un club nuevo`));
-  //   }
-  // }
-
-  // async deleteEntrenamiento(req, res) {
-  //   const identrenamiento = req.params.identrenamiento;
-
-  //   try {
-  //     const entrenamiento = await Entrenamiento.findByPk(identrenamiento);
-
-  //     if (entrenamiento) {
-  //       const numFilas = await Entrenamiento.destroy({
-  //         where: {
-  //           identrenamiento: identrenamiento,
-  //         },
-  //       });
-
-  //       if (numFilas == 0) {
-  //         // No se ha encontrado lo que se quería borrar
-  //         res
-  //           .status(404)
-  //           .json(Respuesta.error(null, "No encontrado: " + identrenamiento));
-  //       } else {
-  //         res.status(204).send();
-  //       }
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al eliminar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
-
-  // async updateEntrenamiento(req, res) {
-  //   const datos = req.body;
-  //   const identrenamiento = req.params.identrenamiento;
-
-  //   console.log("📥 Datos recibidos en el backend:", datos); // 👈 DEBUG
-
-  //   try {
-  //     const entrenamientoSeleccionado = await Entrenamiento.findByPk(
-  //       identrenamiento
-  //     );
-
-  //     // Comprobamos si la fecha o las horas han cambiado
-  //     const haCambiadoHorario =
-  //       entrenamientoSeleccionado.fecha_entrenamiento !==
-  //         datos.fecha_entrenamiento ||
-  //       entrenamientoSeleccionado.hora_inicio !== datos.hora_inicio ||
-  //       entrenamientoSeleccionado.hora_final !== datos.hora_final;
-
-  //     if (haCambiadoHorario) {
-  //       const solapamiento = await Entrenamiento.findOne({
-  //         where: {
-  //           fecha_entrenamiento: datos.fecha_entrenamiento,
-  //           identrenamiento: { [Op.ne]: identrenamiento }, // Excluir el mismo entrenamiento
-  //           [Op.or]: [
-  //             // Caso 1: Se solapa por inicio o fin
-  //             {
-  //               hora_inicio: { [Op.lt]: datos.hora_final },
-  //               hora_final: { [Op.gt]: datos.hora_inicio },
-  //             },
-  //             // Caso 2: El nuevo horario engloba completamente otro
-  //             {
-  //               hora_inicio: { [Op.gte]: datos.hora_inicio },
-  //               hora_final: { [Op.lte]: datos.hora_final },
-  //             },
-  //           ],
-  //         },
-  //       });
-
-  //       if (solapamiento) {
-  //         console.log("Conflicto detectado con otro entrenamiento.");
-  //         return res
-  //           .status(400)
-  //           .json(
-  //             Respuesta.error(
-  //               null,
-  //               "Las horas se solapan con otro entrenamiento en esa fecha."
-  //             )
-  //           );
-  //       }
-  //     }
-
-  //     // Si todo está bien, actualizar el entrenamiento
-  //     const [numFilas] = await Entrenamiento.update(
-  //       { ...datos },
-  //       { where: { identrenamiento } }
-  //     );
-
-  //     if (numFilas === 0) {
-  //       console.log("⚠️ No se realizó ninguna modificación.");
-  //       return res
-  //         .status(404)
-  //         .json(Respuesta.error(null, "No encontrado o no modificado."));
-  //     }
-
-  //     res.status(204).send();
-  //   } catch (err) {
-  //     console.error("Error en la actualización:", err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al actualizar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+      res.json(
+        Respuesta.exito(partidoDeLaSemana, "Partido de la semana recuperado")
+      );
+    } catch (error) {
+      console.error("Error en getPartidoDeLaSemana:", error);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al obtener el partido de la semana: ${error.message}`
+          )
+        );
+    }
+  }
 }
 
 module.exports = new DashboardController();
