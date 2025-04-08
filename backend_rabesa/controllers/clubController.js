@@ -62,30 +62,28 @@ class ClubController {
   //   }
   // }
 
-  // async getEntrenamientoById(req, res) {
-  //   const identrenamiento = req.params.identrenamiento;
-  //   try {
-  //     const entrenamiento = await Entrenamiento.findByPk(identrenamiento);
+  async getClubById(req, res) {
+    const idclub = req.params.idclub;
+    try {
+      const club = await Club.findByPk(idclub);
 
-  //     if (entrenamiento) {
-  //       res.json(Respuesta.exito(entrenamiento, "Entrenamiento recuperado"));
-  //     } else {
-  //       res
-  //         .status(404)
-  //         .json(Respuesta.error(null, "Entrenamiento no encontrado"));
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+      if (club) {
+        res.json(Respuesta.exito(club, "Club recuperado"));
+      } else {
+        res.status(404).json(Respuesta.error(null, "Club no encontrado"));
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   async createClub(req, res) {
     const { nombre, ciudad, estadio, puntos, fecha_fundacion } = req.body;

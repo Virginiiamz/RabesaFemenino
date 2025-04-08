@@ -18,6 +18,13 @@ class PartidosController {
     try {
       const data = await Partido.findAll({
         order: [["fecha_partido", "ASC"]], // Ordenar por fecha ascendente
+        include: [
+          {
+            model: Club,
+            as: "idrival_club", // El rival
+            required: true,
+          },
+        ],
       });
       res.json(Respuesta.exito(data, "Datos de partidos recuperados"));
     } catch (err) {
@@ -300,6 +307,55 @@ class PartidosController {
     console.log("IDPARTIDO: " + idpartido);
 
     try {
+      // const partidosMismoRival = await Partido.findAll({
+      //   where: { idrival: idrival },
+      //   attributes: ["idpartido"],
+      // });
+
+      // if (partidosMismoRival.length >= 2) {
+      //   return res
+      //     .status(400)
+      //     .json(
+      //       Respuesta.error(
+      //         null,
+      //         "No se puede crear más de 2 partidos contra el mismo rival."
+      //       )
+      //     );
+      // }
+
+      // const fechaPartido = new Date(fecha_partido);
+      // const diaSemana = fechaPartido.getDay(); // 0 (domingo) a 6 (sábado)
+
+      // // Calcular inicio (lunes) y fin (domingo) de la semana
+      // const inicioSemana = new Date(fechaPartido);
+      // inicioSemana.setDate(
+      //   fechaPartido.getDate() - (diaSemana === 0 ? 6 : diaSemana - 1)
+      // );
+      // inicioSemana.setHours(0, 0, 0, 0);
+
+      // const finSemana = new Date(inicioSemana);
+      // finSemana.setDate(inicioSemana.getDate() + 6);
+      // finSemana.setHours(23, 59, 59, 999);
+
+      // const partidoEnSemana = await Partido.findOne({
+      //   where: {
+      //     fecha_partido: {
+      //       [Op.between]: [inicioSemana, finSemana],
+      //     },
+      //   },
+      // });
+
+      // if (partidoEnSemana) {
+      //   return res
+      //     .status(400)
+      //     .json(
+      //       Respuesta.error(
+      //         null,
+      //         "Ya existe un partido programado en esta semana (lunes a domingo)."
+      //       )
+      //     );
+      // }
+
       const numFilas = await Partido.update(
         { ...datos },
         { where: { idpartido } }

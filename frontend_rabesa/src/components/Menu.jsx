@@ -65,7 +65,7 @@ function Menu(props) {
         </Link>
       </MenuItem>
       <MenuItem>
-        <Link to="/">
+        <Link to="partidos">
           <ListItemIcon>
             <SportsSoccerIcon sx={{ color: "#00338e" }}></SportsSoccerIcon>
             <Typography style={{ marginLeft: "0.5rem", color: "#00338e", fontWeight: "600" }}>Partidos</Typography>

@@ -22,6 +22,7 @@ import ShowTraining from "./components/training/ShowTraining";
 import CreateAssited from "./components/CreateVerification";
 import CreateVerification from "./components/CreateVerification";
 import SearchTraining from "./components/training/SearchTraining";
+import Match from "./components/match/Match";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -130,6 +131,10 @@ let router = createBrowserRouter([
             allowedRoles={["Entrenador"]} 
           />
         ),
+      },
+      {
+        path: "partidos",
+        element: <Match />,
       },
     ],
   },
