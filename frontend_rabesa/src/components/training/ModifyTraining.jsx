@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { apiUrl } from "../config";
+import { apiUrl } from "../../config";
 
 function ModifyTraining() {
   const navigate = useNavigate();

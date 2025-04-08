@@ -13,14 +13,15 @@ import CreatePlayer from "./components/CreatePlayer";
 import ModifyPlayer from "./components/ModifyPlayer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./components/Unauthorized";
-import Training from "./components/Training";
-import CreateTraining from "./components/CreateTraining";
-import ModifyTraining from "./components/ModifyTraining";
-import AssistedTraining from "./components/AssistedTraining";
+import Training from "./components/training/Training";
+import CreateTraining from "./components/training/CreateTraining";
+import ModifyTraining from "./components/training/ModifyTraining";
+import AssistedTraining from "./components/training/AssistedTraining";
 import NoAssistedTraining from "./components/NoAssistedTraining";
-import ShowTraining from "./components/ShowTraining";
+import ShowTraining from "./components/training/ShowTraining";
 import CreateAssited from "./components/CreateVerification";
 import CreateVerification from "./components/CreateVerification";
+import SearchTraining from "./components/training/SearchTraining";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -89,6 +90,10 @@ let router = createBrowserRouter([
       {
         path: "/home/training/no-asistidos",
         element: <NoAssistedTraining />,
+      },
+      {
+        path: "/home/buscar-entrenamientos",
+        element: <SearchTraining />,
       },
       {
         path: "/home/crear-entrenamiento",

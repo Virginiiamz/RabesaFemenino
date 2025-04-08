@@ -1,7 +1,7 @@
 import { Box, Button, TextareaAutosize, TextField, Toolbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { apiUrl } from "../config";
+import { apiUrl } from "../../config";
 
 function CreateTraining() {
   const navigate = useNavigate();

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-import { apiUrl } from "../config";
+import { apiUrl } from "../../config";
 
 function ShowTraining() {
   const { identrenamiento } = useParams();

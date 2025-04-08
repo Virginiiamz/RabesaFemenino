@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { apiUrl } from "../config";
-import useUserStore from "../stores/useUserStore";
+import { apiUrl } from "../../config";
+import useUserStore from "../../stores/useUserStore";
 
 function Training() {
   const [datosEntrenamientos, setDatosEntrenamientos] = useState([]);
@@ -211,6 +211,10 @@ function Training() {
             <Button variant="contained">Entrenamientos confirmados</Button>
           </Link>
         )}
+
+        <Link to="/home/buscar-entrenamientos">
+          <Button variant="contained">Buscar entrenamientos</Button>
+        </Link>
 
         {entrenador ? null : (
           <Link to="/home/training/no-asistidos">
