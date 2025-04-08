@@ -18,7 +18,9 @@ const Jugadora = models.jugadoras;
 class EntrenamientoController {
   async getAllEntrenamientos(req, res) {
     try {
-      const data = await Entrenamiento.findAll();
+      const data = await Entrenamiento.findAll({
+        order: [["fecha_entrenamiento", "DESC"]]
+      });
       res.json(Respuesta.exito(data, "Datos de entrenamientos recuperados"));
     } catch (err) {
       // Handle errors during the model call
