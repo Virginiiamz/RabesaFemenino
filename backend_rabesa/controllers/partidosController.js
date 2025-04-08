@@ -10,10 +10,6 @@ const { Op } = require("sequelize");
 
 // Cargar las definiciones del modelo en sequelize
 const models = initModels(sequelize);
-// Recuperar el modelo plato
-const Entrenamiento = models.entrenamientos;
-const Asistencia = models.asistenciaEntrenamientos;
-const Jugadora = models.jugadoras;
 const Partido = models.partidos;
 const Club = models.clubs;
 
@@ -172,6 +168,42 @@ class PartidosController {
         fecha_partido,
       });
 
+      if (resultado != "") {
+        const puntos = resultado.split("-");
+
+        if (puntos[0] > puntos[1]) {
+          const equipo = await Club.findOne({ where: { idclub: 1 } });
+
+          let puntosFinal = equipo.puntos + 3;
+
+          await Club.update({ puntos: puntosFinal }, { where: { idclub: 1 } });
+        } else if (puntos[0] == puntos[1]) {
+          const rabesa = await Club.findOne({ where: { idclub: 1 } });
+          const equipoRival = await Club.findOne({
+            where: { idclub: idrival },
+          });
+
+          let puntosRabesa = rabesa.puntos + 1;
+          let puntosRival = equipoRival.puntos + 1;
+
+          await Club.update({ puntos: puntosRabesa }, { where: { idclub: 1 } });
+
+          await Club.update(
+            { puntos: puntosRival },
+            { where: { idclub: idrival } }
+          );
+        } else {
+          const equipo = await Club.findOne({ where: { idclub: idrival } });
+
+          let puntosFinal = equipo.puntos + 3;
+
+          await Club.update(
+            { puntos: puntosFinal },
+            { where: { idclub: idrival } }
+          );
+        }
+      }
+
       res
         .status(201)
         .json(Respuesta.exito(nuevoPartido, "Partido creado exitosamente"));
@@ -236,10 +268,7 @@ class PartidosController {
         res
           .status(404)
           .json(
-            Respuesta.error(
-              null,
-              "No encontrado o no modificado: " + idpartido
-            )
+            Respuesta.error(null, "No encontrado o no modificado: " + idpartido)
           );
       } else {
         // Al dar status 204 no se devuelva nada
