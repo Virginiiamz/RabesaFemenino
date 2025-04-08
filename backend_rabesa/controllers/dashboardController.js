@@ -115,9 +115,7 @@ class DashboardController {
           },
         },
         order: [["fecha_partido", "ASC"]], // Ordenar por fecha más cercana
-        include: [
-          { model: Club, as: "idrival_club" },
-        ],
+        include: [{ model: Club, as: "idrival_club" }],
       });
 
       // 3. Seleccionar el partido más próximo (partido de la semana)
@@ -146,6 +144,27 @@ class DashboardController {
           Respuesta.error(
             null,
             `Error al obtener el partido de la semana: ${error.message}`
+          )
+        );
+    }
+  }
+
+  async getClasificacion(req, res) {
+    try {
+      const clasificacion = await Club.findAll({
+        order: [["puntos", "DESC"]],
+      });
+
+      res.json(
+        Respuesta.exito(clasificacion, "Clasificacion de la liga recuperado")
+      );
+    } catch (error) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al obtener la clasificacion de la liga: ${error.message}`
           )
         );
     }

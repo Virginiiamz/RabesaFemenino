@@ -7,6 +7,7 @@ router.get("/total-jugadoras", dashboardController.getTotalJugadoras);
 router.get("/total-puntos", dashboardController.getTotalPuntosEquipo);
 router.get("/proximo-entrenamiento", dashboardController.getProximoEntrenamiento);
 router.get("/partido-semana", dashboardController.getPartidoDeLaSemana);
+router.get("/clasificacion", dashboardController.getClasificacion);
 // router.get('/actuales', entrenamientoController.getAllEntrenamientosByFecha);
 // router.get('/:identrenamiento', entrenamientoController.getEntrenamientoById);
 // router.post("/", clubsController.createClub);
