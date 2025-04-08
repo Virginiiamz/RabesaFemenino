@@ -222,6 +222,50 @@ class PartidosController {
       const partido = await Partido.findByPk(idpartido);
 
       if (partido) {
+        if (partido.resultado != "") {
+          const puntos = partido.resultado.split("-");
+
+          if (puntos[0] > puntos[1]) {
+            const equipo = await Club.findOne({ where: { idclub: 1 } });
+
+            let puntosFinal = equipo.puntos - 3;
+
+            await Club.update(
+              { puntos: puntosFinal },
+              { where: { idclub: 1 } }
+            );
+          } else if (puntos[0] == puntos[1]) {
+            const rabesa = await Club.findOne({ where: { idclub: 1 } });
+            const equipoRival = await Club.findOne({
+              where: { idclub: partido.idrival },
+            });
+
+            let puntosRabesa = rabesa.puntos - 1;
+            let puntosRival = equipoRival.puntos - 1;
+
+            await Club.update(
+              { puntos: puntosRabesa },
+              { where: { idclub: 1 } }
+            );
+
+            await Club.update(
+              { puntos: puntosRival },
+              { where: { idclub: partido.idrival } }
+            );
+          } else {
+            const equipo = await Club.findOne({
+              where: { idclub: partido.idrival },
+            });
+
+            let puntosFinal = equipo.puntos - 3;
+
+            await Club.update(
+              { puntos: puntosFinal },
+              { where: { idclub: partido.idrival } }
+            );
+          }
+        }
+
         const numFilas = await Partido.destroy({
           where: {
             idpartido: idpartido,
