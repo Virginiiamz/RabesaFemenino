@@ -19,7 +19,7 @@ class EntrenamientoController {
   async getAllEntrenamientos(req, res) {
     try {
       const data = await Entrenamiento.findAll({
-        order: [["fecha_entrenamiento", "DESC"]]
+        order: [["fecha_entrenamiento", "DESC"]],
       });
       res.json(Respuesta.exito(data, "Datos de entrenamientos recuperados"));
     } catch (err) {
@@ -35,7 +35,45 @@ class EntrenamientoController {
     }
   }
 
-  async getAllEntrenamientosByFecha(req, res) {
+  async getEntrenamientoByBusqueda(req, res) {
+    const fechaHasta = req.params.fechahasta;
+    const fechaDesde = req.params.fechadesde;
+
+    console.log(fechaDesde);
+    console.log(fechaHasta);
+
+    try {
+      const entrenamientos = await Entrenamiento.findAll({
+        where: {
+          fecha_entrenamiento: {
+            [Op.between]: [new Date(fechaDesde), new Date(fechaHasta)], // Usar between en lugar de gte/lte
+          },
+        },
+        order: [["fecha_entrenamiento", "ASC"]],
+      });
+
+      if (entrenamientos.length === 0) {
+        return res
+          .status(404)
+          .json(Respuesta.error(null, "No se encontraron entrenamientos."));
+      }
+
+      res.json(
+        Respuesta.exito(entrenamientos, "Datos de entrenamientos recuperados")
+      );
+    } catch (error) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos de los entrenamientos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
+  async getEntrenamientoByFecha(req, res) {
     try {
       // Obtener la fecha actual del sistema (sin hora, solo fecha)
       const hoy = new Date();
