@@ -15,6 +15,7 @@ import { Link, useNavigate } from "react-router";
 function Match() {
   const [datosPartidos, setDatosPartidos] = useState([]);
   const [club, setClub] = useState([]);
+  const [resultadoVacio, setResultadoVacio] = useState([]);
   const navigate = useNavigate();
 
   const { user } = useUserStore();
@@ -37,6 +38,7 @@ function Match() {
       if (response.ok) {
         let data = await response.json();
         setDatosPartidos(data.datos);
+        setResultadoVacio(data.datos.resultado == "");
       }
     }
 
@@ -101,6 +103,7 @@ function Match() {
           }}
         >
           {datosPartidos.map((partido) => (
+           
             <Card>
               <CardContent>
                 <Box

@@ -22,7 +22,6 @@ function ModifyMatch() {
     hora: "00:00", // Sin segundos
   });
   const navigate = useNavigate();
-  const [resultadoVacio, setResultadoVacio] = useState(false);
 
   useEffect(() => {
     async function getPartidoById() {
@@ -30,7 +29,6 @@ function ModifyMatch() {
       if (response.ok) {
         let data = await response.json();
         setFormData(data.datos);
-        setResultadoVacio(data.datos.resultado === null);
       } else if (response.status === 404) {
         let data = await response.json();
         alert(data.mensaje);
@@ -139,16 +137,24 @@ function ModifyMatch() {
             type="text"
             onChange={handleChange}
           />
-          {formData.resultado ? null : (
-            <TextField
-              id="outlined-basic"
-              label="Resultado"
-              variant="outlined"
-              name="resultado"
-              value={formData.resultado}
-              onChange={handleChange}
-            />
-          )}
+          {/* <TextField
+            label="Resultado"
+            name="resultado"
+            value={formData.resultado || ""}
+            onChange={handleChange}
+            InputProps={{
+              readOnly:
+                !resultadoVacio &&
+                formData.resultado !== "" &&
+                formData.resultado !== null,
+            }}
+            onFocus={() => {
+              if (formData.resultado !== "" && formData.resultado !== null) {
+                setResultadoVacio(true); // Permite editar al hacer clic
+              }
+            }}
+            onBlur={() => setResultadoVacio(false)} // Vuelve a solo lectura al salir
+          /> */}
           <TextField
             id="outlined-basic"
             label="Fecha partido"
