@@ -23,6 +23,7 @@ import CreateAssited from "./components/CreateVerification";
 import CreateVerification from "./components/CreateVerification";
 import SearchTraining from "./components/training/SearchTraining";
 import Match from "./components/match/Match";
+import CreateMatch from "./components/match/CreateMatch";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -110,7 +111,7 @@ let router = createBrowserRouter([
         element: (
           <ProtectedRoute
             element={<ModifyTraining />}
-            allowedRoles={["Entrenador"]} 
+            allowedRoles={["Entrenador"]}
           />
         ),
       },
@@ -119,7 +120,7 @@ let router = createBrowserRouter([
         element: (
           <ProtectedRoute
             element={<ShowTraining />}
-            allowedRoles={["Entrenador"]} 
+            allowedRoles={["Entrenador"]}
           />
         ),
       },
@@ -128,13 +129,22 @@ let router = createBrowserRouter([
         element: (
           <ProtectedRoute
             element={<CreateVerification />}
-            allowedRoles={["Entrenador"]} 
+            allowedRoles={["Entrenador"]}
           />
         ),
       },
       {
         path: "partidos",
         element: <Match />,
+      },
+      {
+        path: "/home/crear-partido",
+        element: (
+          <ProtectedRoute
+            element={<CreateMatch />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
       },
     ],
   },

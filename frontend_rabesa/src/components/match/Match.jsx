@@ -9,10 +9,19 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { apiUrl } from "../../config";
+import useUserStore from "../../stores/useUserStore";
+import { Link } from "react-router";
 
 function Match() {
   const [datosPartidos, setDatosPartidos] = useState([]);
   const [club, setClub] = useState([]);
+
+  const { user } = useUserStore();
+  let entrenador = false;
+
+  if (user.rol == "Entrenador") {
+    entrenador = true;
+  }
 
   useEffect(() => {
     async function getPartidos() {
@@ -73,6 +82,13 @@ function Match() {
         }}
       >
         <Toolbar />
+
+        {entrenador ? (
+          <Link to="/home/crear-partido">
+            <Button variant="contained">Crear partido</Button>
+          </Link>
+        ) : null}
+
         <Typography sx={{ marginBottom: 2 }}>Partidos</Typography>
 
         <Box
