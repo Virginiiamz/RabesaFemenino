@@ -308,7 +308,7 @@ class PartidosController {
 
     try {
       const partidosMismoRival = await Partido.findAll({
-        where: { idrival: datos.idrival },
+        where: { idrival: datos.idrival, idpartido: { [Op.ne]: idpartido } },
         attributes: ["idpartido"],
       });
 
@@ -318,7 +318,7 @@ class PartidosController {
           .json(
             Respuesta.error(
               null,
-              "No se puede crear más de 2 partidos contra el mismo rival."
+              "Ya existe más de 2 partidos contra el mismo rival."
             )
           );
       }
@@ -342,6 +342,7 @@ class PartidosController {
           fecha_partido: {
             [Op.between]: [inicioSemana, finSemana],
           },
+          idpartido: { [Op.ne]: idpartido },
         },
       });
 
