@@ -10,11 +10,12 @@ import {
 import { useEffect, useState } from "react";
 import { apiUrl } from "../../config";
 import useUserStore from "../../stores/useUserStore";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function Match() {
   const [datosPartidos, setDatosPartidos] = useState([]);
   const [club, setClub] = useState([]);
+  const navigate = useNavigate();
 
   const { user } = useUserStore();
   let entrenador = false;
@@ -164,9 +165,11 @@ function Match() {
                 {entrenador ? (
                   <Button
                     size="small"
-                    // onClick={() => handleDelete(noAsistencia.idasistencia)}
+                    onClick={() =>
+                      navigate("/home/modificar-partido/" + partido.idpartido)
+                    }
                   >
-                    Modificar
+                    Editar
                   </Button>
                 ) : null}
                 {entrenador ? (

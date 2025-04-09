@@ -24,6 +24,7 @@ import CreateVerification from "./components/CreateVerification";
 import SearchTraining from "./components/training/SearchTraining";
 import Match from "./components/match/Match";
 import CreateMatch from "./components/match/CreateMatch";
+import ModifyMatch from "./components/match/ModifyMatch";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -142,6 +143,15 @@ let router = createBrowserRouter([
         element: (
           <ProtectedRoute
             element={<CreateMatch />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "/home/modificar-partido/:idpartido",
+        element: (
+          <ProtectedRoute
+            element={<ModifyMatch />}
             allowedRoles={["Entrenador"]}
           />
         ),
