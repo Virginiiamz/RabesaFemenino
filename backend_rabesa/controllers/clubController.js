@@ -16,7 +16,13 @@ const Club = models.clubs;
 class ClubController {
   async getAllClubs(req, res) {
     try {
-      const data = await Club.findAll();
+      const data = await Club.findAll({
+        where: {
+          idclub: {
+            [Op.ne]: 1, // Excluir el club del rabesa
+          },
+        },
+      });
       res.json(Respuesta.exito(data, "Datos de clubes recuperados"));
     } catch (err) {
       res
