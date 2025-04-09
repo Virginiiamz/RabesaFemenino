@@ -161,18 +161,22 @@ function Match() {
                 </Box>
               </CardContent>
               <CardActions>
-                <Button
-                  size="small"
-                  onClick={() => handleDelete(noAsistencia.idasistencia)}
-                >
-                  Modificar
-                </Button>
-                <Button
-                  size="small"
-                  onClick={() => handleDelete(partido.idpartido)}
-                >
-                  Eliminar
-                </Button>
+                {entrenador ? (
+                  <Button
+                    size="small"
+                    // onClick={() => handleDelete(noAsistencia.idasistencia)}
+                  >
+                    Modificar
+                  </Button>
+                ) : null}
+                {entrenador ? (
+                  <Button
+                    size="small"
+                    onClick={() => handleDelete(partido.idpartido)}
+                  >
+                    Eliminar
+                  </Button>
+                ) : null}
               </CardActions>
             </Card>
           ))}
