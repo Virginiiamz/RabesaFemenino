@@ -307,54 +307,54 @@ class PartidosController {
     console.log("IDPARTIDO: " + idpartido);
 
     try {
-      // const partidosMismoRival = await Partido.findAll({
-      //   where: { idrival: idrival },
-      //   attributes: ["idpartido"],
-      // });
+      const partidosMismoRival = await Partido.findAll({
+        where: { idrival: datos.idrival },
+        attributes: ["idpartido"],
+      });
 
-      // if (partidosMismoRival.length >= 2) {
-      //   return res
-      //     .status(400)
-      //     .json(
-      //       Respuesta.error(
-      //         null,
-      //         "No se puede crear más de 2 partidos contra el mismo rival."
-      //       )
-      //     );
-      // }
+      if (partidosMismoRival.length >= 2) {
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              "No se puede crear más de 2 partidos contra el mismo rival."
+            )
+          );
+      }
 
-      // const fechaPartido = new Date(fecha_partido);
-      // const diaSemana = fechaPartido.getDay(); // 0 (domingo) a 6 (sábado)
+      const fechaPartido = new Date(datos.fecha_partido);
+      const diaSemana = fechaPartido.getDay(); // 0 (domingo) a 6 (sábado)
 
-      // // Calcular inicio (lunes) y fin (domingo) de la semana
-      // const inicioSemana = new Date(fechaPartido);
-      // inicioSemana.setDate(
-      //   fechaPartido.getDate() - (diaSemana === 0 ? 6 : diaSemana - 1)
-      // );
-      // inicioSemana.setHours(0, 0, 0, 0);
+      // Calcular inicio (lunes) y fin (domingo) de la semana
+      const inicioSemana = new Date(fechaPartido);
+      inicioSemana.setDate(
+        fechaPartido.getDate() - (diaSemana === 0 ? 6 : diaSemana - 1)
+      );
+      inicioSemana.setHours(0, 0, 0, 0);
 
-      // const finSemana = new Date(inicioSemana);
-      // finSemana.setDate(inicioSemana.getDate() + 6);
-      // finSemana.setHours(23, 59, 59, 999);
+      const finSemana = new Date(inicioSemana);
+      finSemana.setDate(inicioSemana.getDate() + 6);
+      finSemana.setHours(23, 59, 59, 999);
 
-      // const partidoEnSemana = await Partido.findOne({
-      //   where: {
-      //     fecha_partido: {
-      //       [Op.between]: [inicioSemana, finSemana],
-      //     },
-      //   },
-      // });
+      const partidoEnSemana = await Partido.findOne({
+        where: {
+          fecha_partido: {
+            [Op.between]: [inicioSemana, finSemana],
+          },
+        },
+      });
 
-      // if (partidoEnSemana) {
-      //   return res
-      //     .status(400)
-      //     .json(
-      //       Respuesta.error(
-      //         null,
-      //         "Ya existe un partido programado en esta semana (lunes a domingo)."
-      //       )
-      //     );
-      // }
+      if (partidoEnSemana) {
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              "Ya existe un partido programado en esta semana (lunes a domingo)."
+            )
+          );
+      }
 
       const numFilas = await Partido.update(
         { ...datos },
