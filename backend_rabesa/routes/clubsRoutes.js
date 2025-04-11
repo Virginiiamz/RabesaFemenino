@@ -1,4 +1,4 @@
-// partidosRoutes.js
+// clubsRoutes.js
 const express = require('express');
 const router = express.Router();
 const clubsController = require('../controllers/clubController');
