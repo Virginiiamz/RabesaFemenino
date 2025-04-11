@@ -26,6 +26,7 @@ import Match from "./components/match/Match";
 import CreateMatch from "./components/match/CreateMatch";
 import ModifyMatch from "./components/match/ModifyMatch";
 import AddResult from "./components/match/AddResult";
+import Club from "./components/club/Club";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -165,6 +166,10 @@ let router = createBrowserRouter([
             allowedRoles={["Entrenador"]}
           />
         ),
+      },
+      {
+        path: "club",
+        element: <Club />,
       },
     ],
   },
