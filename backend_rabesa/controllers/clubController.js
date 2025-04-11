@@ -142,40 +142,40 @@ class ClubController {
     }
   }
 
-  // async deleteEntrenamiento(req, res) {
-  //   const identrenamiento = req.params.identrenamiento;
+  async deleteClub(req, res) {
+    const idclub = req.params.idclub;
 
-  //   try {
-  //     const entrenamiento = await Entrenamiento.findByPk(identrenamiento);
+    try {
+      const club = await Club.findByPk(idclub);
 
-  //     if (entrenamiento) {
-  //       const numFilas = await Entrenamiento.destroy({
-  //         where: {
-  //           identrenamiento: identrenamiento,
-  //         },
-  //       });
+      if (club) {
+        const numFilas = await Club.destroy({
+          where: {
+            idclub: idclub,
+          },
+        });
 
-  //       if (numFilas == 0) {
-  //         // No se ha encontrado lo que se quería borrar
-  //         res
-  //           .status(404)
-  //           .json(Respuesta.error(null, "No encontrado: " + identrenamiento));
-  //       } else {
-  //         res.status(204).send();
-  //       }
-  //     }
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al eliminar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+        if (numFilas == 0) {
+          // No se ha encontrado lo que se quería borrar
+          res
+            .status(404)
+            .json(Respuesta.error(null, "No encontrado: " + idclub));
+        } else {
+          res.status(204).send();
+        }
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al eliminar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 
   // async updateEntrenamiento(req, res) {
   //   const datos = req.body;

@@ -38,6 +38,19 @@ function Club() {
 
     getClubs();
   }, []);
+
+  const handleDelete = async (idclub) => {
+    let response = await fetch(apiUrl + "/clubs/" + idclub, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      const clubTrasBorrado = datosClubs.filter(
+        (club) => club.idclub != idclub
+      );
+      setDatosClubs(clubTrasBorrado);
+    }
+  };
   return (
     <>
       <Box
@@ -98,15 +111,15 @@ function Club() {
                   <>
                     <Button
                       size="small"
-                    //   onClick={() =>
-                    //     // navigate("/home/modificar-partido/" + partido.idpartido)
-                    //   }
+                      //   onClick={() =>
+                      // navigate("/home/modificar-partido/" + partido.idpartido)
+                      //   }
                     >
                       Editar
                     </Button>
                     <Button
                       size="small"
-                    //   onClick={() => handleDelete(partido.idpartido)}
+                      onClick={() => handleDelete(club.idclub)}
                     >
                       Eliminar
                     </Button>

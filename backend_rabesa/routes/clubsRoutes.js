@@ -7,7 +7,7 @@ router.get('/', clubsController.getAllClubs);
 // router.get('/actuales', entrenamientoController.getAllEntrenamientosByFecha);
 router.get('/:idclub', clubsController.getClubById);
 router.post('/', clubsController.createClub);
-// router.delete('/:identrenamiento', entrenamientoController.deleteEntrenamiento);
+router.delete('/:idclub', clubsController.deleteClub);
 // router.put('/:identrenamiento', entrenamientoController.updateEntrenamiento);
 
 
