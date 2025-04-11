@@ -55,6 +55,29 @@ class DashboardController {
     }
   }
 
+  async getTotalPartidosJugados(req, res) {
+    try {
+      const totalPartidosJugados = await Partido.count({
+        where: {
+          resultado: {
+            [Op.ne]: "", // No igual a cadena vacía
+          },
+        },
+      });
+
+      res.json(Respuesta.exito(totalPartidosJugados, "Total de partidos jugados"));
+    } catch (err) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al recuperar los datos del total de partidos jugados: ${req.originalUrl}`
+          )
+        );
+    }
+  }
+
   async getProximoEntrenamiento(req, res) {
     try {
       const hoy = new Date();
