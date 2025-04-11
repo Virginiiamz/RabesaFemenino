@@ -13,11 +13,12 @@ import Typography from "@mui/material/Typography";
 import useUserStore from "../stores/useUserStore";
 import { MenuItem } from "@mui/material";
 import { Link } from "react-router";
-import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import TimerIcon from "@mui/icons-material/Timer";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
-import ShieldIcon from '@mui/icons-material/Shield';
-import SettingsIcon from '@mui/icons-material/Settings';
+import ShieldIcon from "@mui/icons-material/Shield";
+import SettingsIcon from "@mui/icons-material/Settings";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
 const drawerWidth = 240;
 
@@ -50,7 +51,15 @@ function Menu(props) {
         <Link to="dashboard">
           <ListItemIcon>
             <SpaceDashboardIcon sx={{ color: "#00338e" }}></SpaceDashboardIcon>
-            <Typography style={{ marginLeft: "0.5rem", color: "#00338e", fontWeight: "600" }}>Dashboard</Typography>
+            <Typography
+              style={{
+                marginLeft: "0.5rem",
+                color: "#00338e",
+                fontWeight: "600",
+              }}
+            >
+              Dashboard
+            </Typography>
           </ListItemIcon>
         </Link>
       </MenuItem>
@@ -58,7 +67,13 @@ function Menu(props) {
         <Link to="training">
           <ListItemIcon>
             <TimerIcon sx={{ color: "#00338e" }}></TimerIcon>
-            <Typography style={{ marginLeft: "0.5rem", color: "#00338e", fontWeight: "600" }}>
+            <Typography
+              style={{
+                marginLeft: "0.5rem",
+                color: "#00338e",
+                fontWeight: "600",
+              }}
+            >
               Entrenamientos
             </Typography>
           </ListItemIcon>
@@ -68,7 +83,15 @@ function Menu(props) {
         <Link to="partidos">
           <ListItemIcon>
             <SportsSoccerIcon sx={{ color: "#00338e" }}></SportsSoccerIcon>
-            <Typography style={{ marginLeft: "0.5rem", color: "#00338e", fontWeight: "600" }}>Partidos</Typography>
+            <Typography
+              style={{
+                marginLeft: "0.5rem",
+                color: "#00338e",
+                fontWeight: "600",
+              }}
+            >
+              Partidos
+            </Typography>
           </ListItemIcon>
         </Link>
       </MenuItem>
@@ -76,7 +99,31 @@ function Menu(props) {
         <Link to="team">
           <ListItemIcon>
             <ShieldIcon sx={{ color: "#00338e" }}></ShieldIcon>
-            <Typography style={{ marginLeft: "0.5rem", color: "#00338e", fontWeight: "600" }}>Equipo</Typography>
+            <Typography
+              style={{
+                marginLeft: "0.5rem",
+                color: "#00338e",
+                fontWeight: "600",
+              }}
+            >
+              Equipo
+            </Typography>
+          </ListItemIcon>
+        </Link>
+      </MenuItem>
+      <MenuItem>
+        <Link to="club">
+          <ListItemIcon>
+            <EmojiEventsIcon sx={{ color: "#00338e" }}></EmojiEventsIcon>
+            <Typography
+              style={{
+                marginLeft: "0.5rem",
+                color: "#00338e",
+                fontWeight: "600",
+              }}
+            >
+              Clubs
+            </Typography>
           </ListItemIcon>
         </Link>
       </MenuItem>
@@ -84,7 +131,15 @@ function Menu(props) {
         <Link to="/">
           <ListItemIcon>
             <SettingsIcon sx={{ color: "#00338e" }}></SettingsIcon>
-            <Typography style={{ marginLeft: "0.5rem", color: "#00338e", fontWeight: "600" }}>Perfil</Typography>
+            <Typography
+              style={{
+                marginLeft: "0.5rem",
+                color: "#00338e",
+                fontWeight: "600",
+              }}
+            >
+              Perfil
+            </Typography>
           </ListItemIcon>
         </Link>
       </MenuItem>

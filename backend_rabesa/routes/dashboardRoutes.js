@@ -9,10 +9,5 @@ router.get("/total-partidos-jugados", dashboardController.getTotalPartidosJugado
 router.get("/proximo-entrenamiento", dashboardController.getProximoEntrenamiento);
 router.get("/partido-semana", dashboardController.getPartidoDeLaSemana);
 router.get("/clasificacion", dashboardController.getClasificacion);
-// router.get('/actuales', entrenamientoController.getAllEntrenamientosByFecha);
-// router.get('/:identrenamiento', entrenamientoController.getEntrenamientoById);
-// router.post("/", clubsController.createClub);
-// router.delete('/:identrenamiento', entrenamientoController.deleteEntrenamiento);
-// router.put('/:identrenamiento', entrenamientoController.updateEntrenamiento);
 
 module.exports = router;
