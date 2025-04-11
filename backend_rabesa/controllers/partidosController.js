@@ -389,6 +389,83 @@ class PartidosController {
         );
     }
   }
+
+  async updateResultado(req, res) {
+    const datos = req.body; // Recuperamos datos para actualizar
+    const idpartido = req.params.idpartido; // dato de la ruta
+    console.log("IDPARTIDO: " + idpartido);
+
+    try {
+      const partido = await Partido.findByPk(idpartido);
+
+      const numFilas = await Partido.update(
+        { ...datos },
+        { where: { idpartido } }
+      );
+
+      if (numFilas == 0) {
+        console.log("404");
+
+        // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
+        res
+          .status(404)
+          .json(
+            Respuesta.error(null, "No encontrado o no modificado: " + idpartido)
+          );
+      } else {
+        const puntos = datos.resultado.split("-");
+
+        if (puntos[0] > puntos[1]) {
+          const equipo = await Club.findOne({ where: { idclub: 1 } });
+
+          let puntosFinal = equipo.puntos + 3;
+
+          await Club.update({ puntos: puntosFinal }, { where: { idclub: 1 } });
+        } else if (puntos[0] == puntos[1]) {
+          const rabesa = await Club.findOne({ where: { idclub: 1 } });
+          const equipoRival = await Club.findOne({
+            where: { idclub: partido.idrival },
+          });
+
+          let puntosRabesa = rabesa.puntos + 1;
+          let puntosRival = equipoRival.puntos + 1;
+
+          await Club.update({ puntos: puntosRabesa }, { where: { idclub: 1 } });
+
+          await Club.update(
+            { puntos: puntosRival },
+            { where: { idclub: partido.idrival } }
+          );
+        } else {
+          const equipo = await Club.findOne({
+            where: { idclub: partido.idrival },
+          });
+
+          let puntosFinal = equipo.puntos + 3;
+
+          await Club.update(
+            { puntos: puntosFinal },
+            { where: { idclub: partido.idrival } }
+          );
+        }
+
+        // Al dar status 204 no se devuelva nada
+        console.log("204");
+
+        res.status(204).send();
+      }
+    } catch (err) {
+      logMensaje("Error :" + err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al actualizar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 }
 
 module.exports = new PartidosController();

@@ -25,6 +25,7 @@ import SearchTraining from "./components/training/SearchTraining";
 import Match from "./components/match/Match";
 import CreateMatch from "./components/match/CreateMatch";
 import ModifyMatch from "./components/match/ModifyMatch";
+import AddResult from "./components/match/AddResult";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -152,6 +153,15 @@ let router = createBrowserRouter([
         element: (
           <ProtectedRoute
             element={<ModifyMatch />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "/home/partido/anadir-resultado/:idpartido",
+        element: (
+          <ProtectedRoute
+            element={<AddResult />}
             allowedRoles={["Entrenador"]}
           />
         ),

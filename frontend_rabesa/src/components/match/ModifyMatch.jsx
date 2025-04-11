@@ -137,24 +137,6 @@ function ModifyMatch() {
             type="text"
             onChange={handleChange}
           />
-          {/* <TextField
-            label="Resultado"
-            name="resultado"
-            value={formData.resultado || ""}
-            onChange={handleChange}
-            InputProps={{
-              readOnly:
-                !resultadoVacio &&
-                formData.resultado !== "" &&
-                formData.resultado !== null,
-            }}
-            onFocus={() => {
-              if (formData.resultado !== "" && formData.resultado !== null) {
-                setResultadoVacio(true); // Permite editar al hacer clic
-              }
-            }}
-            onBlur={() => setResultadoVacio(false)} // Vuelve a solo lectura al salir
-          /> */}
           <TextField
             id="outlined-basic"
             label="Fecha partido"

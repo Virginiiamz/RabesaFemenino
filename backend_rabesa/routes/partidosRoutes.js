@@ -9,6 +9,7 @@ router.get('/:idpartido', partidosController.getPartidoById);
 router.post('/', partidosController.createPartido);
 router.delete('/:idpartido', partidosController.deletePartido);
 router.put('/:idpartido', partidosController.updatePartido);
+router.put('/anadir-resultado/:idpartido', partidosController.updateResultado);
 
 
 module.exports = router;

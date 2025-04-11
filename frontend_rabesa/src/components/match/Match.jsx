@@ -171,7 +171,7 @@ function Match() {
                         size="small"
                         onClick={() =>
                           navigate(
-                            "/home/modificar-partido/" + partido.idpartido
+                            "/home/partido/anadir-resultado/" + partido.idpartido
                           )
                         }
                       >
