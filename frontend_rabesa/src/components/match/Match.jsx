@@ -38,7 +38,6 @@ function Match() {
       if (response.ok) {
         let data = await response.json();
         setDatosPartidos(data.datos);
-        setResultadoVacio(data.datos.resultado == "");
       }
     }
 
@@ -103,7 +102,6 @@ function Match() {
           }}
         >
           {datosPartidos.map((partido) => (
-           
             <Card>
               <CardContent>
                 <Box
@@ -165,24 +163,37 @@ function Match() {
                 </Box>
               </CardContent>
               <CardActions>
-                {entrenador ? (
-                  <Button
-                    size="small"
-                    onClick={() =>
-                      navigate("/home/modificar-partido/" + partido.idpartido)
-                    }
-                  >
-                    Editar
-                  </Button>
-                ) : null}
-                {entrenador ? (
-                  <Button
-                    size="small"
-                    onClick={() => handleDelete(partido.idpartido)}
-                  >
-                    Eliminar
-                  </Button>
-                ) : null}
+                {entrenador && (
+                  <>
+                    {/* Mostrar "Añadir resultado" SOLO si el resultado está vacío */}
+                    {partido.resultado === "" && (
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          navigate(
+                            "/home/modificar-partido/" + partido.idpartido
+                          )
+                        }
+                      >
+                        Añadir resultado
+                      </Button>
+                    )}
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        navigate("/home/modificar-partido/" + partido.idpartido)
+                      }
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      size="small"
+                      onClick={() => handleDelete(partido.idpartido)}
+                    >
+                      Eliminar
+                    </Button>
+                  </>
+                )}
               </CardActions>
             </Card>
           ))}

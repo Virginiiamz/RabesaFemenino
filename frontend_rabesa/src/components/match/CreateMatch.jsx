@@ -45,7 +45,6 @@ function CreateMatch() {
     e.preventDefault();
 
     console.log(formData);
-    
 
     try {
       const response = await fetch(apiUrl + "/partidos", {
