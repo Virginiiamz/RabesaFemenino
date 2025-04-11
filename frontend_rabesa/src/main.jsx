@@ -17,7 +17,7 @@ import Training from "./components/training/Training";
 import CreateTraining from "./components/training/CreateTraining";
 import ModifyTraining from "./components/training/ModifyTraining";
 import AssistedTraining from "./components/training/AssistedTraining";
-import NoAssistedTraining from "./components/NoAssistedTraining";
+import NoAssistedTraining from "./components/training/NoAssistedTraining";
 import ShowTraining from "./components/training/ShowTraining";
 import CreateAssited from "./components/CreateVerification";
 import CreateVerification from "./components/CreateVerification";

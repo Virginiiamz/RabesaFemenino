@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { apiUrl } from "../config";
+import { apiUrl } from "../../config";
 import { Link, useNavigate } from "react-router";
-import useUserStore from "../stores/useUserStore";
+import useUserStore from "../../stores/useUserStore";
 
 function NoAssistedTraining() {
   const [datosNoConfirmados, setDatosNoConfirmados] = useState([]);
