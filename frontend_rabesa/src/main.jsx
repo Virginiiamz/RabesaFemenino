@@ -29,6 +29,10 @@ import AddResult from "./components/match/AddResult";
 import Club from "./components/club/Club";
 import CreateClub from "./components/club/CreateClub";
 import ModifyClub from "./components/club/ModifyClub";
+import "@fontsource/fira-sans"; // Peso 400 (normal)
+import "@fontsource/fira-sans/400.css"; // Alternativa
+import "@fontsource/fira-sans/500.css"; // Peso 500 (medium)
+import "@fontsource/fira-sans/700.css"; // Peso 700 (bold)
 
 // import PaginaError from "./pages/PaginaError";
 

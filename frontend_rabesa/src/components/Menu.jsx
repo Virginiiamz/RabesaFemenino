@@ -12,13 +12,16 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import useUserStore from "../stores/useUserStore";
 import { MenuItem } from "@mui/material";
-import { Link } from "react-router";
-import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import { Link, useLocation } from "react-router";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import TimerIcon from "@mui/icons-material/Timer";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
 import ShieldIcon from "@mui/icons-material/Shield";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import logoRabesa from "../assets/img/logo_rabesa.jpg";
+import "@fontsource/open-sans";
+import "@fontsource/lexend";
 
 const drawerWidth = 240;
 
@@ -27,6 +30,7 @@ function Menu(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const { user } = useUserStore();
+  const location = useLocation();
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -44,18 +48,42 @@ function Menu(props) {
   };
 
   const drawer = (
-    <div>
-      <h7>Rabesa Femenino</h7>
-      <Divider></Divider>
-      <MenuItem>
+    <section style={{ height: "100%", backgroundColor: "#ffffff" }}>
+      <div
+        className="menu_titulo"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "start",
+          margin: "1rem",
+          gap: "0.5rem",
+        }}
+      >
+        <img src={logoRabesa} style={{ width: "3rem" }}></img>
+        <h4 style={{fontFamily: "'Lexend'"}}>
+          Rabesa Fem
+        </h4>
+      </div>
+      <MenuItem
+        style={{
+          margin: "0.5rem",
+          paddingLeft: "0.5rem",
+          borderRadius: "10px",
+          backgroundColor: location.pathname.includes("dashboard")
+            ? "#AACBFF"
+            : "transparent",
+        }}
+      >
         <Link to="dashboard">
-          <ListItemIcon>
-            <SpaceDashboardIcon sx={{ color: "#00338e" }}></SpaceDashboardIcon>
+          <ListItemIcon
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
+            <BarChartIcon sx={{ color: "#00338e" }}></BarChartIcon>
             <Typography
               style={{
-                marginLeft: "0.5rem",
                 color: "#00338e",
                 fontWeight: "600",
+                fontFamily: "'Open sans'" 
               }}
             >
               Dashboard
@@ -63,15 +91,26 @@ function Menu(props) {
           </ListItemIcon>
         </Link>
       </MenuItem>
-      <MenuItem>
+      <MenuItem
+        style={{
+          margin: "0.5rem",
+          paddingLeft: "0.5rem",
+          borderRadius: "10px",
+          backgroundColor: location.pathname.includes("training")
+            ? "#AACBFF"
+            : "transparent",
+        }}
+      >
         <Link to="training">
-          <ListItemIcon>
+          <ListItemIcon
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
             <TimerIcon sx={{ color: "#00338e" }}></TimerIcon>
             <Typography
               style={{
-                marginLeft: "0.5rem",
                 color: "#00338e",
                 fontWeight: "600",
+                fontFamily: "'Open sans'"
               }}
             >
               Entrenamientos
@@ -79,15 +118,26 @@ function Menu(props) {
           </ListItemIcon>
         </Link>
       </MenuItem>
-      <MenuItem>
+      <MenuItem
+        style={{
+          margin: "0.5rem",
+          paddingLeft: "0.5rem",
+          borderRadius: "10px",
+          backgroundColor: location.pathname.includes("partidos")
+            ? "#AACBFF"
+            : "transparent",
+        }}
+      >
         <Link to="partidos">
-          <ListItemIcon>
+          <ListItemIcon
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
             <SportsSoccerIcon sx={{ color: "#00338e" }}></SportsSoccerIcon>
             <Typography
               style={{
-                marginLeft: "0.5rem",
                 color: "#00338e",
                 fontWeight: "600",
+                fontFamily: "'Open sans'"
               }}
             >
               Partidos
@@ -95,15 +145,26 @@ function Menu(props) {
           </ListItemIcon>
         </Link>
       </MenuItem>
-      <MenuItem>
+      <MenuItem
+        style={{
+          margin: "0.5rem",
+          paddingLeft: "0.5rem",
+          borderRadius: "10px",
+          backgroundColor: location.pathname.includes("team")
+            ? "#AACBFF"
+            : "transparent",
+        }}
+      >
         <Link to="team">
-          <ListItemIcon>
+          <ListItemIcon
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
             <ShieldIcon sx={{ color: "#00338e" }}></ShieldIcon>
             <Typography
               style={{
-                marginLeft: "0.5rem",
                 color: "#00338e",
                 fontWeight: "600",
+                fontFamily: "'Open sans'"
               }}
             >
               Equipo
@@ -111,15 +172,26 @@ function Menu(props) {
           </ListItemIcon>
         </Link>
       </MenuItem>
-      <MenuItem>
+      <MenuItem
+        style={{
+          margin: "0.5rem",
+          paddingLeft: "0.5rem",
+          borderRadius: "10px",
+          backgroundColor: location.pathname.includes("club")
+            ? "#AACBFF"
+            : "transparent",
+        }}
+      >
         <Link to="club">
-          <ListItemIcon>
+          <ListItemIcon
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
             <EmojiEventsIcon sx={{ color: "#00338e" }}></EmojiEventsIcon>
             <Typography
               style={{
-                marginLeft: "0.5rem",
                 color: "#00338e",
                 fontWeight: "600",
+                fontFamily: "'Open sans'"
               }}
             >
               Clubs
@@ -127,15 +199,26 @@ function Menu(props) {
           </ListItemIcon>
         </Link>
       </MenuItem>
-      <MenuItem>
+      <MenuItem
+        style={{
+          margin: "0.5rem",
+          paddingLeft: "0.5rem",
+          borderRadius: "10px",
+          backgroundColor: location.pathname.includes("setting")
+            ? "#AACBFF"
+            : "transparent",
+        }}
+      >
         <Link to="/">
-          <ListItemIcon>
+          <ListItemIcon
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+          >
             <SettingsIcon sx={{ color: "#00338e" }}></SettingsIcon>
             <Typography
               style={{
-                marginLeft: "0.5rem",
                 color: "#00338e",
                 fontWeight: "600",
+                fontFamily: "'Open sans'"
               }}
             >
               Perfil
@@ -143,7 +226,7 @@ function Menu(props) {
           </ListItemIcon>
         </Link>
       </MenuItem>
-    </div>
+    </section>
   );
 
   // Remove this const when copying and pasting into your project.
