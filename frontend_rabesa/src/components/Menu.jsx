@@ -22,6 +22,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import logoRabesa from "../assets/img/logo_rabesa.jpg";
 import "@fontsource/open-sans";
 import "@fontsource/lexend";
+import { apiUrl } from "../config";
 
 const drawerWidth = 240;
 
@@ -31,6 +32,61 @@ function Menu(props) {
   const [isClosing, setIsClosing] = React.useState(false);
   const { user } = useUserStore();
   const location = useLocation();
+  const [datosUsuario, setDatosUsuario] = React.useState([]);
+
+  let entrenador = false;
+
+  if (user.rol == "Entrenador") {
+    entrenador = true;
+  }
+
+  console.log(user);
+
+  React.useEffect(() => {
+    async function getEntrenadorByIdUsuario() {
+      let response = await fetch(
+        apiUrl + "/entrenadores/datos/" + user.idusuario,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        let data = await response.json();
+        setDatosUsuario(data.datos);
+        console.log(data.datos);
+      }
+    }
+
+    async function getJugadoraByIdUsuario() {
+      let response = await fetch(
+        apiUrl + "/jugadoras/datos/" + user.idusuario,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        let data = await response.json();
+        setDatosUsuario(data.datos);
+        console.log(data.datos);
+      }
+    }
+
+    if (entrenador) {
+      getEntrenadorByIdUsuario();
+    } else {
+      getJugadoraByIdUsuario();
+    }
+  }, []);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -60,9 +116,7 @@ function Menu(props) {
         }}
       >
         <img src={logoRabesa} style={{ width: "3rem" }}></img>
-        <h4 style={{fontFamily: "'Lexend'"}}>
-          Rabesa Fem
-        </h4>
+        <h4 style={{ fontFamily: "'Lexend'" }}>Rabesa Fem</h4>
       </div>
       <MenuItem
         style={{
@@ -83,7 +137,7 @@ function Menu(props) {
               style={{
                 color: "#00338e",
                 fontWeight: "600",
-                fontFamily: "'Open sans'" 
+                fontFamily: "'Open sans'",
               }}
             >
               Dashboard
@@ -110,7 +164,7 @@ function Menu(props) {
               style={{
                 color: "#00338e",
                 fontWeight: "600",
-                fontFamily: "'Open sans'"
+                fontFamily: "'Open sans'",
               }}
             >
               Entrenamientos
@@ -137,7 +191,7 @@ function Menu(props) {
               style={{
                 color: "#00338e",
                 fontWeight: "600",
-                fontFamily: "'Open sans'"
+                fontFamily: "'Open sans'",
               }}
             >
               Partidos
@@ -164,7 +218,7 @@ function Menu(props) {
               style={{
                 color: "#00338e",
                 fontWeight: "600",
-                fontFamily: "'Open sans'"
+                fontFamily: "'Open sans'",
               }}
             >
               Equipo
@@ -191,7 +245,7 @@ function Menu(props) {
               style={{
                 color: "#00338e",
                 fontWeight: "600",
-                fontFamily: "'Open sans'"
+                fontFamily: "'Open sans'",
               }}
             >
               Clubs
@@ -218,7 +272,7 @@ function Menu(props) {
               style={{
                 color: "#00338e",
                 fontWeight: "600",
-                fontFamily: "'Open sans'"
+                fontFamily: "'Open sans'",
               }}
             >
               Perfil
@@ -243,9 +297,15 @@ function Menu(props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar>
+        <Toolbar
+          sx={{
+            backgroundColor: "#ffffff",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <IconButton
-            color="inherit"
+            style={{ color: "#00338e" }}
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
@@ -253,8 +313,27 @@ function Menu(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Hola, {user.correo}
+          <Box sx={{ flexGrow: 1 }} />
+          <img
+            src={`http://localhost:3000/uploads/${datosUsuario.imagen}`}
+            style={{
+              height: "40px",
+              width: "40px",
+              marginRight: "0.5rem",
+              borderRadius: "100%",
+              objectFit: "cover",
+            }}
+          ></img>
+          <Typography
+            style={{
+              color: "#00338e",
+              fontWeight: "600",
+              fontFamily: "'Open sans'",
+            }}
+            variant="h7"
+            component="div"
+          >
+            {datosUsuario.correo}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -272,10 +351,6 @@ function Menu(props) {
           onClose={handleDrawerClose}
           sx={{
             display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
           }}
           slotProps={{
             root: {
@@ -299,45 +374,6 @@ function Menu(props) {
           {drawer}
         </Drawer>
       </Box>
-      {/* <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
-        <Typography sx={{ marginBottom: 2 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography sx={{ marginBottom: 2 }}>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-      </Box> */}
     </Box>
   );
 }

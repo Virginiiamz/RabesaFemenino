@@ -22,6 +22,7 @@ const upload = multer({ storage });
 
 router.get("/", jugadoraController.getAllJugadoras);
 router.get("/:idjugadora", jugadoraController.getJugadoraById);
+router.get("/datos/:idusuario", jugadoraController.getJugadoraByIdUsuario);
 router.get("/correo/:correo", jugadoraController.getJugadoraByCorreo);
 router.post("/", upload.single("imagen"), jugadoraController.createJugadora);
 router.delete("/:idjugadora", jugadoraController.deleteJugadora);

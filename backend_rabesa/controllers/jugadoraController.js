@@ -131,76 +131,78 @@ class JugadoraController {
     }
   }
 
-  // async createJugadora(req, res) {
-  //   const {
-  //     correo,
-  //     contrasena,
-  //     nombre,
-  //     edad,
-  //     posicion,
-  //     numero_camiseta,
-  //     fecha_ingreso,
-  //     estado,
-  //     idclub,
-  //   } = req.body;
+  async getJugadoraByIdUsuario(req, res) {
+    const { idusuario } = req.params;
 
-  //   try {
-  //     const existingUser = await Usuario.findOne({ where: { correo } });
-  //     if (existingUser) {
-  //       return res
-  //         .status(400)
-  //         .json(
-  //           Respuesta.error(
-  //             null,
-  //             "Ya existe un usuario con ese correo electrónico."
-  //           )
-  //         );
-  //     }
-  //       // Cifrar la contraseña
-  //       const hashedPassword = await bcrypt.hash(contrasena, 10); // 10 es el nivel de "salting" (puedes ajustarlo)
+    // Validación básica del parámetro
+    if (!idusuario || isNaN(idusuario)) {
+      return res
+        .status(400)
+        .json(
+          Respuesta.error(null, "ID de usuario inválido o no proporcionado")
+        );
+    }
 
-  //       // Crear el nuevo usuario
-  //       const newUser = await Usuario.create({
-  //         correo,
-  //         contrasena: hashedPassword, // Guardamos la contraseña cifrada
-  //         rol: "Jugadora",
-  //       });
+    try {
+      // Buscar el entrenador asociado al usuario
+      const jugadora = await Jugadora.findOne({
+        where: { idusuario: idusuario },
+      });
 
-  //       // Responder con éxito
-  //       delete newUser.dataValues.contrasena; // Eliminar la contraseña del objeto de respuesta
+      if (!jugadora) {
+        return res
+          .status(404)
+          .json(
+            Respuesta.error(
+              null,
+              "No se encontró jugadora asociada a este usuario"
+            )
+          );
+      }
 
-  //       const idusuario = newUser.dataValues.idusuario;
+      // Obtener datos del usuario
+      const usuario = await Usuario.findByPk(idusuario);
 
-  //       console.log("idUsuario: " + idusuario);
+      if (!usuario) {
+        return res
+          .status(404)
+          .json(Respuesta.error(null, "Usuario no encontrado"));
+      }
 
-  //       const imagen = req.file ? req.file.filename : "null.webp";
+      // Construir respuesta
+      const resultado = {
+        idjugadora: jugadora.idjugadora,
+        idusuario: usuario.idusuario,
+        nombre: jugadora.nombre,
+        edad: jugadora.edad,
+        posicion: jugadora.posicion,
+        rol: usuario.rol,
+        numero_camiseta: jugadora.numero_camiseta,
+        fecha_ingreso: jugadora.fecha_ingreso,
+        estado: jugadora.estado,
+        imagen: jugadora.imagen,
+        idclub: jugadora.idclub,
+        correo: usuario.correo,
+      };
 
-  //       const jugadora = {
-  //         nombre,
-  //         edad,
-  //         posicion,
-  //         numero_camiseta,
-  //         fecha_ingreso,
-  //         estado,
-  //         imagen,
-  //         idclub,
-  //         idusuario,
-  //       };
+      res.json(
+        Respuesta.exito(resultado, "Datos de la jugadora recuperados con éxito")
+      );
+    } catch (err) {
+      logMensaje(`Error en getJugadoraByIdUsuario: ${err.message}`);
+      console.error(err.stack); // Log del stack completo para debugging
 
-  //       console.log("jugadora", jugadora);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error interno al recuperar datos de la jugadora: ${err.message}`
+          )
+        );
+    }
+  }
 
-  //       const nuevaJugadora = await Jugadora.create(jugadora);
-
-  //       res
-  //         .status(201)
-  //         .json(Respuesta.exito(nuevaJugadora, "Jugadora creada con éxito"));
-  //   } catch (err) {
-  //     logMensaje("Error :" + err);
-  //     res
-  //       .status(500)
-  //       .json(Respuesta.error(null, `Error al crear una jugadora nueva`));
-  //   }
-  // }
   async createJugadora(req, res) {
     const {
       correo,

@@ -22,6 +22,7 @@ const upload = multer({ storage });
 
 router.get("/", entrenadorController.getAllEntrenadores);
 router.get("/:identrenador", entrenadorController.getEntrenadorById);
+router.get("/datos/:idusuario", entrenadorController.getEntrenadorByIdUsuario);
 router.post(
   "/",
   upload.single("imagen"),
