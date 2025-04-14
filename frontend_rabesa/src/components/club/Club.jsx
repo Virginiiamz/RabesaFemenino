@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { apiUrl } from "../../config";
 import useUserStore from "../../stores/useUserStore";
+import { Link } from "react-router";
 
 function Club() {
   const [datosClubs, setDatosClubs] = useState([]);
@@ -61,6 +62,13 @@ function Club() {
         }}
       >
         <Toolbar />
+
+        {entrenador ? (
+          <Link to="/home/crear-club">
+            <Button variant="contained">Crear club</Button>
+          </Link>
+        ) : null}
+
         <Typography sx={{ marginBottom: 2 }}>Clubs</Typography>
 
         <Box

@@ -7,7 +7,7 @@ function Dashboard() {
   const [totalPartidosJugados, setTotalPartidosJugados] = useState([]);
   const [totalPuntos, setTotalPuntos] = useState([]);
   const [proximoEntrenamiento, setProximoEntrenamiento] = useState([]);
-  const [partidoSemana, setPartidoSemana] = useState([]);
+  const [partidoSemana, setPartidoSemana] = useState(null);
   const [clasificacion, setClasificacion] = useState([]);
 
   useEffect(() => {
@@ -196,7 +196,7 @@ function Dashboard() {
           </Box>
         </Box>
 
-        <Box>
+        {/* <Box>
           <Typography variant="h6" gutterBottom>
             Partido de la semana
           </Typography>
@@ -229,7 +229,7 @@ function Dashboard() {
               Hora: {partidoSemana?.hora}
             </Typography>
           </Box>
-        </Box>
+        </Box> */}
 
         <Box>
           <Typography variant="h6" gutterBottom>
