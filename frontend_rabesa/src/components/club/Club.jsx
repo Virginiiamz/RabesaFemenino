@@ -10,11 +10,12 @@ import {
 import { useEffect, useState } from "react";
 import { apiUrl } from "../../config";
 import useUserStore from "../../stores/useUserStore";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function Club() {
   const [datosClubs, setDatosClubs] = useState([]);
   const { user } = useUserStore();
+  const navigate = useNavigate();
   let entrenador = false;
 
   if (user.rol == "Entrenador") {
@@ -119,9 +120,9 @@ function Club() {
                   <>
                     <Button
                       size="small"
-                      //   onClick={() =>
-                      // navigate("/home/modificar-partido/" + partido.idpartido)
-                      //   }
+                      onClick={() =>
+                        navigate("/home/modificar-club/" + club.idclub)
+                      }
                     >
                       Editar
                     </Button>

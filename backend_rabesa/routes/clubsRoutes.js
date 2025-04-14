@@ -21,10 +21,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.get("/", clubsController.getAllClubs);
-// router.get('/actuales', entrenamientoController.getAllEntrenamientosByFecha);
 router.get("/:idclub", clubsController.getClubById);
 router.post("/", upload.single("imagen"), clubsController.createClub);
 router.delete("/:idclub", clubsController.deleteClub);
-// router.put('/:identrenamiento', entrenamientoController.updateEntrenamiento);
+router.put('/:idclub', upload.single("imagen"), clubsController.updateClub);
 
 module.exports = router;

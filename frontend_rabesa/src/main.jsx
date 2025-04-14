@@ -28,6 +28,7 @@ import ModifyMatch from "./components/match/ModifyMatch";
 import AddResult from "./components/match/AddResult";
 import Club from "./components/club/Club";
 import CreateClub from "./components/club/CreateClub";
+import ModifyClub from "./components/club/ModifyClub";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -177,6 +178,15 @@ let router = createBrowserRouter([
         element: (
           <ProtectedRoute
             element={<CreateClub />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "/home/modificar-club/:idclub",
+        element: (
+          <ProtectedRoute
+            element={<ModifyClub />}
             allowedRoles={["Entrenador"]}
           />
         ),

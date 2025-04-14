@@ -182,83 +182,56 @@ class ClubController {
     }
   }
 
-  // async updateEntrenamiento(req, res) {
-  //   const datos = req.body;
-  //   const identrenamiento = req.params.identrenamiento;
+  async updateClub(req, res) {
+    const datos = req.body;
+    const idclub = req.params.idclub;
 
-  //   console.log("📥 Datos recibidos en el backend:", datos); // 👈 DEBUG
+    try {
+      const nombreSinEspacios = datos.nombre.trim();
 
-  //   try {
-  //     const entrenamientoSeleccionado = await Entrenamiento.findByPk(
-  //       identrenamiento
-  //     );
+      const existingClub = await Club.findOne({
+        where: {
+          nombre: nombreSinEspacios,
+          idclub: { [Op.ne]: idclub }, // Excluir el club actual de la verificación
+        },
+      });
 
-  //     // Comprobamos si la fecha o las horas han cambiado
-  //     const haCambiadoHorario =
-  //       entrenamientoSeleccionado.fecha_entrenamiento !==
-  //         datos.fecha_entrenamiento ||
-  //       entrenamientoSeleccionado.hora_inicio !== datos.hora_inicio ||
-  //       entrenamientoSeleccionado.hora_final !== datos.hora_final;
+      if (existingClub) {
+        return res
+          .status(400)
+          .json(Respuesta.error(null, "Ya existe un club con ese nombre."));
+      } else {
+        if (req.file) {
+          datos.imagen = req.file.filename;
+        } else {
+          const club = await Club.findByPk(idclub);
 
-  //     if (haCambiadoHorario) {
-  //       const solapamiento = await Entrenamiento.findOne({
-  //         where: {
-  //           fecha_entrenamiento: datos.fecha_entrenamiento,
-  //           identrenamiento: { [Op.ne]: identrenamiento }, // Excluir el mismo entrenamiento
-  //           [Op.or]: [
-  //             // Caso 1: Se solapa por inicio o fin
-  //             {
-  //               hora_inicio: { [Op.lt]: datos.hora_final },
-  //               hora_final: { [Op.gt]: datos.hora_inicio },
-  //             },
-  //             // Caso 2: El nuevo horario engloba completamente otro
-  //             {
-  //               hora_inicio: { [Op.gte]: datos.hora_inicio },
-  //               hora_final: { [Op.lte]: datos.hora_final },
-  //             },
-  //           ],
-  //         },
-  //       });
+          datos.imagen = club.imagen; // Mantener la imagen existente si no se proporciona una nueva
+        }
 
-  //       if (solapamiento) {
-  //         console.log("Conflicto detectado con otro entrenamiento.");
-  //         return res
-  //           .status(400)
-  //           .json(
-  //             Respuesta.error(
-  //               null,
-  //               "Las horas se solapan con otro entrenamiento en esa fecha."
-  //             )
-  //           );
-  //       }
-  //     }
+        const club = {
+          nombre: nombreSinEspacios,
+          ciudad: datos.ciudad,
+          estadio: datos.estadio,
+          imagen: datos.imagen,
+        };
 
-  //     // Si todo está bien, actualizar el entrenamiento
-  //     const [numFilas] = await Entrenamiento.update(
-  //       { ...datos },
-  //       { where: { identrenamiento } }
-  //     );
+        await Club.update(club, { where: { idclub } });
 
-  //     if (numFilas === 0) {
-  //       console.log("⚠️ No se realizó ninguna modificación.");
-  //       return res
-  //         .status(404)
-  //         .json(Respuesta.error(null, "No encontrado o no modificado."));
-  //     }
-
-  //     res.status(204).send();
-  //   } catch (err) {
-  //     console.error("Error en la actualización:", err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al actualizar los datos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
+        res.status(204).send();
+      }
+    } catch (err) {
+      console.error("Error en la actualización:", err);
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error al actualizar los datos: ${req.originalUrl}`
+          )
+        );
+    }
+  }
 }
 
 module.exports = new ClubController();
