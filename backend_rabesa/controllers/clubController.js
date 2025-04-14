@@ -101,9 +101,14 @@ class ClubController {
       const fechaLimite = new Date(new Date().getFullYear() - 1, 5, 1); // 1 de junio del año pasado (mes 5 = junio)
 
       if (fechaFundacion >= fechaLimite) {
-        return res.status(400).json({
-          error: `La fecha de fundación debe ser anterior a junio del ${fechaLimite.getFullYear()}.`,
-        });
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              `La fecha de fundación debe ser anterior a junio del ${fechaLimite.getFullYear()}.`
+            )
+          );
       }
 
       const existingClub = await Club.findOne({
@@ -115,7 +120,7 @@ class ClubController {
           .status(400)
           .json(Respuesta.error(null, "Ya existe un club con ese nombre."));
       } else {
-        const imagen = req.file ? req.file.filename : "null.webp";
+        const imagen = req.file ? req.file.filename : "null1.jpg";
 
         const club = {
           nombre: nombreSinEspacios,
