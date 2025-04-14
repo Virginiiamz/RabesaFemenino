@@ -196,40 +196,58 @@ function Dashboard() {
           </Box>
         </Box>
 
-        {/* <Box>
+        <Box>
           <Typography variant="h6" gutterBottom>
             Partido de la semana
           </Typography>
-          <Box
-            sx={{
-              border: "1px solid #ccc",
-              padding: "16px",
-              borderRadius: "8px",
-              width: "100%",
-            }}
-          >
-            <img
-              src={`http://localhost:3000/uploads/${partidoSemana?.idrival_club?.imagen}`}
-              style={{
-                height: "100px",
-                width: "100px",
-                margin: "1rem",
+          {partidoSemana ? (
+            <Box
+              sx={{
+                border: "1px solid #ccc",
+                padding: "16px",
+                borderRadius: "8px",
+                width: "100%",
               }}
-            />
-            <Typography variant="body1" gutterBottom>
-              {partidoSemana.idrival_club?.nombre}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Ubicacion: {partidoSemana?.ubicacion}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Fecha partido: {partidoSemana?.fecha_partido}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Hora: {partidoSemana?.hora}
-            </Typography>
-          </Box>
-        </Box> */}
+            >
+              <img
+                src={`http://localhost:3000/uploads/${partidoSemana.idrival_club?.imagen}`}
+                style={{
+                  height: "100px",
+                  width: "100px",
+                  margin: "1rem",
+                }}
+                alt="Escudo del rival"
+              />
+              <Typography variant="body1" gutterBottom>
+                {partidoSemana.idrival_club?.nombre}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Ubicación: {partidoSemana.ubicacion}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Fecha partido: {partidoSemana.fecha_partido}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Hora: {partidoSemana.hora}
+              </Typography>
+            </Box>
+          ) : (
+            <>
+              <Box
+                sx={{
+                  border: "1px solid #ccc",
+                  padding: "16px",
+                  borderRadius: "8px",
+                  width: "100%",
+                }}
+              >
+                <Typography variant="body1">
+                  No hay partidos esta semana
+                </Typography>
+              </Box>
+            </>
+          )}
+        </Box>
 
         <Box>
           <Typography variant="h6" gutterBottom>
