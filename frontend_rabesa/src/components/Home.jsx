@@ -13,6 +13,7 @@ function Home() {
           p: 3,
           width: "100%", // Ocupa todo el ancho
           marginLeft: 0, // Elimina el margen izquierdo
+          backgroundColor: "#F1F8FF"
         }}
       >
         <Outlet /> {/* Contenido principal */}

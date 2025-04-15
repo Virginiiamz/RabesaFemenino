@@ -1,6 +1,23 @@
-import { Avatar, Box, Grid, Paper, Toolbar, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Divider,
+  Grid,
+  Paper,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { apiUrl } from "../config";
+import ShieldIcon from "@mui/icons-material/Shield";
+import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import TimerIcon from "@mui/icons-material/Timer";
+import logoRabesa from "../assets/img/logo_rabesa.jpg";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 
 function Dashboard() {
   const [totalJugadoras, setTotalJugadoras] = useState([]);
@@ -9,6 +26,41 @@ function Dashboard() {
   const [proximoEntrenamiento, setProximoEntrenamiento] = useState([]);
   const [partidoSemana, setPartidoSemana] = useState(null);
   const [clasificacion, setClasificacion] = useState([]);
+
+  const formatearFecha = (fecha) => {
+    if (!fecha) return "";
+
+    const opciones = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+
+    let fechaStr = new Date(fecha).toLocaleDateString("es-ES", opciones);
+
+    fechaStr = fechaStr.replace(/\b\w/g, (letra, indice) => {
+      if (indice === 0 || fechaStr.substring(indice - 3, indice) === "de ") {
+        return letra.toUpperCase();
+      }
+      return letra;
+    });
+
+    return fechaStr;
+  };
+
+  const formatHora = (horaString) => {
+    // Verifica si la hora existe y es un string
+    if (!horaString || typeof horaString !== "string") return "--:--"; // Valor por defecto
+
+    try {
+      const [hora, minuto] = horaString.split(":");
+      return `${hora}:${minuto}`; // Formato 24h (ejemplo: "12:00")
+    } catch (error) {
+      console.error("Error al formatear la hora:", error);
+      return "--:--"; // Fallback seguro
+    }
+  };
 
   useEffect(() => {
     async function getTotalJugadoras() {
@@ -115,7 +167,7 @@ function Dashboard() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          paddingX: 2,
         }}
       >
         <Toolbar />
@@ -123,160 +175,613 @@ function Dashboard() {
         <Box
           sx={{
             display: "flex",
+            flexDirection: { xs: "column", lg: "row" },
             justifyContent: "space-between",
-            marginBottom: "16px",
+            marginBottom: "30px",
             gap: "16px",
           }}
         >
           <Box
             sx={{
-              border: "1px solid #ccc",
-              padding: "16px",
+              border: "1px solid #BDBDBD",
+              paddingX: "16px",
+              paddingTop: "16px",
               borderRadius: "8px",
               width: "100%",
+              backgroundColor: "#FFFFFF",
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              Total de Jugadoras: {totalJugadoras}
-            </Typography>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontFamily: "'Open sans'",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: "#00338e",
+                }}
+              >
+                Total Jugadoras
+              </Typography>
+              <ShieldIcon
+                sx={{ color: "#00338e", fontSize: "20px" }}
+              ></ShieldIcon>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "start",
+                paddingTop: "1rem",
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontFamily: "'Open sans'",
+                  fontSize: "40px",
+                  fontWeight: 600,
+                  color: "#00338e",
+                }}
+              >
+                {totalJugadoras}
+              </Typography>
+            </div>
           </Box>
           <Box
             sx={{
-              border: "1px solid #ccc",
-              padding: "16px",
+              border: "1px solid #BDBDBD",
+              paddingX: "16px",
+              paddingTop: "16px",
               borderRadius: "8px",
               width: "100%",
+              backgroundColor: "#FFFFFF",
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              Total de partidos finalizados: {totalPartidosJugados}
-            </Typography>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontFamily: "'Open sans'",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: "#00338e",
+                }}
+              >
+                Partidos Finalizados
+              </Typography>
+              <SportsSoccerIcon
+                sx={{ color: "#00338e", fontSize: "20px" }}
+              ></SportsSoccerIcon>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "start",
+                paddingTop: "1rem",
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontFamily: "'Open sans'",
+                  fontSize: "40px",
+                  fontWeight: 600,
+                  color: "#00338e",
+                }}
+              >
+                {totalPartidosJugados}
+              </Typography>
+            </div>
           </Box>
           <Box
             sx={{
-              border: "1px solid #ccc",
-              padding: "16px",
+              border: "1px solid #BDBDBD",
+              paddingX: "16px",
+              paddingTop: "16px",
               borderRadius: "8px",
               width: "100%",
+              backgroundColor: "#FFFFFF",
             }}
           >
-            <Typography variant="h6" gutterBottom>
-              Total de puntos: {totalPuntos.puntos}
-            </Typography>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontFamily: "'Open sans'",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: "#00338e",
+                }}
+              >
+                Total Puntos
+              </Typography>
+              <EmojiEventsIcon
+                sx={{ color: "#00338e", fontSize: "20px" }}
+              ></EmojiEventsIcon>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "start",
+                paddingTop: "1rem",
+              }}
+            >
+              <Typography
+                gutterBottom
+                sx={{
+                  fontFamily: "'Open sans'",
+                  fontSize: "40px",
+                  fontWeight: 600,
+                  color: "#00338e",
+                }}
+              >
+                {totalPuntos.puntos}
+              </Typography>
+            </div>
           </Box>
         </Box>
 
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Proximo entrenamiento
-          </Typography>
-          <Box
-            sx={{
-              border: "1px solid #ccc",
-              padding: "16px",
-              borderRadius: "8px",
-              width: "100%",
+        <Box sx={{ marginBottom: "30px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "10px",
             }}
           >
-            <Typography variant="body1" gutterBottom>
-              Tipo: {proximoEntrenamiento.tipo}
+            <TimerIcon
+              sx={{
+                color: "#00338e",
+                fontSize: "22px",
+                margin: "0px",
+                padding: "0px",
+              }}
+            ></TimerIcon>
+            <Typography
+              sx={{
+                fontFamily: "'Open sans'",
+                fontSize: "19px",
+                fontWeight: 600,
+                color: "#00338e",
+                padding: "0px",
+              }}
+            >
+              Próximo entrenamiento
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              Fecha: {proximoEntrenamiento.fecha_entrenamiento}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Hora inicio: {proximoEntrenamiento.hora_inicio}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Hora final: {proximoEntrenamiento.hora_final}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Informacion: {proximoEntrenamiento.informacion}
-            </Typography>
-          </Box>
-        </Box>
+          </div>
+          {proximoEntrenamiento.length !== 0 ? (
+            <Box
+              sx={{
+                border: "1px solid #BDBDBD",
+                paddingX: "16px",
+                paddingTop: "16px",
+                borderRadius: "8px",
+                width: "100%",
+                backgroundColor: "#FFFFFF",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "0.7rem",
+                }}
+              >
+                <FitnessCenterIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "#3d64a8",
+                      fontFamily: "'Open sans'",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Tipo
+                  </Typography>
+                  <Typography variant="body1">
+                    {proximoEntrenamiento.tipo}
+                  </Typography>
+                </Box>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "0.7rem",
+                }}
+              >
+                <CalendarTodayIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "#3d64a8",
+                      fontFamily: "'Open sans'",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Fecha
+                  </Typography>
+                  <Typography variant="body1">
+                    {formatearFecha(proximoEntrenamiento.fecha_entrenamiento)}
+                  </Typography>
+                </Box>
+              </div>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
+                  gap: 3,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
+                  <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Inicio
+                    </Typography>
+                    <Typography variant="body1">
+                      {formatHora(proximoEntrenamiento?.hora_inicio)}
+                    </Typography>
+                  </Box>
+                </Box>
 
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Partido de la semana
-          </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
+                  <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Fin
+                    </Typography>
+                    <Typography variant="body1">
+                      {formatHora(proximoEntrenamiento?.hora_final)}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+
+              <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
+
+              <Typography variant="subtitle2" sx={{ color: "#3d64a8", mb: 1 }}>
+                Información adicional
+              </Typography>
+
+              {proximoEntrenamiento.informacion ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "0.7rem",
+                  }}
+                >
+                  <Typography variant="body1" gutterBottom>
+                    {proximoEntrenamiento.informacion}
+                  </Typography>
+                </div>
+              ) : (
+                <Typography
+                  variant="body2"
+                  sx={{ fontStyle: "italic", marginBottom: "0.7rem" }}
+                >
+                  [No hay ninguna información adicional]
+                </Typography>
+              )}
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                border: "1px solid #BDBDBD",
+                paddingX: "16px",
+                paddingTop: "16px",
+                borderRadius: "8px",
+                width: "100%",
+                backgroundColor: "#FFFFFF",
+              }}
+            >
+              <Typography sx={{ fontStyle: "italic", marginBottom: "0.7rem" }}>
+                [No hay ningun entrenamiento programado]
+              </Typography>
+            </Box>
+          )}
+        </Box>
+        <Box sx={{ marginBottom: "30px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "10px",
+            }}
+          >
+            <SportsSoccerIcon
+              sx={{
+                color: "#00338e",
+                fontSize: "22px",
+                margin: "0px",
+                padding: "0px",
+              }}
+            ></SportsSoccerIcon>
+            <Typography
+              sx={{
+                fontFamily: "'Open sans'",
+                fontSize: "19px",
+                fontWeight: 600,
+                color: "#00338e",
+                padding: "0px",
+              }}
+            >
+              Partido de la semana
+            </Typography>
+          </div>
           {partidoSemana ? (
             <Box
               sx={{
-                border: "1px solid #ccc",
-                padding: "16px",
+                border: "1px solid #BDBDBD",
+                paddingX: "16px",
+                paddingY: "16px",
                 borderRadius: "8px",
                 width: "100%",
+                backgroundColor: "#FFFFFF",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <img
-                src={`http://localhost:3000/uploads/${partidoSemana.idrival_club?.imagen}`}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                  margin: "1rem",
+                  padding: "0.8rem",
+                }}
+              >
+                <Box
+                  component="img"
+                  src={logoRabesa}
+                  sx={{
+                    height: { xs: "60px", lg: "90px" },
+                    width: { xs: "50px", lg: "80px" },
+                  }}
+                  alt="Escudo Rabesa"
+                />
+                <Typography
+                  sx={{
+                    fontSize: { xs: "16px", lg: "20px" },
+                    fontFamily: "Open Sans",
+                    fontWeight: 600,
+                  }}
+                  gutterBottom
+                >
+                  Rabesa
+                </Typography>
+              </Box>
+              <div
                 style={{
-                  height: "100px",
-                  width: "100px",
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  textAlign: "center",
                   margin: "1rem",
                 }}
-                alt="Escudo del rival"
-              />
-              <Typography variant="body1" gutterBottom>
-                {partidoSemana.idrival_club?.nombre}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Ubicación: {partidoSemana.ubicacion}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Fecha partido: {partidoSemana.fecha_partido}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Hora: {partidoSemana.hora}
-              </Typography>
+              >
+                <Typography
+                  sx={{
+                    fontSize: { xs: "12px", lg: "16px" },
+                    fontFamily: "Open Sans",
+                    fontWeight: 600,
+                  }}
+                  gutterBottom
+                >
+                  {formatearFecha(partidoSemana.fecha_partido)}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: { xs: "12px", lg: "16px" },
+                    fontFamily: "Open Sans",
+                    fontWeight: 600,
+                  }}
+                  gutterBottom
+                >
+                  {formatHora(partidoSemana?.hora)} H
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: { xs: "12px", lg: "16px" },
+                    fontFamily: "Open Sans",
+                    fontWeight: 600,
+                  }}
+                  gutterBottom
+                >
+                  {partidoSemana.ubicacion}
+                </Typography>
+              </div>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                  margin: "1rem",
+                }}
+              >
+                <Box
+                  component="img"
+                  src={`http://localhost:3000/uploads/${partidoSemana.idrival_club?.imagen}`}
+                  sx={{
+                    height: { xs: "50px", lg: "90px" },
+                    width: { xs: "50px", lg: "90px" },
+                  }}
+                  alt="Escudo del rival"
+                />
+                <Typography
+                  sx={{
+                    fontSize: { xs: "16px", lg: "20px" },
+                    fontFamily: "Open Sans",
+                    fontWeight: 600,
+                    textAlign: "center",
+                  }}
+                  gutterBottom
+                >
+                  {partidoSemana.idrival_club?.nombre}
+                </Typography>
+              </Box>
             </Box>
           ) : (
             <>
               <Box
                 sx={{
-                  border: "1px solid #ccc",
-                  padding: "16px",
+                  border: "1px solid #BDBDBD",
+                  paddingX: "16px",
+                  paddingTop: "16px",
                   borderRadius: "8px",
                   width: "100%",
+                  backgroundColor: "#FFFFFF",
                 }}
               >
-                <Typography variant="body1">
-                  No hay partidos esta semana
+                <Typography
+                  sx={{ fontStyle: "italic", marginBottom: "0.7rem" }}
+                >
+                  [No hay ningun partido programado]
                 </Typography>
               </Box>
             </>
           )}
         </Box>
 
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Clasificacion
-          </Typography>
+        <Box sx={{ marginBottom: "30px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "10px",
+            }}
+          >
+            <FormatListNumberedIcon
+              sx={{
+                color: "#00338e",
+                fontSize: "22px",
+                margin: "0px",
+                padding: "0px",
+              }}
+            ></FormatListNumberedIcon>
+            <Typography
+              sx={{
+                fontFamily: "'Open sans'",
+                fontSize: "19px",
+                fontWeight: 600,
+                color: "#00338e",
+                padding: "0px",
+              }}
+            >
+              Clasificación
+            </Typography>
+          </div>
           {clasificacion.map((club) => (
-            <Grid item xs={12} md={6} lg={4} key={club.idclub}>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              lg={4}
+              key={club.idclub}
+              sx={{ marginY: "1rem" }}
+            >
               <Paper
                 elevation={3}
                 sx={{ p: 3, display: "flex", alignItems: "center" }}
               >
-                <img
+                <Box
+                  component={"img"}
                   src={`http://localhost:3000/uploads/${club?.imagen}`}
-                  style={{
-                    height: "70px",
-                    width: "70px",
+                  sx={{
+                    height: { xs: "50px", lg: "80px" },
+                    width: { xs: "50px", lg: "80px" },
+                    objectFit: "cover",
                     margin: "1rem",
                   }}
                 />
                 <Box>
-                  <Typography variant="h6">{club.nombre}</Typography>
-                  <Typography variant="body1">Ciudad: {club.ciudad}</Typography>
-                  <Typography variant="body1">
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "16px", lg: "20px" },
+                      fontFamily: "Open Sans",
+                      fontWeight: 600,
+                    }}
+                    gutterBottom
+                  >
+                    {club.nombre}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "12px", lg: "16px" },
+                      fontFamily: "Open Sans",
+                    }}
+                    gutterBottom
+                  >
+                    Ciudad: {club.ciudad}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "12px", lg: "16px" },
+                      fontFamily: "Open Sans",
+                    }}
+                    gutterBottom
+                  >
                     Estadio: {club.estadio}
                   </Typography>
-                  <Typography variant="body1" color="primary">
-                    Puntos: <strong>{club.puntos}</strong>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "12px", lg: "16px" },
+                      fontFamily: "Open Sans",
+                    }}
+                    gutterBottom
+                  >
+                    Puntos: {club.puntos}
                   </Typography>
-                  <Typography variant="caption">
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "12px", lg: "16px" },
+                      fontFamily: "Open Sans",
+                    }}
+                    gutterBottom
+                  >
                     Fundado:{" "}
                     {new Date(club.fecha_fundacion).toLocaleDateString()}
                   </Typography>
