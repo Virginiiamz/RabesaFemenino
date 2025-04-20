@@ -9,11 +9,10 @@ function Home() {
       <Box
         component="main"
         sx={{
-          flexGrow: 1,
-          p: 3,
           width: "100%", // Ocupa todo el ancho
           marginLeft: 0, // Elimina el margen izquierdo
-          backgroundColor: "#F1F8FF"
+          backgroundColor: "#F1F8FF",
+          minHeight: "100vh",
         }}
       >
         <Outlet /> {/* Contenido principal */}

@@ -167,7 +167,7 @@ function Dashboard() {
         component="main"
         sx={{
           flexGrow: 1,
-          paddingX: 2,
+          p: 3,
         }}
       >
         <Toolbar />
@@ -468,7 +468,7 @@ function Dashboard() {
                   sx={{
                     display: "flex",
                     flexDirection: { xs: "column", md: "row" },
-                    gap: {xs: 1, md: 3},
+                    gap: { xs: 1, md: 3 },
                   }}
                 >
                   <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
