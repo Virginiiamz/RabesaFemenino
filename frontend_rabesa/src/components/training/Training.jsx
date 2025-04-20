@@ -6,6 +6,7 @@ import {
   CardContent,
   Divider,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -15,11 +16,16 @@ import useUserStore from "../../stores/useUserStore";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import InfoIcon from "@mui/icons-material/Info";
-import EditIcon from "@mui/icons-material/Edit";
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
+import TimerIcon from "@mui/icons-material/Timer";
+import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import EventBusyIcon from "@mui/icons-material/EventBusy";
+import SearchIcon from "@mui/icons-material/Search";
 
 function Training() {
   const [datosEntrenamientos, setDatosEntrenamientos] = useState([]);
@@ -224,33 +230,128 @@ function Training() {
         }}
       >
         <Toolbar />
-        {entrenador ? (
-          <Link to="/home/crear-entrenamiento">
-            <Button variant="contained">Crear entrenamiento</Button>
-          </Link>
-        ) : (
-          <Link to="/home/training/asistidos">
-            <Button variant="contained">Entrenamientos confirmados</Button>
-          </Link>
-        )}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "8px",
+            marginBottom: "10px",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <TimerIcon
+              sx={{
+                color: "#00338e",
+                fontSize: "26px",
+                margin: "0px",
+                padding: "0px",
+              }}
+            ></TimerIcon>
+            <Typography
+              sx={{
+                fontFamily: "'Open sans'",
+                fontSize: "22px",
+                fontWeight: 600,
+                color: "#00338e",
+                padding: "0px",
+                margin: "0px",
+              }}
+            >
+              Entrenamientos
+            </Typography>
+          </Box>
 
-        <Link to="/home/buscar-entrenamientos">
-          <Button variant="contained">Buscar entrenamientos</Button>
-        </Link>
-
-        {entrenador ? null : (
-          <Link to="/home/training/no-asistidos">
-            <Button variant="contained">Entrenamientos no asistidos</Button>
-          </Link>
-        )}
-
-        {entrenador ? (
-          <Typography sx={{ marginBottom: 2 }}>Entrenamientos</Typography>
-        ) : (
-          <Typography sx={{ marginBottom: 2 }}>
-            Entrenamientos no confirmados
-          </Typography>
-        )}
+          <Box sx={{ display: "flex", gap: 1 }}>
+            {entrenador ? (
+              <Link to="/home/crear-entrenamiento">
+                <Button
+                  sx={{
+                    gap: 0.5,
+                    color: "white",
+                    backgroundColor: "#00338e",
+                    fontFamily: "'Open sans'",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    "&:hover": {
+                      backgroundColor: "#AACBFF",
+                      color: "#00338e",
+                    },
+                  }}
+                >
+                  <Tooltip title="Crear entrenamiento">
+                    <InsertInvitationIcon></InsertInvitationIcon>
+                  </Tooltip>
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/home/training/asistidos">
+                <Button
+                  sx={{
+                    gap: 0.5,
+                    color: "white",
+                    backgroundColor: "#00338e",
+                    fontFamily: "'Open sans'",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    "&:hover": {
+                      backgroundColor: "#AACBFF",
+                      color: "#00338e",
+                    },
+                  }}
+                >
+                  <Tooltip title="Entrenamientos confirmados">
+                    <EventAvailableIcon></EventAvailableIcon>
+                  </Tooltip>
+                </Button>
+              </Link>
+            )}
+            {entrenador ? null : (
+              <Link to="/home/training/no-asistidos">
+                <Button
+                  sx={{
+                    gap: 0.5,
+                    color: "white",
+                    backgroundColor: "#00338e",
+                    fontFamily: "'Open sans'",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    "&:hover": {
+                      backgroundColor: "#AACBFF",
+                      color: "#00338e",
+                    },
+                  }}
+                >
+                  <Tooltip title="Entrenamientos rechazados">
+                    <EventBusyIcon></EventBusyIcon>
+                  </Tooltip>
+                </Button>
+              </Link>
+            )}
+            {entrenador ? (
+              <Link to="/home/buscar-entrenamientos">
+                <Button
+                  sx={{
+                    gap: 0.5,
+                    color: "white",
+                    backgroundColor: "#00338e",
+                    fontFamily: "'Open sans'",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    "&:hover": {
+                      backgroundColor: "#AACBFF",
+                      color: "#00338e",
+                    },
+                  }}
+                >
+                  <Tooltip title="Buscar entrenamientos">
+                    <SearchIcon></SearchIcon>
+                  </Tooltip>
+                </Button>
+              </Link>
+            ) : null}
+          </Box>
+        </div>
 
         <Box
           sx={{
@@ -443,31 +544,35 @@ function Training() {
                     sx={{
                       display: "flex",
                       gap: 0.3,
-                      alignSelf: { xs: "flex-end" },
+                      alignSelf: { xs: "flex-start" },
                     }}
                   >
                     {entrenador ? (
                       <Link
                         to={`/home/training/mostrar-entrenamiento/${entrenamiento.identrenamiento}`}
                       >
-                        <InfoIcon
-                          sx={{
-                            color: "#00338e",
-                            fontSize: { xs: "24px", md: "28px" },
-                          }}
-                        ></InfoIcon>
+                        <Tooltip title="Informacion del entrenamiento">
+                          <EventNoteIcon
+                            sx={{
+                              color: "#00338e",
+                              fontSize: { xs: "24px", md: "28px" },
+                            }}
+                          ></EventNoteIcon>
+                        </Tooltip>
                       </Link>
                     ) : null}
                     {entrenador ? (
                       <Link
                         to={`/home/modificar-entrenamiento/${entrenamiento.identrenamiento}`}
                       >
-                        <EditIcon
-                          sx={{
-                            color: "#00338e",
-                            fontSize: { xs: "24px", md: "28px" },
-                          }}
-                        ></EditIcon>
+                        <Tooltip title="Modificar entrenamiento">
+                          <EditCalendarIcon
+                            sx={{
+                              color: "#00338e",
+                              fontSize: { xs: "24px", md: "28px" },
+                            }}
+                          ></EditCalendarIcon>
+                        </Tooltip>
                       </Link>
                     ) : (
                       <Box
@@ -478,15 +583,16 @@ function Training() {
                             true
                           )
                         }
-                        component="button"
-                        sx={{ border: "none", backgroundColor: "white" }}
+                        sx={{ cursor: "pointer" }}
                       >
-                        <CheckCircleIcon
-                          sx={{
-                            color: "#00338e",
-                            fontSize: { xs: "24px", md: "28px" },
-                          }}
-                        ></CheckCircleIcon>
+                        <Tooltip title="Asistir">
+                          <CheckCircleIcon
+                            sx={{
+                              color: "#00338e",
+                              fontSize: { xs: "24px", md: "28px" },
+                            }}
+                          ></CheckCircleIcon>
+                        </Tooltip>
                       </Box>
                     )}
                     {entrenador ? (
@@ -494,13 +600,16 @@ function Training() {
                         onClick={() =>
                           handleDelete(entrenamiento.identrenamiento)
                         }
+                        sx={{ cursor: "pointer" }}
                       >
-                        <DeleteIcon
-                          sx={{
-                            color: "#00338e",
-                            fontSize: { xs: "24px", md: "28px" },
-                          }}
-                        ></DeleteIcon>
+                        <Tooltip title="Eliminar entrenamiento">
+                          <DeleteIcon
+                            sx={{
+                              color: "#00338e",
+                              fontSize: { xs: "24px", md: "28px" },
+                            }}
+                          ></DeleteIcon>
+                        </Tooltip>
                       </Box>
                     ) : (
                       <Box
@@ -511,15 +620,16 @@ function Training() {
                             false
                           )
                         }
-                        component="button"
-                        sx={{ border: "none", backgroundColor: "white" }}
+                        sx={{ cursor: "pointer" }}
                       >
-                        <CancelIcon
-                          sx={{
-                            color: "#00338e",
-                            fontSize: { xs: "24px", md: "28px" },
-                          }}
-                        ></CancelIcon>
+                        <Tooltip title="No asistir">
+                          <CancelIcon
+                            sx={{
+                              color: "#00338e",
+                              fontSize: { xs: "24px", md: "28px" },
+                            }}
+                          ></CancelIcon>
+                        </Tooltip>
                       </Box>
                     )}
                   </Box>
