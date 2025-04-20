@@ -341,7 +341,6 @@ function Dashboard() {
             </div>
           </Box>
         </Box>
-
         <Box sx={{ marginBottom: "30px" }}>
           <div
             style={{
@@ -371,114 +370,54 @@ function Dashboard() {
               Próximo entrenamiento
             </Typography>
           </div>
+
           {proximoEntrenamiento.length !== 0 ? (
             <Box
               sx={{
+                display: "flex",
                 border: "1px solid #BDBDBD",
-                paddingX: "16px",
-                paddingTop: "16px",
+                padding: "16px",
                 borderRadius: "8px",
                 width: "100%",
                 backgroundColor: "#FFFFFF",
+                gap: 3,
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "0.7rem",
-                }}
-              >
-                <FitnessCenterIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
-                <Box>
-                  <Typography
-                    sx={{
-                      color: "#3d64a8",
-                      fontFamily: "'Open sans'",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Tipo
-                  </Typography>
-                  <Typography variant="body1">
-                    {proximoEntrenamiento.tipo}
-                  </Typography>
-                </Box>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "0.7rem",
-                }}
-              >
-                <CalendarTodayIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
-                <Box>
-                  <Typography
-                    sx={{
-                      color: "#3d64a8",
-                      fontFamily: "'Open sans'",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Fecha
-                  </Typography>
-                  <Typography variant="body1">
-                    {formatearFecha(proximoEntrenamiento.fecha_entrenamiento)}
-                  </Typography>
-                </Box>
-              </div>
+              {/* Calendario */}
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: { xs: "column", md: "row" },
-                  gap: 3,
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "80px",
+                  height: "80px",
+                  borderRadius: "8px",
+                  backgroundColor: "#3d64a8",
+                  color: "white",
+                  flexShrink: 0,
                 }}
               >
-                <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
-                  <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
-                  <Box>
-                    <Typography
-                      sx={{
-                        color: "#3d64a8",
-                        fontFamily: "'Open sans'",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Inicio
-                    </Typography>
-                    <Typography variant="body1">
-                      {formatHora(proximoEntrenamiento?.hora_inicio)}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
-                  <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
-                  <Box>
-                    <Typography
-                      sx={{
-                        color: "#3d64a8",
-                        fontFamily: "'Open sans'",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Fin
-                    </Typography>
-                    <Typography variant="body1">
-                      {formatHora(proximoEntrenamiento?.hora_final)}
-                    </Typography>
-                  </Box>
-                </Box>
+                <Typography
+                  variant="h5"
+                  sx={{ fontWeight: "bold", lineHeight: 1 }}
+                >
+                  {new Date(
+                    proximoEntrenamiento.fecha_entrenamiento
+                  ).toLocaleString("es-ES", { day: "numeric" })}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ textTransform: "uppercase", lineHeight: 1 }}
+                >
+                  {new Date(
+                    proximoEntrenamiento.fecha_entrenamiento
+                  ).toLocaleString("es-ES", { month: "short" })}
+                </Typography>
               </Box>
 
-              <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
-
-              <Typography variant="subtitle2" sx={{ color: "#3d64a8", mb: 1 }}>
-                Información adicional
-              </Typography>
-
-              {proximoEntrenamiento.informacion ? (
+              {/* Información del entrenamiento */}
+              <Box sx={{ flexGrow: 1 }}>
                 <div
                   style={{
                     display: "flex",
@@ -486,18 +425,119 @@ function Dashboard() {
                     marginBottom: "0.7rem",
                   }}
                 >
-                  <Typography variant="body1" gutterBottom>
-                    {proximoEntrenamiento.informacion}
-                  </Typography>
+                  <FitnessCenterIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Tipo
+                    </Typography>
+                    <Typography variant="body1">
+                      {proximoEntrenamiento.tipo}
+                    </Typography>
+                  </Box>
                 </div>
-              ) : (
-                <Typography
-                  variant="body2"
-                  sx={{ fontStyle: "italic", marginBottom: "0.7rem" }}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: "0.7rem",
+                  }}
                 >
-                  [No hay ninguna información adicional]
+                  <CalendarTodayIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Fecha
+                    </Typography>
+                    <Typography variant="body1">
+                      {formatearFecha(proximoEntrenamiento.fecha_entrenamiento)}
+                    </Typography>
+                  </Box>
+                </div>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", md: "row" },
+                    gap: {xs: 1, md: 3},
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
+                    <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: "#3d64a8",
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Inicio
+                      </Typography>
+                      <Typography variant="body1">
+                        {formatHora(proximoEntrenamiento?.hora_inicio)}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
+                    <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: "#3d64a8",
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Fin
+                      </Typography>
+                      <Typography variant="body1">
+                        {formatHora(proximoEntrenamiento?.hora_final)}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
+
+                <Typography
+                  variant="subtitle2"
+                  sx={{ color: "#3d64a8", mb: 1 }}
+                >
+                  Información adicional
                 </Typography>
-              )}
+
+                {proximoEntrenamiento.informacion ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "0.7rem",
+                    }}
+                  >
+                    <Typography variant="body1" gutterBottom>
+                      {proximoEntrenamiento.informacion}
+                    </Typography>
+                  </div>
+                ) : (
+                  <Typography
+                    variant="body2"
+                    sx={{ fontStyle: "italic", marginBottom: "0.7rem" }}
+                  >
+                    [No hay ninguna información adicional]
+                  </Typography>
+                )}
+              </Box>
             </Box>
           ) : (
             <Box
