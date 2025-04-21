@@ -27,7 +27,7 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import SearchIcon from "@mui/icons-material/Search";
 import { SnackbarProvider, useSnackbar } from "notistack";
-import { playNotificationSound } from '../../utils/Funciones';
+import { playNotificationSound } from "../../utils/Funciones";
 
 function Training() {
   const [datosEntrenamientos, setDatosEntrenamientos] = useState([]);
@@ -35,7 +35,6 @@ function Training() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const notificacion = useRef(null);
-
 
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
@@ -365,282 +364,299 @@ function Training() {
             gap: 2,
           }}
         >
-          {datosEntrenamientos.map((entrenamiento) => (
-            <Box
-              sx={{
-                display: "flex",
-                border: "1px solid #BDBDBD",
-                padding: "16px",
-                borderRadius: "8px",
-                width: "100%",
-                backgroundColor: "#FFFFFF",
-                gap: 3,
-              }}
-              key={entrenamiento.identrenamiento}
-            >
-              {/* Calendario */}
-              <Box
+          {datosEntrenamientos.length === 0 ? (
+            <Box sx={{border: "1px solid #BDBDBD", padding: "16px", borderRadius: "10px", textAlign: "center", backgroundColor: "white"}}>
+              <Typography
+                variant="body"
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "80px",
-                  height: "80px",
-                  borderRadius: "8px",
-                  backgroundColor: "#3d64a8",
-                  color: "white",
-                  flexShrink: 0,
+                  alignSelf: { xs: "flex-start" },
                 }}
               >
-                <Typography
-                  variant="h5"
-                  sx={{ fontWeight: "bold", lineHeight: 1 }}
-                >
-                  {new Date(entrenamiento.fecha_entrenamiento).toLocaleString(
-                    "es-ES",
-                    { day: "numeric" }
-                  )}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ textTransform: "uppercase", lineHeight: 1 }}
-                >
-                  {new Date(entrenamiento.fecha_entrenamiento).toLocaleString(
-                    "es-ES",
-                    { month: "short" }
-                  )}
-                </Typography>
-              </Box>
-
-              {/* Información del entrenamiento */}
-              <Box sx={{ flexGrow: 1 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "0.7rem",
-                  }}
-                >
-                  <FitnessCenterIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
-                  <Box>
-                    <Typography
-                      sx={{
-                        color: "#3d64a8",
-                        fontFamily: "'Open sans'",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Tipo
-                    </Typography>
-                    <Typography variant="body1">
-                      {entrenamiento.tipo}
-                    </Typography>
-                  </Box>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginBottom: "0.7rem",
-                  }}
-                >
-                  <CalendarTodayIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
-                  <Box>
-                    <Typography
-                      sx={{
-                        color: "#3d64a8",
-                        fontFamily: "'Open sans'",
-                        fontWeight: 600,
-                      }}
-                    >
-                      Fecha
-                    </Typography>
-                    <Typography variant="body1">
-                      {formatearFecha(entrenamiento.fecha_entrenamiento)}
-                    </Typography>
-                  </Box>
-                </div>
+                No hay entrenamientos programados
+              </Typography>
+            </Box>
+          ) : (
+            <>
+              {datosEntrenamientos.map((entrenamiento) => (
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: { xs: "column", md: "row" },
-                    gap: { xs: 1, md: 3 },
+                    border: "1px solid #BDBDBD",
+                    padding: "16px",
+                    borderRadius: "8px",
+                    width: "100%",
+                    backgroundColor: "#FFFFFF",
+                    gap: 3,
                   }}
+                  key={entrenamiento.identrenamiento}
                 >
-                  <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
-                    <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
-                    <Box>
-                      <Typography
-                        sx={{
-                          color: "#3d64a8",
-                          fontFamily: "'Open sans'",
-                          fontWeight: 600,
-                        }}
-                      >
-                        Inicio
-                      </Typography>
-                      <Typography variant="body1">
-                        {formatHora(entrenamiento?.hora_inicio)}
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
-                    <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
-                    <Box>
-                      <Typography
-                        sx={{
-                          color: "#3d64a8",
-                          fontFamily: "'Open sans'",
-                          fontWeight: 600,
-                        }}
-                      >
-                        Fin
-                      </Typography>
-                      <Typography variant="body1">
-                        {formatHora(entrenamiento?.hora_final)}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-
-                <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
-
-                <Typography
-                  variant="subtitle2"
-                  sx={{ color: "#3d64a8", mb: 1 }}
-                >
-                  Información adicional
-                </Typography>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: { xs: "column", md: "row" },
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  {entrenamiento.informacion ? (
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        marginBottom: "0.7rem",
-                        alignSelf: { xs: "flex-start" },
-                      }}
-                    >
-                      {entrenamiento.informacion}
-                    </Typography>
-                  ) : (
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontStyle: "italic",
-                        marginBottom: "0.7rem",
-                        alignSelf: { xs: "flex-start" },
-                      }}
-                    >
-                      [No hay ninguna información adicional]
-                    </Typography>
-                  )}
+                  {/* Calendario */}
                   <Box
                     sx={{
                       display: "flex",
-                      gap: 0.3,
-                      alignSelf: { xs: "flex-start" },
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "80px",
+                      height: "80px",
+                      borderRadius: "8px",
+                      backgroundColor: "#3d64a8",
+                      color: "white",
+                      flexShrink: 0,
                     }}
                   >
-                    {entrenador ? (
-                      <Link
-                        to={`/home/training/mostrar-entrenamiento/${entrenamiento.identrenamiento}`}
-                      >
-                        <Tooltip title="Informacion del entrenamiento">
-                          <EventNoteIcon
-                            sx={{
-                              color: "#00338e",
-                              fontSize: { xs: "24px", md: "28px" },
-                            }}
-                          ></EventNoteIcon>
-                        </Tooltip>
-                      </Link>
-                    ) : null}
-                    {entrenador ? (
-                      <Link
-                        to={`/home/modificar-entrenamiento/${entrenamiento.identrenamiento}`}
-                      >
-                        <Tooltip title="Modificar entrenamiento">
-                          <EditCalendarIcon
-                            sx={{
-                              color: "#00338e",
-                              fontSize: { xs: "24px", md: "28px" },
-                            }}
-                          ></EditCalendarIcon>
-                        </Tooltip>
-                      </Link>
-                    ) : (
-                      <Box
-                        onClick={() =>
-                          handleSubmitAsistencia(
-                            entrenamiento.identrenamiento,
-                            datosJugadora.idjugadora,
-                            true
-                          )
-                        }
-                        sx={{ cursor: "pointer" }}
-                      >
-                        <Tooltip title="Asistir">
-                          <CheckCircleIcon
-                            sx={{
-                              color: "#00338e",
-                              fontSize: { xs: "24px", md: "28px" },
-                            }}
-                          ></CheckCircleIcon>
-                        </Tooltip>
+                    <Typography
+                      variant="h5"
+                      sx={{ fontWeight: "bold", lineHeight: 1 }}
+                    >
+                      {new Date(
+                        entrenamiento.fecha_entrenamiento
+                      ).toLocaleString("es-ES", { day: "numeric" })}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ textTransform: "uppercase", lineHeight: 1 }}
+                    >
+                      {new Date(
+                        entrenamiento.fecha_entrenamiento
+                      ).toLocaleString("es-ES", { month: "short" })}
+                    </Typography>
+                  </Box>
+
+                  {/* Información del entrenamiento */}
+                  <Box sx={{ flexGrow: 1 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "0.7rem",
+                      }}
+                    >
+                      <FitnessCenterIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                      <Box>
+                        <Typography
+                          sx={{
+                            color: "#3d64a8",
+                            fontFamily: "'Open sans'",
+                            fontWeight: 600,
+                          }}
+                        >
+                          Tipo
+                        </Typography>
+                        <Typography variant="body1">
+                          {entrenamiento.tipo}
+                        </Typography>
                       </Box>
-                    )}
-                    {entrenador ? (
-                      <Box
-                        onClick={() =>
-                          handleDelete(entrenamiento.identrenamiento)
-                        }
-                        sx={{ cursor: "pointer" }}
-                      >
-                        <Tooltip title="Eliminar entrenamiento">
-                          <DeleteIcon
-                            sx={{
-                              color: "#00338e",
-                              fontSize: { xs: "24px", md: "28px" },
-                            }}
-                          ></DeleteIcon>
-                        </Tooltip>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "0.7rem",
+                      }}
+                    >
+                      <CalendarTodayIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                      <Box>
+                        <Typography
+                          sx={{
+                            color: "#3d64a8",
+                            fontFamily: "'Open sans'",
+                            fontWeight: 600,
+                          }}
+                        >
+                          Fecha
+                        </Typography>
+                        <Typography variant="body1">
+                          {formatearFecha(entrenamiento.fecha_entrenamiento)}
+                        </Typography>
                       </Box>
-                    ) : (
+                    </div>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", md: "row" },
+                        gap: { xs: 1, md: 3 },
+                      }}
+                    >
                       <Box
-                        onClick={() =>
-                          handleSubmitAsistencia(
-                            entrenamiento.identrenamiento,
-                            datosJugadora.idjugadora,
-                            false
-                          )
-                        }
-                        sx={{ cursor: "pointer" }}
+                        sx={{ display: "flex", alignItems: "center", flex: 1 }}
                       >
-                        <Tooltip title="No asistir">
-                          <CancelIcon
+                        <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                        <Box>
+                          <Typography
                             sx={{
-                              color: "#00338e",
-                              fontSize: { xs: "24px", md: "28px" },
+                              color: "#3d64a8",
+                              fontFamily: "'Open sans'",
+                              fontWeight: 600,
                             }}
-                          ></CancelIcon>
-                        </Tooltip>
+                          >
+                            Inicio
+                          </Typography>
+                          <Typography variant="body1">
+                            {formatHora(entrenamiento?.hora_inicio)}
+                          </Typography>
+                        </Box>
                       </Box>
-                    )}
+
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", flex: 1 }}
+                      >
+                        <AccessTimeIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
+                        <Box>
+                          <Typography
+                            sx={{
+                              color: "#3d64a8",
+                              fontFamily: "'Open sans'",
+                              fontWeight: 600,
+                            }}
+                          >
+                            Fin
+                          </Typography>
+                          <Typography variant="body1">
+                            {formatHora(entrenamiento?.hora_final)}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+
+                    <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
+
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ color: "#3d64a8", mb: 1 }}
+                    >
+                      Información adicional
+                    </Typography>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", md: "row" },
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      {entrenamiento.informacion ? (
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            marginBottom: "0.7rem",
+                            alignSelf: { xs: "flex-start" },
+                          }}
+                        >
+                          {entrenamiento.informacion}
+                        </Typography>
+                      ) : (
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            fontStyle: "italic",
+                            marginBottom: "0.7rem",
+                            alignSelf: { xs: "flex-start" },
+                          }}
+                        >
+                          [No hay ninguna información adicional]
+                        </Typography>
+                      )}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 0.3,
+                          alignSelf: { xs: "flex-start" },
+                        }}
+                      >
+                        {entrenador ? (
+                          <Link
+                            to={`/home/training/mostrar-entrenamiento/${entrenamiento.identrenamiento}`}
+                          >
+                            <Tooltip title="Informacion del entrenamiento">
+                              <EventNoteIcon
+                                sx={{
+                                  color: "#00338e",
+                                  fontSize: { xs: "24px", md: "28px" },
+                                }}
+                              ></EventNoteIcon>
+                            </Tooltip>
+                          </Link>
+                        ) : null}
+                        {entrenador ? (
+                          <Link
+                            to={`/home/modificar-entrenamiento/${entrenamiento.identrenamiento}`}
+                          >
+                            <Tooltip title="Modificar entrenamiento">
+                              <EditCalendarIcon
+                                sx={{
+                                  color: "#00338e",
+                                  fontSize: { xs: "24px", md: "28px" },
+                                }}
+                              ></EditCalendarIcon>
+                            </Tooltip>
+                          </Link>
+                        ) : (
+                          <Box
+                            onClick={() =>
+                              handleSubmitAsistencia(
+                                entrenamiento.identrenamiento,
+                                datosJugadora.idjugadora,
+                                true
+                              )
+                            }
+                            sx={{ cursor: "pointer" }}
+                          >
+                            <Tooltip title="Asistir">
+                              <CheckCircleIcon
+                                sx={{
+                                  color: "#00338e",
+                                  fontSize: { xs: "24px", md: "28px" },
+                                }}
+                              ></CheckCircleIcon>
+                            </Tooltip>
+                          </Box>
+                        )}
+                        {entrenador ? (
+                          <Box
+                            onClick={() =>
+                              handleDelete(entrenamiento.identrenamiento)
+                            }
+                            sx={{ cursor: "pointer" }}
+                          >
+                            <Tooltip title="Eliminar entrenamiento">
+                              <DeleteIcon
+                                sx={{
+                                  color: "#00338e",
+                                  fontSize: { xs: "24px", md: "28px" },
+                                }}
+                              ></DeleteIcon>
+                            </Tooltip>
+                          </Box>
+                        ) : (
+                          <Box
+                            onClick={() =>
+                              handleSubmitAsistencia(
+                                entrenamiento.identrenamiento,
+                                datosJugadora.idjugadora,
+                                false
+                              )
+                            }
+                            sx={{ cursor: "pointer" }}
+                          >
+                            <Tooltip title="No asistir">
+                              <CancelIcon
+                                sx={{
+                                  color: "#00338e",
+                                  fontSize: { xs: "24px", md: "28px" },
+                                }}
+                              ></CancelIcon>
+                            </Tooltip>
+                          </Box>
+                        )}
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            </Box>
-          ))}
+              ))}
+            </>
+          )}
         </Box>
       </Box>
     </>
