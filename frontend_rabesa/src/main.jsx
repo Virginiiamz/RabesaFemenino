@@ -33,6 +33,7 @@ import "@fontsource/fira-sans"; // Peso 400 (normal)
 import "@fontsource/fira-sans/400.css"; // Alternativa
 import "@fontsource/fira-sans/500.css"; // Peso 500 (medium)
 import "@fontsource/fira-sans/700.css"; // Peso 700 (bold)
+import { SnackbarProvider } from "notistack";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -205,6 +206,15 @@ let router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <SnackbarProvider
+      maxSnack={3}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      autoHideDuration={3000}
+    >
+      <RouterProvider router={router} />
+    </SnackbarProvider>
   </StrictMode>
 );

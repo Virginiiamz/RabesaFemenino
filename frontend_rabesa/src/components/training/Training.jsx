@@ -9,14 +9,14 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { apiUrl } from "../../config";
 import useUserStore from "../../stores/useUserStore";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import EventNoteIcon from '@mui/icons-material/EventNote';
+import EventNoteIcon from "@mui/icons-material/EventNote";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -26,11 +26,16 @@ import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import SearchIcon from "@mui/icons-material/Search";
+import { SnackbarProvider, useSnackbar } from "notistack";
+import { playNotificationSound } from '../../utils/Funciones';
 
 function Training() {
   const [datosEntrenamientos, setDatosEntrenamientos] = useState([]);
   const [datosJugadora, setDatosJugadora] = useState([]);
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const notificacion = useRef(null);
+
 
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
@@ -163,48 +168,37 @@ function Training() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.mensaje);
-        navigate(0);
+        // Actualiza el estado local filtrando el entrenamiento confirmado
+        setDatosEntrenamientos((prev) =>
+          prev.filter((ent) => ent.identrenamiento !== identrenamiento)
+        );
+
+        playNotificationSound(notificacion);
+
+        enqueueSnackbar(data.mensaje, {
+          variant: "success",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
       } else {
-        alert(data.mensaje);
+        playNotificationSound(notificacion);
+
+        enqueueSnackbar(data.mensaje, {
+          variant: "error",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
       }
     } catch (error) {
-      alert("Error de red. Inténtalo de nuevo más tarde.");
+      playNotificationSound(notificacion);
+
+      enqueueSnackbar("Error de red. Inténtalo de nuevo más tarde.", {
+        variant: "error",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     }
   };
-
-  // const handleSubmitNoAsistencia = async (identrenamiento, idjugadora) => {
-  //   console.log(identrenamiento);
-  //   console.log(idjugadora);
-
-  //   try {
-  //     const response = await fetch(
-  //       apiUrl +
-  //         "/entrenamientos/no-asistencias/" +
-  //         identrenamiento +
-  //         "/" +
-  //         idjugadora,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
-  //       }
-  //     );
-
-  //     const data = await response.json();
-
-  //     if (response.ok) {
-  //       alert(data.mensaje);
-  //       navigate(0);
-  //     } else {
-  //       alert(data.mensaje);
-  //     }
-  //   } catch (error) {
-  //     alert("Error de red. Inténtalo de nuevo más tarde.");
-  //   }
-  // };
 
   const handleDelete = async (identrenamiento) => {
     let response = await fetch(apiUrl + "/entrenamientos/" + identrenamiento, {
@@ -215,13 +209,23 @@ function Training() {
       const entrenamientoTrasBorrado = datosEntrenamientos.filter(
         (entrenamiento) => entrenamiento.identrenamiento != identrenamiento
       );
+
       // Establece los datos de nuevo para provocar un renderizado
       setDatosEntrenamientos(entrenamientoTrasBorrado);
+
+      playNotificationSound(notificacion);
+
+      enqueueSnackbar("Entrenamiento borrado correctamente", {
+        variant: "success",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     }
   };
 
   return (
     <>
+      <audio ref={notificacion} src="/sonido/notificacion.mp3" preload="auto" />
       <Box
         component="main"
         sx={{

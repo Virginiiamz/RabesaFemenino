@@ -326,7 +326,7 @@ class AsistenciasEntrenamientoController {
         .json(
           Respuesta.exito(
             nuevaAsistencia,
-            "Se ha guardado tu informacion sobre la asistencia al entrenamiento"
+            "Información guardada con éxito"
           )
         );
     } catch (err) {
