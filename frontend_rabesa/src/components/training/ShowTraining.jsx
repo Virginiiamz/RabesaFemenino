@@ -8,11 +8,21 @@ import {
   ImageListItem,
   Modal,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { apiUrl } from "../../config";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+import { PiMapPinSimpleAreaBold } from "react-icons/pi";
+import { FaUserPlus, FaUserTimes } from "react-icons/fa";
+import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { playNotificationSound } from "../../utils/Funciones";
+import { enqueueSnackbar } from "notistack";
 
 function ShowTraining() {
   const { identrenamiento } = useParams();
@@ -20,27 +30,16 @@ function ShowTraining() {
   const [datosAsistencia, setDatosAsistencia] = useState([]);
   const [datosNoAsistencia, setDatosNoAsistencia] = useState([]);
   const navigate = useNavigate();
+  const notificacion = useRef(null);
 
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
 
-    const opciones = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
+    const fechaFormateada = format(fecha, "MMM d, yyyy", {
+      locale: es,
+    }).replace(/^\w/, (c) => c.toUpperCase());
 
-    let fechaStr = new Date(fecha).toLocaleDateString("es-ES", opciones);
-
-    fechaStr = fechaStr.replace(/\b\w/g, (letra, indice) => {
-      if (indice === 0 || fechaStr.substring(indice - 3, indice) === "de ") {
-        return letra.toUpperCase();
-      }
-      return letra;
-    });
-
-    return fechaStr;
+    return fechaFormateada;
   };
 
   useEffect(() => {
@@ -97,7 +96,7 @@ function ShowTraining() {
     getAllInformacionByIdEntrenamiento();
   }, []);
 
-  const handleDelete = async (idasistencia) => {
+  const handleDelete = async (idasistencia, tipo) => {
     let response = await fetch(
       apiUrl + "/entrenamientos/tipo/" + idasistencia,
       {
@@ -106,18 +105,33 @@ function ShowTraining() {
     );
 
     if (response.ok) {
-      const asistenciaTrasBorrado = datosAsistencia.filter(
-        (asistencia) => asistencia.idasistencia != idasistencia
-      );
       // Establece los datos de nuevo para provocar un renderizado
-      setDatosAsistencia(asistenciaTrasBorrado);
-      setDatosNoAsistencia(asistenciaTrasBorrado);
-      navigate(0);
+      if (tipo === "asistencia") {
+        const asistenciaTrasBorrado = datosAsistencia.filter(
+          (asistencia) => asistencia.idasistencia != idasistencia
+        );
+        setDatosAsistencia(asistenciaTrasBorrado);
+      } else if (tipo === "noAsistencia") {
+        const asistenciaTrasBorrado = datosNoAsistencia.filter(
+          (asistencia) => asistencia.idasistencia != idasistencia
+        );
+        setDatosNoAsistencia(asistenciaTrasBorrado);
+      }
+
+      playNotificationSound(notificacion);
+
+      enqueueSnackbar("Guardado con éxito", {
+        variant: "success",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+      // navigate(0);
     }
   };
 
   return (
     <>
+      <audio ref={notificacion} src="/sonido/notificacion.mp3" preload="auto" />
       <Box
         component="main"
         sx={{
@@ -127,111 +141,296 @@ function ShowTraining() {
       >
         <Toolbar />
 
-        <Typography sx={{ marginBottom: 2 }}>
-          Entrenamiento:{" "}
-          {formatearFecha(datosEntrenamiento.fecha_entrenamiento)}
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "8px",
+            marginBottom: "10px",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <EventNoteIcon
+              sx={{
+                color: "#00338e",
+                fontSize: "26px",
+                margin: "0px",
+                padding: "0px",
+              }}
+            ></EventNoteIcon>
+            <Typography
+              sx={{
+                fontFamily: "'Open sans'",
+                fontSize: "22px",
+                fontWeight: 600,
+                color: "#00338e",
+                padding: "0px",
+                margin: "0px",
+              }}
+            >
+              {formatearFecha(datosEntrenamiento.fecha_entrenamiento)}
+            </Typography>
+          </Box>
 
-        <Link to={`/home/crear-confirmacion/${identrenamiento}/${true}`}>
-          <Button variant="contained">Añadir asistencia</Button>
-        </Link>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Link to={`/home/crear-confirmacion/${identrenamiento}/${true}`}>
+              <Button
+                sx={{
+                  gap: 0.5,
+                  color: "white",
+                  backgroundColor: "#00338e",
+                  fontFamily: "'Open sans'",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  "&:hover": {
+                    backgroundColor: "#AACBFF",
+                    color: "#00338e",
+                  },
+                }}
+                variant="contained"
+              >
+                <Tooltip title="Crear asistencia">
+                  <FaUserPlus style={{ fontSize: "24px" }}></FaUserPlus>
+                </Tooltip>
+              </Button>
+            </Link>
 
-        <Link to={`/home/crear-confirmacion/${identrenamiento}/${false}`}>
-          <Button variant="contained">Añadir no asistencia</Button>
-        </Link>
+            <Link to={`/home/crear-confirmacion/${identrenamiento}/${false}`}>
+              <Button
+                sx={{
+                  gap: 0.5,
+                  color: "white",
+                  backgroundColor: "#00338e",
+                  fontFamily: "'Open sans'",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  "&:hover": {
+                    backgroundColor: "#AACBFF",
+                    color: "#00338e",
+                  },
+                }}
+                variant="contained"
+              >
+                <Tooltip title="Crear no asistencia">
+                  <FaUserTimes style={{ fontSize: "24px" }}></FaUserTimes>
+                </Tooltip>
+              </Button>
+            </Link>
+          </Box>
+        </Box>
 
         <Box
           sx={{
             width: "100%",
             display: "flex",
-            flexDirection: "row",
+            flexDirection: { xs: "column", lg: "row" },
+            justifyContent: "space-between",
             gap: 2,
           }}
         >
           <Box
             sx={{
-              width: "50%",
+              minWidth: "50%",
               display: "flex",
               flexDirection: "column",
               gap: 2,
+              backgroundColor: "white",
+              border: "1px solid #BDBDBD",
+              padding: "16px",
+              borderRadius: "8px",
             }}
           >
-            <Typography gutterBottom component="div">
-              Jugadoras que asisten
+            <Typography
+              sx={{
+                color: "#3d64a8",
+                fontFamily: "'Open sans'",
+                fontWeight: 600,
+              }}
+            >
+              Asistencia confirmadas
             </Typography>
             {datosAsistencia.map((asistencia) => (
-              <Card
-                sx={{
+              <div
+                style={{
                   display: "flex",
                   flexDirection: "row",
+                  justifyContent: "space-between",
+                  borderBottom: "1px solid #BDBDBD",
                   alignItems: "center",
-                  gap: 1,
                 }}
               >
-                <img
-                  src={`http://localhost:3000/uploads/${asistencia.idjugadora_jugadora.imagen}`}
-                  style={{
-                    borderRadius: "70%",
-                    height: "100px",
-                    width: "100px",
-                    margin: "1rem",
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 1,
                   }}
-                ></img>
-                <Typography gutterBottom component="div">
-                  {asistencia.idjugadora_jugadora.nombre}
-                </Typography>
-                <CardActions>
-                  <Button
-                    size="small"
-                    onClick={() => handleDelete(asistencia.idasistencia)}
+                >
+                  <img
+                    src={`http://localhost:3000/uploads/${asistencia.idjugadora_jugadora.imagen}`}
+                    style={{
+                      borderRadius: "70%",
+                      height: "60px",
+                      width: "60px",
+                      marginTop: "0.5rem",
+                      marginBottom: "0.5rem",
+                      objectFit: "cover",
+                    }}
+                  ></img>
+                  <Box sx={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "0.4rem",
+                        alignItems: "center",
+                        color: "#3d64a8",
+                        marginBottom: "0.3rem",
+                      }}
+                    >
+                      <PermContactCalendarIcon></PermContactCalendarIcon>
+                      <Typography variant="body1">
+                        {asistencia.idjugadora_jugadora.nombre}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "0.4rem",
+                        alignItems: "center",
+                        color: "#3d64a8",
+                      }}
+                    >
+                      <PiMapPinSimpleAreaBold
+                        style={{ fontSize: "22px" }}
+                      ></PiMapPinSimpleAreaBold>
+                      <Typography variant="body1">
+                        {asistencia.idjugadora_jugadora.posicion}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box>
+                  <Box
+                    onClick={() =>
+                      handleDelete(asistencia.idasistencia, "asistencia")
+                    }
+                    sx={{ cursor: "pointer", alignSelf: "flex-end" }}
                   >
-                    Cancelar
-                  </Button>
-                </CardActions>
-              </Card>
+                    <Tooltip title="Eliminar confirmación">
+                      <CancelIcon
+                        sx={{
+                          color: "#3d64a8",
+                          fontSize: { xs: "24px", md: "24px" },
+                        }}
+                      ></CancelIcon>
+                    </Tooltip>
+                  </Box>
+                </Box>
+              </div>
             ))}
           </Box>
           <Box
             sx={{
-              width: "50%",
+              minWidth: "50%",
               display: "flex",
               flexDirection: "column",
               gap: 2,
+              backgroundColor: "white",
+              border: "1px solid #BDBDBD",
+              padding: "16px",
+              borderRadius: "8px",
             }}
           >
-            <Typography gutterBottom component="div">
-              Jugadoras que no asisten
+            <Typography
+              sx={{
+                color: "#3d64a8",
+                fontFamily: "'Open sans'",
+                fontWeight: 600,
+              }}
+            >
+              Asistencia rechazadas
             </Typography>
-            {datosNoAsistencia.map((noAsistencia) => (
-              <Card
-                sx={{
+            {datosNoAsistencia.map((asistencia) => (
+              <div
+                style={{
                   display: "flex",
                   flexDirection: "row",
+                  justifyContent: "space-between",
+                  borderBottom: "1px solid #BDBDBD",
                   alignItems: "center",
-                  gap: 1,
                 }}
               >
-                <img
-                  src={`http://localhost:3000/uploads/${noAsistencia.idjugadora_jugadora.imagen}`}
-                  style={{
-                    borderRadius: "70%",
-                    height: "100px",
-                    width: "100px",
-                    margin: "1rem",
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 1,
                   }}
-                ></img>
-                <Typography gutterBottom component="div">
-                  {noAsistencia.idjugadora_jugadora.nombre}
-                </Typography>
-                <CardActions>
-                  <Button
-                    size="small"
-                    onClick={() => handleDelete(noAsistencia.idasistencia)}
+                >
+                  <img
+                    src={`http://localhost:3000/uploads/${asistencia.idjugadora_jugadora.imagen}`}
+                    style={{
+                      borderRadius: "70%",
+                      height: "60px",
+                      width: "60px",
+                      marginTop: "0.5rem",
+                      marginBottom: "0.5rem",
+                      objectFit: "cover",
+                    }}
+                  ></img>
+                  <Box sx={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "0.4rem",
+                        alignItems: "center",
+                        color: "#3d64a8",
+                        marginBottom: "0.3rem",
+                      }}
+                    >
+                      <PermContactCalendarIcon></PermContactCalendarIcon>
+                      <Typography variant="body1">
+                        {asistencia.idjugadora_jugadora.nombre}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "0.4rem",
+                        alignItems: "center",
+                        color: "#3d64a8",
+                      }}
+                    >
+                      <PiMapPinSimpleAreaBold
+                        style={{ fontSize: "22px" }}
+                      ></PiMapPinSimpleAreaBold>
+                      <Typography variant="body1">
+                        {asistencia.idjugadora_jugadora.posicion}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box>
+                  <Box
+                    onClick={() =>
+                      handleDelete(asistencia.idasistencia, "noAsistencia")
+                    }
+                    sx={{ cursor: "pointer", alignSelf: "flex-end" }}
                   >
-                    Cancelar
-                  </Button>
-                </CardActions>
-              </Card>
+                    <Tooltip title="Eliminar confirmación">
+                      <CancelIcon
+                        sx={{
+                          color: "#3d64a8",
+                          fontSize: { xs: "24px", md: "24px" },
+                        }}
+                      ></CancelIcon>
+                    </Tooltip>
+                  </Box>
+                </Box>
+              </div>
             ))}
           </Box>
         </Box>
