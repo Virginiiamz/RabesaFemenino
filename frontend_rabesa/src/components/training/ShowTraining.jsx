@@ -16,7 +16,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { apiUrl } from "../../config";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import EventNoteIcon from "@mui/icons-material/EventNote";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { PiMapPinSimpleAreaBold } from "react-icons/pi";
 import { FaUserPlus, FaUserTimes } from "react-icons/fa";
 import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
@@ -151,14 +151,14 @@ function ShowTraining() {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <EventNoteIcon
+            <CalendarMonthIcon
               sx={{
                 color: "#00338e",
                 fontSize: "26px",
                 margin: "0px",
                 padding: "0px",
               }}
-            ></EventNoteIcon>
+            ></CalendarMonthIcon>
             <Typography
               sx={{
                 fontFamily: "'Open sans'",
