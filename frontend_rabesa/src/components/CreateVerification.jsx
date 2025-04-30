@@ -101,7 +101,7 @@ function CreateVerification() {
         });
         setTimeout(() => {
           navigate(`/home/training/mostrar-entrenamiento/${identrenamiento}`);
-        }, 2000);
+        }, 1000);
       } else {
         playNotificationSound(notificacionError);
 
