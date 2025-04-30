@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { apiUrl } from "../../config";
 import { Link, useNavigate } from "react-router";
 import useUserStore from "../../stores/useUserStore";
+import { FaUserPlus } from "react-icons/fa";
 
 function AssistedTraining() {
   const [datosConfirmados, setDatosConfirmados] = useState([]);
@@ -88,6 +89,7 @@ function AssistedTraining() {
         }}
       >
         <Toolbar />
+        
         <Link to="/home/training">
           <Button variant="contained">Volver atras</Button>
         </Link>

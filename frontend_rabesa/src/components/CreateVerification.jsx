@@ -6,11 +6,16 @@ import {
   MenuItem,
   Select,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router";
 import { apiUrl } from "../config";
+import { FaUserPlus, FaUserTimes } from "react-icons/fa";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { playNotificationSound } from "../utils/Funciones";
+import { enqueueSnackbar } from "notistack";
 
 function CreateVerification() {
   const { identrenamiento, tipoconfirmacion } = useParams();
@@ -18,9 +23,11 @@ function CreateVerification() {
   const [formData, setFormData] = useState({
     identrenamiento: identrenamiento,
     idjugadora: null,
-    estado: tipoconfirmacion === "true"
+    estado: tipoconfirmacion === "true",
   });
   const navigate = useNavigate();
+  const notificacionError = useRef(null);
+  const notificacion = useRef(null);
 
   useEffect(() => {
     setFormData((prev) => ({
@@ -60,7 +67,13 @@ function CreateVerification() {
     }
 
     if (!idjugadora) {
-      alert("Selecciona una jugadora");
+      playNotificationSound(notificacionError);
+
+      enqueueSnackbar("Tienes que seleccionar una jugadora", {
+        variant: "error",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
       return;
     }
 
@@ -79,13 +92,33 @@ function CreateVerification() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.mensaje);
-        navigate(`/home/training/mostrar-entrenamiento/${identrenamiento}`);
+        playNotificationSound(notificacion);
+
+        enqueueSnackbar(data.mensaje, {
+          variant: "success",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
+        setTimeout(() => {
+          navigate(`/home/training/mostrar-entrenamiento/${identrenamiento}`);
+        }, 2000);
       } else {
-        alert(data.mensaje);
+        playNotificationSound(notificacionError);
+
+        enqueueSnackbar(data.mensaje, {
+          variant: "error",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
       }
     } catch (error) {
-      alert("Error de red. Inténtalo de nuevo más tarde.");
+      playNotificationSound(notificacionError);
+
+      enqueueSnackbar("Error de red. Inténtalo de nuevo más tarde.", {
+        variant: "error",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     }
   };
 
@@ -101,6 +134,13 @@ function CreateVerification() {
 
   return (
     <>
+      <audio
+        ref={notificacionError}
+        src="/sonido/notificacion_error.mp3"
+        preload="auto"
+      />
+      <audio ref={notificacion} src="/sonido/notificacion.mp3" preload="auto" />
+
       <Box
         component="main"
         sx={{
@@ -110,35 +150,136 @@ function CreateVerification() {
       >
         <Toolbar />
 
-        {formData.estado ? (
-          <Typography sx={{ marginBottom: 2 }}>Crear asistencia</Typography>
-        ) : (
-          <Typography sx={{ marginBottom: 2 }}>Crear no asistencia</Typography>
-        )}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "8px",
+            marginBottom: "10px",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {formData.estado ? (
+              <>
+                <FaUserPlus
+                  style={{
+                    color: "#00338e",
+                    fontSize: "24px",
+                    margin: "0px",
+                    padding: "0px",
+                  }}
+                ></FaUserPlus>
+                <Typography
+                  sx={{
+                    fontFamily: "'Open sans'",
+                    fontSize: "22px",
+                    fontWeight: 600,
+                    color: "#00338e",
+                    padding: "0px",
+                    margin: "0px",
+                  }}
+                >
+                  Crear asistencia
+                </Typography>
+              </>
+            ) : (
+              <>
+                <FaUserTimes
+                  style={{
+                    color: "#00338e",
+                    fontSize: "24px",
+                    margin: "0px",
+                    padding: "0px",
+                  }}
+                ></FaUserTimes>
+                <Typography
+                  sx={{
+                    fontFamily: "'Open sans'",
+                    fontSize: "22px",
+                    fontWeight: 600,
+                    color: "#00338e",
+                    padding: "0px",
+                    margin: "0px",
+                  }}
+                >
+                  Crear no asistencia
+                </Typography>
+              </>
+            )}
+          </Box>
+          <Link to={`/home/training/mostrar-entrenamiento/${identrenamiento}`}>
+            <Button
+              sx={{
+                gap: 0.5,
+                color: "white",
+                backgroundColor: "#00338e",
+                fontFamily: "'Open sans'",
+                fontSize: "14px",
+                fontWeight: 600,
+                "&:hover": {
+                  backgroundColor: "#AACBFF",
+                  color: "#00338e",
+                },
+              }}
+            >
+              <Tooltip title="Volver atrás">
+                <ArrowBackIcon></ArrowBackIcon>
+              </Tooltip>
+            </Button>
+          </Link>
+        </Box>
 
         <Box
           component="form"
-          sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            border: "1px solid #BDBDBD",
+            backgroundColor: "white",
+            borderRadius: "10px",
+            padding: "20px",
+            width: "100%",
+            gap: "1rem",
+          }}
           noValidate
           autoComplete="off"
           onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column" }}
         >
-          <Select
-            labelId="select-jugadora-label"
-            id="select-jugadora"
-            value={formData.idjugadora}
-            label="Jugadora"
-            onChange={handleChange}
-            name="idjugadora"
+          <FormControl fullWidth required>
+            <InputLabel id="select-jugadora">Jugadora</InputLabel>
+            <Select
+              labelId="select-jugadora"
+              id="select-jugadora"
+              value={formData.idjugadora}
+              label="Jugadora"
+              onChange={handleChange}
+              name="idjugadora"
+            >
+              {datosJugadoras.map((jugadora) => (
+                <MenuItem key={jugadora.idjugadora} value={jugadora.idjugadora}>
+                  {jugadora.nombre}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Button
+            sx={{
+              gap: 0.5,
+              color: "white",
+              backgroundColor: "#00338e",
+              fontFamily: "'Open sans'",
+              fontSize: "14px",
+              fontWeight: 600,
+              width: "12rem",
+              "&:hover": {
+                backgroundColor: "#AACBFF",
+                color: "#00338e",
+              },
+            }}
+            variant="contained"
+            type="submit"
           >
-            {datosJugadoras.map((jugadora) => (
-              <MenuItem key={jugadora.idjugadora} value={jugadora.idjugadora}>
-                {jugadora.nombre}
-              </MenuItem>
-            ))}
-          </Select>
-          <Button variant="outlined" type="submit">
             Guardar asistencia
           </Button>
         </Box>
