@@ -16,13 +16,14 @@ import { Link, useNavigate, useParams } from "react-router";
 import { apiUrl } from "../../config";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { PiMapPinSimpleAreaBold } from "react-icons/pi";
 import { FaUserPlus, FaUserTimes } from "react-icons/fa";
 import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { playNotificationSound } from "../../utils/Funciones";
 import { enqueueSnackbar } from "notistack";
+import PlaceIcon from "@mui/icons-material/Place";
 
 function ShowTraining() {
   const { identrenamiento } = useParams();
@@ -125,7 +126,6 @@ function ShowTraining() {
         autoHideDuration: 3000,
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
       });
-      // navigate(0);
     }
   };
 
@@ -283,13 +283,12 @@ function ShowTraining() {
                     <Box
                       sx={{
                         display: "flex",
-                        gap: "0.4rem",
                         alignItems: "center",
                         color: "#3d64a8",
                         marginBottom: "0.3rem",
+                        marginLeft: "0.4rem"
                       }}
                     >
-                      <PermContactCalendarIcon></PermContactCalendarIcon>
                       <Typography variant="body1">
                         {asistencia.idjugadora_jugadora.nombre}
                       </Typography>
@@ -297,14 +296,11 @@ function ShowTraining() {
                     <Box
                       sx={{
                         display: "flex",
-                        gap: "0.4rem",
                         alignItems: "center",
                         color: "#3d64a8",
                       }}
                     >
-                      <PiMapPinSimpleAreaBold
-                        style={{ fontSize: "22px" }}
-                      ></PiMapPinSimpleAreaBold>
+                      <PlaceIcon></PlaceIcon>
                       <Typography variant="body1">
                         {asistencia.idjugadora_jugadora.posicion}
                       </Typography>
@@ -389,9 +385,9 @@ function ShowTraining() {
                         alignItems: "center",
                         color: "#3d64a8",
                         marginBottom: "0.3rem",
+                        marginLeft: "0.4rem"
                       }}
                     >
-                      <PermContactCalendarIcon></PermContactCalendarIcon>
                       <Typography variant="body1">
                         {asistencia.idjugadora_jugadora.nombre}
                       </Typography>
@@ -399,14 +395,11 @@ function ShowTraining() {
                     <Box
                       sx={{
                         display: "flex",
-                        gap: "0.4rem",
                         alignItems: "center",
                         color: "#3d64a8",
                       }}
                     >
-                      <PiMapPinSimpleAreaBold
-                        style={{ fontSize: "22px" }}
-                      ></PiMapPinSimpleAreaBold>
+                      <PlaceIcon></PlaceIcon>
                       <Typography variant="body1">
                         {asistencia.idjugadora_jugadora.posicion}
                       </Typography>
