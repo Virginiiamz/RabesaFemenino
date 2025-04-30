@@ -574,6 +574,7 @@ function Training() {
                                 sx={{
                                   color: "#00338e",
                                   fontSize: { xs: "24px", md: "28px" },
+                                  marginTop: "1px",
                                 }}
                               ></EventNoteIcon>
                             </Tooltip>
