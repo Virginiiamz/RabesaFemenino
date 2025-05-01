@@ -65,18 +65,57 @@ function ModifyTraining() {
       return;
     }
 
-    if (formData.hora_final < formData.hora_inicio) {
-      playNotificationSound(notificacionError);
+    if (formData.hora_inicio && formData.hora_final) {
+      const toMinutes = (h, m) => h * 60 + m;
+      const [hi, mi] = formData.hora_inicio.split(":").map(Number);
+      const [hf, mf] = formData.hora_final.split(":").map(Number);
 
-      enqueueSnackbar(
-        "La hora final tiene que ser posterior a la hora inicio",
-        {
+      const inicioMin = toMinutes(hi, mi);
+      const finalMin = toMinutes(hf, mf);
+
+      const APERTURA = toMinutes(8, 0); // 08:00
+      const CIERRE = toMinutes(23, 0); // 23:00
+
+      // 1. No permitir horas iguales
+      if (inicioMin === finalMin) {
+        playNotificationSound(notificacionError);
+        enqueueSnackbar("Las horas no pueden ser iguales", {
           variant: "error",
           autoHideDuration: 3000,
           anchorOrigin: { vertical: "bottom", horizontal: "right" },
-        }
-      );
-      return;
+        });
+        return;
+      }
+
+      // 2. Validar rango permitido para ambas horas
+      if (
+        inicioMin < APERTURA ||
+        inicioMin > CIERRE ||
+        finalMin < APERTURA ||
+        finalMin > CIERRE
+      ) {
+        playNotificationSound(notificacionError);
+        enqueueSnackbar("El horario permitido es de 08:00 a 23:00", {
+          variant: "error",
+          autoHideDuration: 4000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
+        return;
+      }
+
+      // 3. Validar que hora final sea mayor a hora inicio, sin cruzar medianoche
+      if (finalMin <= inicioMin) {
+        playNotificationSound(notificacionError);
+        enqueueSnackbar(
+          "La hora final debe ser posterior a la hora inicio y en el mismo día",
+          {
+            variant: "error",
+            autoHideDuration: 4000,
+            anchorOrigin: { vertical: "bottom", horizontal: "right" },
+          }
+        );
+        return;
+      }
     }
 
     try {

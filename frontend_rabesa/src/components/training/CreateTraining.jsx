@@ -40,6 +40,7 @@ function CreateTraining() {
   });
   const { enqueueSnackbar } = useSnackbar();
   const notificacion = useRef(null);
+  const notificacion_error = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,8 +56,16 @@ function CreateTraining() {
     } else {
       const hoy = new Date().toISOString().split("T")[0];
       if (formData.fecha_entrenamiento < hoy) {
-        setValidacion({ ...validacion, fecha_atrasada: true });
-        return;
+        playNotificationSound(notificacion_error);
+
+        enqueueSnackbar(
+          "La fecha de entrenamiento no puede ser una fecha ya pasada",
+          {
+            variant: "error",
+            autoHideDuration: 3000,
+            anchorOrigin: { vertical: "bottom", horizontal: "right" },
+          }
+        );
       }
     }
 
@@ -69,13 +78,66 @@ function CreateTraining() {
       return;
     }
 
+    if (formData.hora_inicio && formData.hora_final) {
+      const toMinutes = (h, m) => h * 60 + m;
+      const [hi, mi] = formData.hora_inicio.split(":").map(Number);
+      const [hf, mf] = formData.hora_final.split(":").map(Number);
+
+      const inicioMin = toMinutes(hi, mi);
+      const finalMin = toMinutes(hf, mf);
+
+      const APERTURA = toMinutes(8, 0); // 08:00
+      const CIERRE = toMinutes(23, 0); // 23:00
+
+      // 1. No permitir horas iguales
+      if (inicioMin === finalMin) {
+        playNotificationSound(notificacion_error);
+        enqueueSnackbar("Las horas no pueden ser iguales", {
+          variant: "error",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
+        return;
+      }
+
+      // 2. Validar rango permitido para ambas horas
+      if (
+        inicioMin < APERTURA ||
+        inicioMin > CIERRE ||
+        finalMin < APERTURA ||
+        finalMin > CIERRE
+      ) {
+        playNotificationSound(notificacion_error);
+        enqueueSnackbar("El horario permitido es de 08:00 a 23:00", {
+          variant: "error",
+          autoHideDuration: 4000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
+        return;
+      }
+
+      // 3. Validar que hora final sea mayor a hora inicio, sin cruzar medianoche
+      if (finalMin <= inicioMin) {
+        playNotificationSound(notificacion_error);
+        enqueueSnackbar(
+          "La hora final debe ser posterior a la hora inicio y en el mismo día",
+          {
+            variant: "error",
+            autoHideDuration: 4000,
+            anchorOrigin: { vertical: "bottom", horizontal: "right" },
+          }
+        );
+        return;
+      }
+    }
+
     try {
       const response = await fetch(apiUrl + "/entrenamientos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+        credentials: "include",
         body: JSON.stringify(formData),
       });
 
@@ -91,9 +153,9 @@ function CreateTraining() {
         });
         setTimeout(() => {
           navigate("/home/training");
-        }, 3500);
+        }, 1000);
       } else {
-        playNotificationSound(notificacion);
+        playNotificationSound(notificacion_error);
 
         enqueueSnackbar(data.mensaje, {
           variant: "error",
@@ -102,7 +164,7 @@ function CreateTraining() {
         });
       }
     } catch (error) {
-      playNotificationSound(notificacion);
+      playNotificationSound(notificacion_error);
 
       enqueueSnackbar("Error de red. Inténtalo de nuevo más tarde.", {
         variant: "error",
@@ -114,12 +176,27 @@ function CreateTraining() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData({ ...formData, [name]: value });
+
+    // Actualiza el estado de validación cuando el campo cambia
+    if (value) {
+      setValidacion((prev) => ({
+        ...prev,
+        [name]: false,
+        ...(name === "fecha_entrenamiento" && { fecha_atrasada: false }),
+      }));
+    }
   };
 
   return (
     <>
       <audio ref={notificacion} src="/sonido/notificacion.mp3" preload="auto" />
+      <audio
+        ref={notificacion_error}
+        src="/sonido/notificacion_error.mp3"
+        preload="auto"
+      />
       <Box
         component="main"
         sx={{
@@ -196,9 +273,12 @@ function CreateTraining() {
             }}
           >
             <Grid container spacing={3} sx={{ width: "100%" }}>
-              {/* Primera fila - Tipo y Descripción */}
               <Grid item xs={12} md={6}>
-                <FormControl fullWidth required error={validacion.tipo}>
+                <FormControl
+                  fullWidth
+                  required
+                  error={validacion.tipo && !formData.tipo}
+                >
                   <InputLabel id="select-tipo">Tipo</InputLabel>
                   <Select
                     labelId="select-tipo"
@@ -218,7 +298,7 @@ function CreateTraining() {
                       Mental y psicológico
                     </MenuItem>
                   </Select>
-                  {validacion.tipo && (
+                  {validacion.tipo && !formData.tipo && (
                     <FormHelperText error>Campo obligatorio</FormHelperText>
                   )}
                 </FormControl>
@@ -238,20 +318,16 @@ function CreateTraining() {
                   }}
                   required={true}
                   error={
-                    validacion.fecha_entrenamiento || validacion.fecha_atrasada
+                    validacion.fecha_entrenamiento &&
+                    !formData.fecha_entrenamiento
                   }
                 />
-                {validacion.fecha_entrenamiento && (
-                  <FormHelperText error>Campo obligatorio</FormHelperText>
-                )}
-                {validacion.fecha_atrasada && (
-                  <FormHelperText error>
-                    No puede ser una fecha ya pasada
-                  </FormHelperText>
-                )}
+                {validacion.fecha_entrenamiento &&
+                  !formData.fecha_entrenamiento && (
+                    <FormHelperText error>Campo obligatorio</FormHelperText>
+                  )}
               </Grid>
 
-              {/* Tercera fila - Horas */}
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
@@ -265,12 +341,12 @@ function CreateTraining() {
                     shrink: true,
                   }}
                   inputProps={{
-                    step: 300, // intervalos de 5 minutos
+                    step: 300,
                   }}
                   required={true}
-                  error={validacion.hora_inicio}
+                  error={validacion.hora_inicio && !formData.hora_inicio}
                 />
-                {validacion.hora_inicio && (
+                {validacion.hora_inicio && !formData.hora_inicio && (
                   <FormHelperText error>Campo obligatorio</FormHelperText>
                 )}
               </Grid>
@@ -288,17 +364,16 @@ function CreateTraining() {
                     shrink: true,
                   }}
                   inputProps={{
-                    step: 300, // intervalos de 5 minutos
+                    step: 300,
                   }}
                   required={true}
-                  error={validacion.hora_final}
+                  error={validacion.hora_final && !formData.hora_final}
                 />
-                {validacion.hora_final && (
+                {validacion.hora_final && !formData.hora_final && (
                   <FormHelperText error>Campo obligatorio</FormHelperText>
                 )}
               </Grid>
 
-              {/* Segunda fila - Fecha */}
               <Grid item xs={12}>
                 <TextField
                   fullWidth
