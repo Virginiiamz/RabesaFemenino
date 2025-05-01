@@ -19,7 +19,9 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
+import { playNotificationSound } from "../../utils/Funciones";
+import { enqueueSnackbar } from "notistack";
 
 function AssistedTraining() {
   const [datosConfirmados, setDatosConfirmados] = useState([]);
@@ -108,20 +110,51 @@ function AssistedTraining() {
   }, []);
 
   const handleDelete = async (idasistencia) => {
-    let response = await fetch(
-      apiUrl + "/entrenamientos/tipo/" + idasistencia,
-      {
-        method: "DELETE",
-      }
-    );
-
-    if (response.ok) {
-      const asistenciaTrasBorrado = datosConfirmados.filter(
-        (asistencia) => asistencia.idasistencia != idasistencia
+    try {
+      let response = await fetch(
+        `${apiUrl}/entrenamientos/tipo/${idasistencia}`,
+        {
+          method: "DELETE",
+        }
       );
-      // Establece los datos de nuevo para provocar un renderizado
-      setDatosConfirmados(asistenciaTrasBorrado);
-      navigate(0);
+
+      if (response.ok) {
+        // Actualizar el estado basado en el estado anterior
+        setDatosConfirmados((prev) =>
+          prev.filter((entrenamiento) => {
+            // Verifica si asistencia_entrenamientos existe y tiene elementos
+            if (
+              !entrenamiento.asistencia_entrenamientos ||
+              entrenamiento.asistencia_entrenamientos.length === 0
+            ) {
+              return true; // Mantener este entrenamiento si no tiene asistencia
+            }
+
+            // Comparar con el idasistencia correcto
+            return (
+              entrenamiento.asistencia_entrenamientos[0].idasistencia !=
+              idasistencia
+            );
+          })
+        );
+
+        playNotificationSound(notificacion);
+
+        enqueueSnackbar("Asistencia cancelada con éxito", {
+          variant: "success",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
+      } else {
+        throw new Error("Error al eliminar");
+      }
+    } catch (error) {
+      enqueueSnackbar("Error al cancelar la asistencia", {
+        variant: "error",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+      console.error("Error en handleDelete:", error);
     }
   };
 
@@ -251,7 +284,7 @@ function AssistedTraining() {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Box sx={{display: "flex", alignItems: "center"}}>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
                     <FitnessCenterIcon sx={{ mr: 1.5, color: "#3d64a8" }} />
                     <Box>
                       <Typography
