@@ -13,7 +13,6 @@ import { useEffect, useRef, useState } from "react";
 import { apiUrl } from "../../config";
 import { Link, useNavigate } from "react-router";
 import useUserStore from "../../stores/useUserStore";
-import { FaUserPlus } from "react-icons/fa";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
@@ -30,7 +29,6 @@ function AssistedTraining() {
 
   const { user } = useUserStore();
 
-  const notificacionError = useRef(null);
   const notificacion = useRef(null);
 
   const formatearFecha = (fecha) => {
@@ -145,26 +143,18 @@ function AssistedTraining() {
           autoHideDuration: 3000,
           anchorOrigin: { vertical: "bottom", horizontal: "right" },
         });
-      } else {
-        throw new Error("Error al eliminar");
-      }
+      } 
     } catch (error) {
       enqueueSnackbar("Error al cancelar la asistencia", {
         variant: "error",
         autoHideDuration: 3000,
         anchorOrigin: { vertical: "bottom", horizontal: "right" },
       });
-      console.error("Error en handleDelete:", error);
     }
   };
 
   return (
     <>
-      <audio
-        ref={notificacionError}
-        src="/sonido/notificacion_error.mp3"
-        preload="auto"
-      />
       <audio ref={notificacion} src="/sonido/notificacion.mp3" preload="auto" />
 
       <Box
