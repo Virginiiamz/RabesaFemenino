@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-import { apiUrl } from "../config";
+import { apiUrl } from "../../config";
 import { FaUserPlus, FaUserTimes } from "react-icons/fa";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { playNotificationSound } from "../utils/Funciones";
+import { playNotificationSound } from "../../utils/Funciones";
 import { enqueueSnackbar } from "notistack";
 
 function CreateVerification() {
