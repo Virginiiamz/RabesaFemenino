@@ -32,6 +32,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@iconify-icon/react": "^3.0.0",
+    "@iconify-icon/solid": "^3.0.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",

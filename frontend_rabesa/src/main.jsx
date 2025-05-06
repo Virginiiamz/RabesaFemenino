@@ -6,7 +6,7 @@ import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Dashboard from "./components/Dashboard";
-import Team from "./components/Team";
+import Team from "./components/team/Team";
 import CreateTrainer from "./components/CreateTrainer";
 import ModifyTrainer from "./components/ModifyTrainer";
 import CreatePlayer from "./components/CreatePlayer";
