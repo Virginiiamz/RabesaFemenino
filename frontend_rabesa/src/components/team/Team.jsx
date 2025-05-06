@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { apiUrl } from "../../config";
 import useUserStore from "../../stores/useUserStore";
@@ -20,11 +20,15 @@ import SportsIcon from "@mui/icons-material/Sports";
 import { Icon } from "@iconify-icon/react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { useSnackbar } from "notistack";
+import { playNotificationSound } from "../../utils/Funciones";
 
 function Team() {
   const [datosEntrenadores, setDatosEntrenadores] = useState([]);
   const [datosJugadoras, setDatosJugadoras] = useState([]);
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const notificacion = useRef(null);
 
   const { user } = useUserStore();
   let esEntrenador = false;
@@ -79,6 +83,14 @@ function Team() {
       );
       // Establece los datos de nuevo para provocar un renderizado
       setDatosEntrenadores(entrenadoresTrasBorrado);
+
+      playNotificationSound(notificacion);
+
+      enqueueSnackbar("Se ha guardado con éxito", {
+        variant: "success",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     }
   };
 
@@ -93,6 +105,14 @@ function Team() {
       );
       // Establece los datos de nuevo para provocar un renderizado
       setDatosJugadoras(jugadorasTrasBorrado);
+
+      playNotificationSound(notificacion);
+
+      enqueueSnackbar("Se ha guardado con éxito", {
+        variant: "success",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     }
   };
 
@@ -107,6 +127,7 @@ function Team() {
 
   return (
     <>
+      <audio ref={notificacion} src="/sonido/notificacion.mp3" preload="auto" />
       <Box
         component="main"
         sx={{
