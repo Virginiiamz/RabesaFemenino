@@ -297,19 +297,22 @@ function Team() {
                             }}
                           ></EditIcon>
                         </Box>
-                        <Box
-                          onClick={() =>
-                            handleDeleteEntrenadores(entrenador.identrenador)
-                          }
-                          sx={{ cursor: "pointer" }}
-                        >
-                          <DeleteIcon
-                            sx={{
-                              color: "#00338e",
-                              fontSize: { xs: "24px", md: "28px" },
-                            }}
-                          ></DeleteIcon>
-                        </Box>
+                        {user.idusuario ===
+                        entrenador.idusuario ? null : (
+                          <Box
+                            onClick={() =>
+                              handleDeleteEntrenadores(entrenador.identrenador)
+                            }
+                            sx={{ cursor: "pointer" }}
+                          >
+                            <DeleteIcon
+                              sx={{
+                                color: "#00338e",
+                                fontSize: { xs: "24px", md: "28px" },
+                              }}
+                            />
+                          </Box>
+                        )}
                       </>
                     ) : null}
                   </Box>

@@ -22,9 +22,28 @@ class JugadoraController {
   async getAllJugadoras(req, res) {
     try {
       const data = await Jugadora.findAll();
-      res.json(Respuesta.exito(data, "Datos de jugadoras recuperadas"));
+
+      // Orden personalizado de posiciones
+      const ordenPosiciones = [
+        "Delantera",
+        "Extremo izquierdo",
+        "Extremo derecho",
+        "Medio Centro",
+        "Lateral izquierdo",
+        "Lateral Derecho",
+        "Central",
+        "Portera",
+      ];
+
+      // Ordenar según el índice en ordenPosiciones
+      const dataOrdenada = data.sort((a, b) => {
+        const posA = ordenPosiciones.indexOf(a.posicion);
+        const posB = ordenPosiciones.indexOf(b.posicion);
+        return posA - posB;
+      });
+
+      res.json(Respuesta.exito(dataOrdenada, "Datos de jugadoras recuperadas"));
     } catch (err) {
-      // Handle errors during the model call
       res
         .status(500)
         .json(
