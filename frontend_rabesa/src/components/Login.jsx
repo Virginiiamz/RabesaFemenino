@@ -131,7 +131,6 @@ function Login() {
 
       <Box
         sx={{
-          border: "1px solid red",
           height: "100vh",
           display: "flex",
           justifyContent: "center",

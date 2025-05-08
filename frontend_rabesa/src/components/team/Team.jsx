@@ -231,7 +231,9 @@ function Team() {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: { xs: "repeat(1, 1fr)", md: "repeat(3, 1fr)" },
+            gridTemplateColumns: {
+              xs: "repeat(auto-fit, minmax(300px, 1fr))",
+            },
             gap: 2,
             justifyContent: "center",
             width: "100%",
@@ -239,7 +241,7 @@ function Team() {
           }}
         >
           {datosEntrenadores.map((entrenador) => (
-            <Card>
+            <Card sx={{ width: "100%" }}>
               <CardContent>
                 <Box
                   sx={{
@@ -297,8 +299,7 @@ function Team() {
                             }}
                           ></EditIcon>
                         </Box>
-                        {user.idusuario ===
-                        entrenador.idusuario ? null : (
+                        {user.idusuario === entrenador.idusuario ? null : (
                           <Box
                             onClick={() =>
                               handleDeleteEntrenadores(entrenador.identrenador)
@@ -381,12 +382,12 @@ function Team() {
           sx={{
             display: "grid",
             gridTemplateColumns: {
-              xs: "repeat(1, 1fr)",
-              md: "repeat(3, 1fr)",
+              xs: "repeat(auto-fit, minmax(300px, 1fr))",
             },
             gap: 2,
             justifyContent: "center",
             width: "100%",
+            marginY: 2,
           }}
         >
           {datosJugadoras.map((jugadora) => (
