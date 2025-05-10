@@ -165,6 +165,8 @@ class EntrenadorController {
       }
 
       const fechaIngreso = new Date(fecha_ingreso);
+      fechaIngreso.setHours(0, 0, 0, 0); 
+
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
 
