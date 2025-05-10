@@ -10,7 +10,7 @@ const sequelize = require("../config/sequelize.js");
 const bcrypt = require("bcrypt");
 // Librería de manejo de JWT
 const jwt = require("jsonwebtoken");
-const { where } = require("sequelize");
+const { where, Op } = require("sequelize");
 
 // Cargar las definiciones del modelo en sequelize
 const models = initModels(sequelize);
@@ -412,30 +412,37 @@ class JugadoraController {
     const idjugadora = req.params.idjugadora; // dato de la ruta
     console.log("IdJugadora: " + idjugadora);
 
+    // Iniciar transacción
+    const transaction = await sequelize.transaction();
+
     try {
+      const existingNumeroCamiseta = await Jugadora.findOne({
+        where: {
+          numero_camiseta: datos.numero_camiseta,
+          idjugadora: { [Op.ne]: idjugadora },
+        },
+        transaction,
+      });
+
+      if (existingNumeroCamiseta) {
+        await transaction.rollback(); // Rollback explícito (aunque no hay cambios aún)
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              "Ya existe una jugadora con ese numero de camiseta."
+            )
+          );
+      }
+
       const numFilas = await Jugadora.update(
         { ...datos },
         { where: { idjugadora } }
       );
 
-      if (numFilas == 0) {
-        console.log("404");
-
-        // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
-        res
-          .status(404)
-          .json(
-            Respuesta.error(
-              null,
-              "No encontrado o no modificado: " + idjugadora
-            )
-          );
-      } else {
-        // Al dar status 204 no se devuelva nada
-        console.log("204");
-
-        res.status(204).send();
-      }
+      res.status(204).send();
+      
     } catch (err) {
       logMensaje("Error :" + err);
       res
