@@ -256,8 +256,10 @@ class JugadoraController {
       }
 
       const fechaIngreso = new Date(fecha_ingreso);
+      fechaIngreso.setHours(0, 0, 0, 0); // Normalizar fecha de ingreso
+
       const hoy = new Date();
-      hoy.setHours(0, 0, 0, 0);
+      hoy.setHours(0, 0, 0, 0); // Normalizar fecha actual
 
       if (isNaN(fechaIngreso.getTime())) {
         return res

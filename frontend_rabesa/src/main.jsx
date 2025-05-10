@@ -9,7 +9,7 @@ import Dashboard from "./components/Dashboard";
 import Team from "./components/team/Team";
 import CreateTrainer from "./components/CreateTrainer";
 import ModifyTrainer from "./components/ModifyTrainer";
-import CreatePlayer from "./components/CreatePlayer";
+import CreatePlayer from "./components/team/CreatePlayer";
 import ModifyPlayer from "./components/ModifyPlayer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./components/Unauthorized";
