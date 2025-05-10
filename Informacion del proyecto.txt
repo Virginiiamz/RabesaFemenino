@@ -30,7 +30,12 @@ CREAR ENTRENADOR:
 MODIFICAR JUGADORA:
 
 - Valida que el nombre tenga mínimo 4 caracteres.
-- Valida que la edad sea mayor e igual a 16 y menor que 65.
+- Valida que la edad sea mayor e igual a 18 y menor que 40.
 - Valida que otra jugadora no tenga el mismo dorsal, ni que el dorsal sea menor que el numero 1.
+
+MODIFICAR ENTRENADOR:
+- Valida que el nombre tenga mínimo 4 caracteres.
+- Valida que la edad sea mayor e igual a 16 y menor que 65.
+
 
 
