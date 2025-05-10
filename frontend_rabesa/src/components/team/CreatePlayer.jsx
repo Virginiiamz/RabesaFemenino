@@ -320,11 +320,12 @@ function CreatePlayer() {
           <Box
             sx={{
               display: "flex",
-              gap: 2,
+              flexDirection: {xs: "column", md: "row"},
+              gap: {xs: 0, md: 2},
               marginBottom: 2,
             }}
           >
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
               <Typography
                 sx={{
                   fontFamily: "'Open sans'",
@@ -360,7 +361,7 @@ function CreatePlayer() {
                 helperText={validacion.correo}
               />
             </Box>
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
               <Typography
                 sx={{
                   fontFamily: "'Open sans'",
@@ -400,11 +401,12 @@ function CreatePlayer() {
           <Box
             sx={{
               display: "flex",
-              gap: 2,
+              flexDirection: {xs: "column", md: "row"},
+              gap: {xs: 0, md: 2},
               marginBottom: 2,
             }}
           >
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
               <Typography
                 sx={{
                   fontFamily: "'Open sans'",
@@ -439,7 +441,7 @@ function CreatePlayer() {
                 helperText={validacion.nombre}
               />
             </Box>
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
               <Typography
                 sx={{
                   fontFamily: "'Open sans'",
@@ -481,11 +483,12 @@ function CreatePlayer() {
           <Box
             sx={{
               display: "flex",
-              gap: 2,
+              flexDirection: {xs: "column", md: "row"},
+              gap: {xs: 0, md: 2},
               marginBottom: 2,
             }}
           >
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
               <Typography
                 sx={{
                   fontFamily: "'Open sans'",
@@ -534,7 +537,7 @@ function CreatePlayer() {
                 </FormHelperText>
               )}
             </Box>
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
               <Typography
                 sx={{
                   fontFamily: "'Open sans'",
@@ -577,11 +580,12 @@ function CreatePlayer() {
           <Box
             sx={{
               display: "flex",
-              gap: 2,
+              flexDirection: {xs: "column", md: "row"},
+              gap: {xs: 0, md: 2},
               marginBottom: 2,
             }}
           >
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
               <Typography
                 sx={{
                   fontFamily: "'Open sans'",
@@ -618,7 +622,7 @@ function CreatePlayer() {
                 helperText={validacion.fecha_ingreso}
               />
             </Box>
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
               <Typography
                 sx={{
                   fontFamily: "'Open sans'",
