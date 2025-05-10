@@ -3,6 +3,7 @@ EQUIPO:
 - Controla que el mismo usuario con rol de entrenador, no se pueda eliminar el información del equipo, sino que otro entrenador pueda borrarlo.
 - Elimina a la jugadora o entrenador con su usuario (correo y contraseña, si el usuario es entrenador).
 - Permite modificar a las jugadoras y a los entrenadores (si el usuario es entrenador).
+- No permite crear mas de 25 jugadoras y mas de 3 entrenadores.
 
 CREAR JUGADORA:
 

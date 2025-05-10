@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   InputAdornment,
   MenuItem,
   Select,
@@ -22,15 +23,13 @@ import { playNotificationSound } from "../../utils/Funciones";
 import { useSnackbar } from "notistack";
 import EditIcon from "@mui/icons-material/Edit";
 
-function ModifyPlayer() {
+function ModifyTrainer() {
   const navigate = useNavigate();
   const params = useParams();
   const [formData, setFormData] = useState({
     nombre: "",
     edad: 0,
-    posicion: "",
-    numero_camiseta: 0,
-    estado: "",
+    rol: "",
     idclub: 1,
   });
 
@@ -41,8 +40,10 @@ function ModifyPlayer() {
   const notificacion_error = useRef(null);
 
   useEffect(() => {
-    async function getJugadoraById() {
-      let response = await fetch(apiUrl + "/jugadoras/" + params.idjugadora);
+    async function getEntrenadorById() {
+      let response = await fetch(
+        apiUrl + "/entrenadores/" + params.identrenador
+      );
       if (response.ok) {
         let data = await response.json();
         setFormData(data.datos);
@@ -53,8 +54,8 @@ function ModifyPlayer() {
       }
     }
 
-    getJugadoraById();
-  }, []); // Se ejecuta solo en el primer renderizado
+    getEntrenadorById();
+  }, []);
 
   const validarCampos = () => {
     const nuevosErrores = {};
@@ -66,19 +67,14 @@ function ModifyPlayer() {
         "El nombre debe tener una longitud mínima de 4 carácteres";
     }
 
-    if (formData.edad < 18) {
-      nuevosErrores.edad = "La edad no puede ser menor de 18 años";
-    } else if (formData.edad > 40) {
-      nuevosErrores.edad = "La edad no puede ser mayor de 40 años";
-    }
-
-    if (formData.numero_camiseta < 1) {
-      nuevosErrores.numero_camiseta = "El dorsal no puede ser menor que 1";
+    if (formData.edad < 16) {
+      nuevosErrores.edad = "La edad no puede ser menor de 16 años";
+    } else if (formData.edad > 66) {
+      nuevosErrores.edad = "La edad no puede ser mayor de 66 años";
     }
 
     setValidacion(nuevosErrores);
 
-    // Devuelve true si no hay errores
     return Object.keys(nuevosErrores).length === 0;
   };
 
@@ -90,19 +86,22 @@ function ModifyPlayer() {
     if (!esValido) return;
 
     try {
-      const response = await fetch(apiUrl + "/jugadoras/" + params.idjugadora, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        apiUrl + "/entrenadores/" + params.identrenador,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.status == 204) {
         playNotificationSound(notificacion);
 
-        enqueueSnackbar("Jugadora modificada correctamente", {
+        enqueueSnackbar("Entrenador modificado correctamente", {
           variant: "success",
           autoHideDuration: 3000,
           anchorOrigin: { vertical: "bottom", horizontal: "right" },
@@ -111,7 +110,6 @@ function ModifyPlayer() {
           navigate("/home/team");
         }, 1000);
       } else {
-
         const data = await response.json();
 
         playNotificationSound(notificacion_error);
@@ -156,6 +154,7 @@ function ModifyPlayer() {
         }}
       >
         <Toolbar />
+
         <div
           style={{
             display: "flex",
@@ -184,7 +183,7 @@ function ModifyPlayer() {
                 margin: 0,
               }}
             >
-              Modificar jugadora
+              Modificar entrenador
             </Typography>
           </Box>
 
@@ -319,103 +318,6 @@ function ModifyPlayer() {
           >
             Información de equipo
           </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", md: "row" },
-              gap: { xs: 0, md: 2 },
-              marginBottom: 2,
-            }}
-          >
-            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
-              <Typography
-                sx={{
-                  fontFamily: "'Open sans'",
-                  fontWeight: 600,
-                  fontSize: "13px",
-                  marginTop: 2,
-                  marginBottom: 1,
-                  color: "#3d64a8",
-                }}
-              >
-                Posición *
-              </Typography>
-              <FormControl fullWidth required>
-                <Select
-                  name="posicion"
-                  value={formData.posicion}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  placeholder="Introduce una posición"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  error={!!validacion.posicion}
-                >
-                  <MenuItem value="Default" disabled>
-                    Seleccione una posición
-                  </MenuItem>
-                  <MenuItem value="Delantera">Delantera</MenuItem>
-                  <MenuItem value="Extremo izquierdo">
-                    Extremo izquierdo
-                  </MenuItem>
-                  <MenuItem value="Extremo derecho">Extremo derecho</MenuItem>
-                  <MenuItem value="Medio Centro">Medio centro</MenuItem>
-                  <MenuItem value="Lateral izquierdo">
-                    Lateral izquierdo
-                  </MenuItem>
-                  <MenuItem value="Lateral Derecho">Lateral derecho</MenuItem>
-                  <MenuItem value="Central">Central</MenuItem>
-                  <MenuItem value="Portera">Portera</MenuItem>
-                </Select>
-              </FormControl>
-              {validacion.posicion && (
-                <FormHelperText error>
-                  Debes seleccionar la posición de la jugadora
-                </FormHelperText>
-              )}
-            </Box>
-            <Box sx={{ width: { xs: "100%", md: "50%" } }}>
-              <Typography
-                sx={{
-                  fontFamily: "'Open sans'",
-                  fontWeight: 600,
-                  fontSize: "13px",
-                  marginTop: 2,
-                  marginBottom: 1,
-                  color: "#3d64a8",
-                }}
-              >
-                Número de dorsal *
-              </Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                type="number"
-                name="numero_camiseta"
-                value={formData.numero_camiseta}
-                onChange={handleChange}
-                placeholder="Introduce un dorsal"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <NumbersIcon
-                        sx={{ color: "#a6a6a6", fontSize: "20px" }}
-                      />
-                    </InputAdornment>
-                  ),
-                }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                required={true}
-                error={!!validacion.numero_camiseta}
-                helperText={validacion.numero_camiseta}
-              />
-            </Box>
-          </Box>
           <Box>
             <Typography
               sx={{
@@ -423,36 +325,43 @@ function ModifyPlayer() {
                 fontWeight: 600,
                 fontSize: "13px",
                 marginBottom: 1,
+                marginTop: 2,
                 color: "#3d64a8",
               }}
             >
-              Estado *
+              Tipo de entrenador *
             </Typography>
-            <FormControl fullWidth required error={!!validacion.estado}>
+            <FormControl fullWidth required error={!!validacion.rol}>
               <Select
                 type="text"
-                name="estado"
-                value={formData.estado}
+                name="rol"
+                value={formData.rol}
                 onChange={handleChange}
                 fullWidth
                 required
-                placeholder="Introduce un estado"
+                placeholder="Introduce un tipo de entrenador"
                 InputLabelProps={{
                   shrink: true,
                 }}
               >
                 <MenuItem value="Default" disabled>
-                  Seleccione un estado
+                  Seleccione un tipo de entrenador
                 </MenuItem>
-                <MenuItem value="Activa">Activa</MenuItem>
-                <MenuItem value="Lesionada">Lesionada</MenuItem>
-                <MenuItem value="Recuperacion">En recuperación</MenuItem>
-                <MenuItem value="Prueba">En prueba</MenuItem>
+                <MenuItem value="Entrenador principal">
+                  Entrenador principal
+                </MenuItem>
+                <MenuItem value="Entrenador asistente">
+                  Entrenador asistente
+                </MenuItem>
+                <MenuItem value="Preparador físico">Preparador físico</MenuItem>
+                <MenuItem value="Entrenador de porteros">
+                  Entrenador de porteros
+                </MenuItem>
               </Select>
             </FormControl>
-            {validacion.estado && (
+            {validacion.rol && (
               <FormHelperText error>
-                Debes seleccionar el estado de la jugadora
+                Debes seleccionar el tipo de entrenador
               </FormHelperText>
             )}
           </Box>
@@ -484,4 +393,4 @@ function ModifyPlayer() {
   );
 }
 
-export default ModifyPlayer;
+export default ModifyTrainer;

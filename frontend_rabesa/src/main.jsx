@@ -8,7 +8,7 @@ import Home from "./components/Home";
 import Dashboard from "./components/Dashboard";
 import Team from "./components/team/Team";
 import CreateTrainer from "./components/team/CreateTrainer";
-import ModifyTrainer from "./components/ModifyTrainer";
+import ModifyTrainer from "./components/team/ModifyTrainer";
 import CreatePlayer from "./components/team/CreatePlayer";
 import ModifyPlayer from "./components/team/ModifyPlayer";
 import ProtectedRoute from "./components/ProtectedRoute";
