@@ -18,6 +18,7 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+import { Icon } from "@iconify-icon/react";
 
 function Dashboard() {
   const [totalJugadoras, setTotalJugadoras] = useState([]);
@@ -210,7 +211,7 @@ function Dashboard() {
                 Total Jugadoras
               </Typography>
               <ShieldIcon
-                sx={{ color: "#00338e", fontSize: "20px" }}
+                sx={{ color: "#00338e", fontSize: "22px" }}
               ></ShieldIcon>
             </div>
             <div
@@ -249,6 +250,7 @@ function Dashboard() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                color: "#00338e",
               }}
             >
               <Typography
@@ -262,9 +264,11 @@ function Dashboard() {
               >
                 Partidos Finalizados
               </Typography>
-              <SportsSoccerIcon
-                sx={{ color: "#00338e", fontSize: "20px" }}
-              ></SportsSoccerIcon>
+              <iconify-icon
+                icon="famicons:football-sharp"
+                width="24"
+                height="24"
+              ></iconify-icon>
             </div>
             <div
               style={{
@@ -316,7 +320,7 @@ function Dashboard() {
                 Total Puntos
               </Typography>
               <EmojiEventsIcon
-                sx={{ color: "#00338e", fontSize: "20px" }}
+                sx={{ color: "#00338e", fontSize: "24px" }}
               ></EmojiEventsIcon>
             </div>
             <div
@@ -563,16 +567,14 @@ function Dashboard() {
               alignItems: "center",
               gap: "8px",
               marginBottom: "10px",
+              color: "#00338e",
             }}
           >
-            <SportsSoccerIcon
-              sx={{
-                color: "#00338e",
-                fontSize: "22px",
-                margin: "0px",
-                padding: "0px",
-              }}
-            ></SportsSoccerIcon>
+            <iconify-icon
+              icon="famicons:football-sharp"
+              width="24"
+              height="24"
+            ></iconify-icon>
             <Typography
               sx={{
                 fontFamily: "'Open sans'",
@@ -732,16 +734,14 @@ function Dashboard() {
               alignItems: "center",
               gap: "8px",
               marginBottom: "10px",
+              color: "#00338e",
             }}
           >
-            <FormatListNumberedIcon
-              sx={{
-                color: "#00338e",
-                fontSize: "22px",
-                margin: "0px",
-                padding: "0px",
-              }}
-            ></FormatListNumberedIcon>
+            <iconify-icon
+              icon="fa-solid:list-ol"
+              width="20"
+              height="20"
+            ></iconify-icon>
             <Typography
               sx={{
                 fontFamily: "'Open sans'",

@@ -23,6 +23,7 @@ import logoRabesa from "../assets/img/logo_rabesa.jpg";
 import "@fontsource/open-sans";
 import "@fontsource/lexend";
 import { apiUrl } from "../config";
+import { Icon } from "@iconify-icon/react";
 
 const drawerWidth = 240;
 
@@ -184,9 +185,19 @@ function Menu(props) {
       >
         <Link to="partidos">
           <ListItemIcon
-            style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              color: "#00338e",
+            }}
           >
-            <SportsSoccerIcon sx={{ color: "#00338e" }}></SportsSoccerIcon>
+            <iconify-icon
+              icon="famicons:football-sharp"
+              width="26"
+              height="26"
+            ></iconify-icon>
+            {/* <SportsSoccerIcon sx={{ color: "#00338e" }}></SportsSoccerIcon> */}
             <Typography
               style={{
                 color: "#00338e",
