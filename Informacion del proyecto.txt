@@ -1,0 +1,29 @@
+CREAR JUGADORA:
+
+- Valida que no exista el mismo correo en la bd.
+- Valida que la contraseña tenga de longitud minima 8 caracteres.
+- Valida el formato del correo electrónico.
+- Valida que el nombre tenga mínimo 4 caracteres.
+- Valida que la edad sea mayor e igual a 18 y menor que 40.
+- Obliga a seleccionar una posición de la jugadora.
+- Valida que otra jugadora no tenga el mismo dorsal, ni que el dorsal sea menor que el numero 1.
+- Valida que la fecha de alta sea igual o inferior a la fecha actual. 
+- Obliga a seleccionar un estado para la jugadora.
+
+CREAR ENTRENADOR:
+
+- Valida que no exista el mismo correo en la bd.
+- Valida que la contraseña tenga de longitud minima 8 caracteres.
+- Valida el formato del correo electrónico.
+- Valida que el nombre tenga mínimo 4 caracteres.
+- Valida que la edad sea mayor e igual a 16 y menor que 65.
+- Obliga a seleccionar el tipo de entrenador.
+- Valida que la fecha de alta sea igual o inferior a la fecha actual.
+
+EQUIPO: 
+
+- Controla que el mismo usuario con rol de entrenador, no se pueda eliminar el información del equipo, sino que otro entrenador pueda borrarlo.
+- Elimina a la jugadora o entrenador con su usuario (correo y contraseña, si el usuario es entrenador).
+- Permite modificar a las jugadoras y a los entrenadores (si el usuario es entrenador).
+
+
