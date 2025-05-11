@@ -318,25 +318,26 @@ function Match() {
                           }}
                         >
                           {/* Mostrar "Añadir resultado" SOLO si el resultado está vacío */}
-                          {partido.resultado === "" && (
-                            <Box
-                              onClick={() =>
-                                navigate(
-                                  "/home/partido/anadir-resultado/" +
-                                    partido.idpartido
-                                )
-                              }
-                              sx={{ cursor: "pointer", color: "#00338e" }}
-                            >
-                              <Tooltip title="Añadir resultado">
-                                <iconify-icon
-                                  icon="material-symbols:scoreboard-rounded"
-                                  width="28"
-                                  height="28"
-                                ></iconify-icon>
-                              </Tooltip>
-                            </Box>
-                          )}
+                          {partido.resultado === "" &&
+                            new Date(partido.fecha_partido) < new Date() && (
+                              <Box
+                                onClick={() =>
+                                  navigate(
+                                    "/home/partido/anadir-resultado/" +
+                                      partido.idpartido
+                                  )
+                                }
+                                sx={{ cursor: "pointer", color: "#00338e" }}
+                              >
+                                <Tooltip title="Añadir resultado">
+                                  <iconify-icon
+                                    icon="material-symbols:scoreboard-rounded"
+                                    width="28"
+                                    height="28"
+                                  ></iconify-icon>
+                                </Tooltip>
+                              </Box>
+                            )}
                           <Box
                             onClick={() =>
                               navigate(
