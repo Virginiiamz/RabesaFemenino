@@ -256,6 +256,18 @@ function Match() {
                       Rabesa
                     </Typography>
                   </Box>
+                  <Typography
+                    sx={{
+                      width: "8%",
+                      textAlign: { xs: "center", md: "left" },
+                      fontSize: { xs: "20px", lg: "28px" },
+                      fontWeight: 600,
+                      fontFamily: "Open Sans",
+                    }}
+                    gutterBottom
+                  >
+                    {partido.resultado.split("-")[0]}
+                  </Typography>
                   <div
                     style={{
                       display: "flex",
@@ -264,7 +276,7 @@ function Match() {
                       justifyContent: "center",
                       textAlign: "center",
                       padding: 0,
-                      width: { md: "50%" },
+                      width: { md: "30%" },
                     }}
                   >
                     <Typography
@@ -283,7 +295,7 @@ function Match() {
                         fontWeight: 600,
                       }}
                     >
-                      {formatHora(partido?.hora)} H
+                      {partido.ubicacion}
                     </Typography>
                     <Typography
                       sx={{
@@ -292,8 +304,9 @@ function Match() {
                         fontWeight: 600,
                       }}
                     >
-                      {partido.ubicacion}
+                      {formatHora(partido?.hora)} h
                     </Typography>
+
                     {entrenador && (
                       <>
                         <Box
@@ -348,13 +361,25 @@ function Match() {
                       </>
                     )}
                   </div>
+                  <Typography
+                    sx={{
+                      width: "8%",
+                      textAlign: { xs: "center", md: "right" },
+                      fontSize: { xs: "20px", lg: "28px" },
+                      fontWeight: 600,
+                      fontFamily: "Open Sans",
+                    }}
+                    gutterBottom
+                  >
+                    {partido.resultado.split("-")[1]}
+                  </Typography>
                   <Box
                     sx={{
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "center",
                       alignItems: "center",
-                      width: { xs: "20%", md: "30%" },
+                      width: { xs: "20%", md: "28%" },
                     }}
                   >
                     <Box
