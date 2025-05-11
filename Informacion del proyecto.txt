@@ -43,7 +43,7 @@ MODIFICAR ENTRENADOR:
 PARTIDOS:
 
 - Elimina, modifica y crea un partido.
-- Si el partido no tiene un resultado por defecto, existe un botón para poder añadir el resultado del partido.
+- Muestra el botón de resultado, si la fecha es anterior a la fecha actual y si el partido no tiene resultado.
 
 CREAR PARTIDO:
 
