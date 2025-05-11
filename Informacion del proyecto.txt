@@ -63,6 +63,11 @@ MODIFICAR PARTIDO:
 - Si el partido tiene resultado, no se puede modificar la fecha.
 - Valida si ya existe un partido en la semana seleccionada.
 
+AÑADIR RESULTADO:
+
+- Valida que se tenga que meter ambos goles para tener un resultado.
+- Valida que los goles no puedan ser menor de 0.
+
 
 
 
