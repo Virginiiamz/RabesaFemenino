@@ -20,8 +20,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Icon } from "@iconify-icon/react";
 import NumbersIcon from "@mui/icons-material/Numbers";
 import { TbSoccerField } from "react-icons/tb";
-import ShieldIcon from "@mui/icons-material/Shield";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
 
@@ -57,13 +55,6 @@ function CreateMatch() {
       if (response.ok) {
         let data = await response.json();
         setDatosClubs(data.datos);
-        // const estadiosUnicos = [
-        //   ...new Set([
-        //     ...data.datos.map((club) => club.estadio),
-        //     "Campo de Fútbol de Rabesa",
-        //   ]),
-        // ];
-        // setEstadio(estadiosUnicos);
       }
     }
 

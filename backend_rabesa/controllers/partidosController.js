@@ -362,21 +362,8 @@ class PartidosController {
         { where: { idpartido } }
       );
 
-      if (numFilas == 0) {
-        console.log("404");
-
-        // No se ha encontrado lo que se quería actualizar o no hay nada que cambiar
-        res
-          .status(404)
-          .json(
-            Respuesta.error(null, "No encontrado o no modificado: " + idpartido)
-          );
-      } else {
-        // Al dar status 204 no se devuelva nada
-        console.log("204");
-
-        res.status(204).send();
-      }
+      console.log("204");
+      res.status(204).send();
     } catch (err) {
       logMensaje("Error :" + err);
       res
