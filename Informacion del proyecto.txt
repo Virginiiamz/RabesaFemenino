@@ -34,6 +34,7 @@ MODIFICAR JUGADORA:
 - Valida que otra jugadora no tenga el mismo dorsal, ni que el dorsal sea menor que el numero 1.
 
 MODIFICAR ENTRENADOR:
+
 - Valida que el nombre tenga mínimo 4 caracteres.
 - Valida que la edad sea mayor e igual a 16 y menor que 65.
 
@@ -43,6 +44,25 @@ PARTIDOS:
 
 - Elimina, modifica y crea un partido.
 - Si el partido no tiene un resultado por defecto, existe un botón para poder añadir el resultado del partido.
+
+CREAR PARTIDO:
+
+- Valida que la hora del partido no este entre las 23:00 y 08:00.
+- Valida que no se pueda tener mas de dos partidos con el mismo rival.
+- Valida que se seleccione obligatoriamente una ubicación.
+- Obliga a seleccionar un rival.
+- Obliga a poner una hora y fecha de partido.
+- Valida que se tenga que meter ambos goles para tener un resultado.
+- Valida si ya existe un partido en la semana seleccionada.
+
+MODIFICAR PARTIDO:
+
+- Valida que la hora del partido no este entre las 23:00 y 08:00.
+- Valida que no se pueda tener mas de dos partidos con el mismo rival.
+- Valida que se seleccione obligatoriamente una ubicación.
+- Si el partido tiene resultado, no se puede modificar la fecha.
+- Valida si ya existe un partido en la semana seleccionada.
+
 
 
 
