@@ -37,5 +37,12 @@ MODIFICAR ENTRENADOR:
 - Valida que el nombre tenga mínimo 4 caracteres.
 - Valida que la edad sea mayor e igual a 16 y menor que 65.
 
+-----------------------------------------------------------------------------------------------------
+
+PARTIDOS:
+
+- Elimina, modifica y crea un partido.
+- Si el partido no tiene un resultado por defecto, existe un botón para poder añadir el resultado del partido.
+
 
 
