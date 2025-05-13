@@ -81,3 +81,9 @@ CREAR CLUB:
 - La fecha fundación no puede ser superior a junio de este año.
 - Valida la longitud de los campos.
 
+MODIFICAR CLUB:
+
+- Valida si existe otro nombre igual en la BD.
+- Valida la longitud de los campos.
+- Cambia la imagen del club.
+
