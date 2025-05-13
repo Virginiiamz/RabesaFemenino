@@ -18,7 +18,9 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Icon } from "@iconify-icon/react";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 
 function Dashboard() {
   const [totalJugadoras, setTotalJugadoras] = useState([]);
@@ -591,119 +593,151 @@ function Dashboard() {
             <Box
               sx={{
                 border: "1px solid #BDBDBD",
-                paddingX: "16px",
-                paddingY: "16px",
-                borderRadius: "8px",
-                width: "100%",
+                borderRadius: "4px",
                 backgroundColor: "#FFFFFF",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                padding: "1.5rem 1rem",
               }}
             >
-              <Box
-                sx={{
+              <section
+                style={{
                   display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
+                  justifyContent: "space-between",
                   alignItems: "center",
-                  gap: "0.4rem",
-                  margin: "1rem",
-                  padding: "0.8rem",
                 }}
               >
                 <Box
-                  component="img"
-                  src={logoRabesa}
                   sx={{
-                    height: { xs: "60px", lg: "90px" },
-                    width: { xs: "50px", lg: "80px" },
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: { xs: "28%", md: "24%" },
                   }}
-                  alt="Escudo Rabesa"
-                />
+                >
+                  <Box
+                    component="img"
+                    src={logoRabesa}
+                    sx={{
+                      height: { xs: "70px", lg: "90px" },
+                      width: { xs: "60px", lg: "80px" },
+                    }}
+                    alt="Escudo Rabesa"
+                  />
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "16px", lg: "20px" },
+                      fontFamily: "Open Sans",
+                    }}
+                    gutterBottom
+                  >
+                    Rabesa
+                  </Typography>
+                </Box>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    padding: 0,
+                    width: { md: "30%" },
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "20px", lg: "24px" },
+                      fontFamily: "Open Sans",
+                      fontWeight: 600,
+                    }}
+                  >
+                    VS
+                  </Typography>
+                </div>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: { xs: "30%", md: "28%" },
+                  }}
+                >
+                  <Box
+                    component="img"
+                    src={`http://localhost:3000/uploads/${partidoSemana.idrival_club?.imagen}`}
+                    sx={{
+                      height: { xs: "60px", lg: "90px" },
+                      width: { xs: "60px", lg: "90px" },
+                    }}
+                    alt="Escudo del rival"
+                  />
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "16px", lg: "20px" },
+                      fontFamily: "Open Sans",
+                      textAlign: "center",
+                    }}
+                    gutterBottom
+                  >
+                    {partidoSemana.idrival_club?.nombre}
+                  </Typography>
+                </Box>
+              </section>
+              <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
+              <section>
                 <Typography
                   sx={{
-                    fontSize: { xs: "16px", lg: "20px" },
+                    fontSize: { xs: "14px", lg: "16px" },
                     fontFamily: "Open Sans",
-                    fontWeight: 600,
+                    textAlign: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    marginLeft: 1,
+                    marginBottom: 1,
                   }}
-                  gutterBottom
                 >
-                  Rabesa
-                </Typography>
-              </Box>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  textAlign: "center",
-                  margin: "1rem",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: { xs: "12px", lg: "16px" },
-                    fontFamily: "Open Sans",
-                    fontWeight: 600,
-                  }}
-                  gutterBottom
-                >
+                  <CalendarTodayIcon
+                    sx={{ fontSize: "18px", color: "#3d64a8" }}
+                  ></CalendarTodayIcon>
                   {formatearFecha(partidoSemana.fecha_partido)}
                 </Typography>
                 <Typography
                   sx={{
-                    fontSize: { xs: "12px", lg: "16px" },
+                    fontSize: { xs: "14px", lg: "16px" },
                     fontFamily: "Open Sans",
-                    fontWeight: 600,
+                    textAlign: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    marginLeft: 1,
+                    marginBottom: 1,
                   }}
-                  gutterBottom
                 >
-                  {formatHora(partidoSemana?.hora)} H
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: { xs: "12px", lg: "16px" },
-                    fontFamily: "Open Sans",
-                    fontWeight: 600,
-                  }}
-                  gutterBottom
-                >
+                  <LocationOnIcon
+                    sx={{ fontSize: "18px", color: "#3d64a8" }}
+                  ></LocationOnIcon>
                   {partidoSemana.ubicacion}
                 </Typography>
-              </div>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "0.4rem",
-                  margin: "1rem",
-                }}
-              >
-                <Box
-                  component="img"
-                  src={`http://localhost:3000/uploads/${partidoSemana.idrival_club?.imagen}`}
-                  sx={{
-                    height: { xs: "50px", lg: "90px" },
-                    width: { xs: "50px", lg: "90px" },
-                  }}
-                  alt="Escudo del rival"
-                />
                 <Typography
                   sx={{
-                    fontSize: { xs: "16px", lg: "20px" },
+                    fontSize: { xs: "14px", lg: "16px" },
                     fontFamily: "Open Sans",
-                    fontWeight: 600,
                     textAlign: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    marginLeft: 1,
+                    marginBottom: 1,
                   }}
-                  gutterBottom
                 >
-                  {partidoSemana.idrival_club?.nombre}
+                  <ScheduleIcon
+                    sx={{ fontSize: "18px", color: "#3d64a8" }}
+                  ></ScheduleIcon>
+                  {formatHora(partidoSemana?.hora)} h
                 </Typography>
-              </Box>
+              </section>
             </Box>
           ) : (
             <>
