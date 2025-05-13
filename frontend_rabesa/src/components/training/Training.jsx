@@ -371,7 +371,7 @@ function Training() {
               sx={{
                 border: "1px solid #BDBDBD",
                 padding: "16px",
-                borderRadius: "10px",
+                borderRadius: "4px",
                 textAlign: "center",
                 backgroundColor: "white",
               }}
@@ -393,7 +393,7 @@ function Training() {
                     display: "flex",
                     border: "1px solid #BDBDBD",
                     padding: "16px",
-                    borderRadius: "8px",
+                    borderRadius: "4px",
                     width: "100%",
                     backgroundColor: "#FFFFFF",
                     gap: 3,

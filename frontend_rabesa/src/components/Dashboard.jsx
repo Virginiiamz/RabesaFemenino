@@ -189,7 +189,7 @@ function Dashboard() {
               border: "1px solid #BDBDBD",
               paddingX: "16px",
               paddingTop: "16px",
-              borderRadius: "8px",
+              borderRadius: "4px",
               width: "100%",
               backgroundColor: "#FFFFFF",
             }}
@@ -242,7 +242,7 @@ function Dashboard() {
               border: "1px solid #BDBDBD",
               paddingX: "16px",
               paddingTop: "16px",
-              borderRadius: "8px",
+              borderRadius: "4px",
               width: "100%",
               backgroundColor: "#FFFFFF",
             }}
@@ -298,7 +298,7 @@ function Dashboard() {
               border: "1px solid #BDBDBD",
               paddingX: "16px",
               paddingTop: "16px",
-              borderRadius: "8px",
+              borderRadius: "4px",
               width: "100%",
               backgroundColor: "#FFFFFF",
             }}
@@ -383,7 +383,7 @@ function Dashboard() {
                 display: "flex",
                 border: "1px solid #BDBDBD",
                 padding: "16px",
-                borderRadius: "8px",
+                borderRadius: "4px",
                 width: "100%",
                 backgroundColor: "#FFFFFF",
                 gap: 3,
@@ -685,7 +685,14 @@ function Dashboard() {
                 </Box>
               </section>
               <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
-              <section>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
+                  justifyContent: "center",
+                  gap: 1,
+                }}
+              >
                 <Typography
                   sx={{
                     fontSize: { xs: "14px", lg: "16px" },
@@ -694,14 +701,15 @@ function Dashboard() {
                     display: "flex",
                     alignItems: "center",
                     gap: 1,
-                    marginLeft: 1,
-                    marginBottom: 1,
                   }}
                 >
                   <CalendarTodayIcon
                     sx={{ fontSize: "18px", color: "#3d64a8" }}
                   ></CalendarTodayIcon>
                   {formatearFecha(partidoSemana.fecha_partido)}
+                  <Typography sx={{ display: { xs: "none", md: "block" } }}>
+                    |
+                  </Typography>
                 </Typography>
                 <Typography
                   sx={{
@@ -711,14 +719,15 @@ function Dashboard() {
                     display: "flex",
                     alignItems: "center",
                     gap: 1,
-                    marginLeft: 1,
-                    marginBottom: 1,
                   }}
                 >
                   <LocationOnIcon
                     sx={{ fontSize: "18px", color: "#3d64a8" }}
                   ></LocationOnIcon>
                   {partidoSemana.ubicacion}
+                  <Typography sx={{ display: { xs: "none", md: "block" } }}>
+                    |
+                  </Typography>
                 </Typography>
                 <Typography
                   sx={{
@@ -728,8 +737,6 @@ function Dashboard() {
                     display: "flex",
                     alignItems: "center",
                     gap: 1,
-                    marginLeft: 1,
-                    marginBottom: 1,
                   }}
                 >
                   <ScheduleIcon
@@ -737,7 +744,7 @@ function Dashboard() {
                   ></ScheduleIcon>
                   {formatHora(partidoSemana?.hora)} h
                 </Typography>
-              </section>
+              </Box>
             </Box>
           ) : (
             <>

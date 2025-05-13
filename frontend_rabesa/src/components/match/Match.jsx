@@ -390,7 +390,14 @@ function Match() {
                   </Box>
                 </section>
                 <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
-                <section>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", md: "row" },
+                    justifyContent: "center",
+                    gap: 1,
+                  }}
+                >
                   <Typography
                     sx={{
                       fontSize: { xs: "14px", lg: "16px" },
@@ -399,14 +406,15 @@ function Match() {
                       display: "flex",
                       alignItems: "center",
                       gap: 1,
-                      marginLeft: 1,
-                      marginBottom: 1,
                     }}
                   >
                     <CalendarTodayIcon
                       sx={{ fontSize: "18px", color: "#3d64a8" }}
                     ></CalendarTodayIcon>
                     {formatearFecha(partido.fecha_partido)}
+                    <Typography sx={{ display: { xs: "none", md: "block" } }}>
+                      |
+                    </Typography>
                   </Typography>
                   <Typography
                     sx={{
@@ -416,14 +424,15 @@ function Match() {
                       display: "flex",
                       alignItems: "center",
                       gap: 1,
-                      marginLeft: 1,
-                      marginBottom: 1,
                     }}
                   >
                     <LocationOnIcon
                       sx={{ fontSize: "18px", color: "#3d64a8" }}
                     ></LocationOnIcon>
                     {partido.ubicacion}
+                    <Typography sx={{ display: { xs: "none", md: "block" } }}>
+                      |
+                    </Typography>
                   </Typography>
                   <Typography
                     sx={{
@@ -433,8 +442,6 @@ function Match() {
                       display: "flex",
                       alignItems: "center",
                       gap: 1,
-                      marginLeft: 1,
-                      marginBottom: 1,
                     }}
                   >
                     <ScheduleIcon
@@ -442,7 +449,7 @@ function Match() {
                     ></ScheduleIcon>
                     {formatHora(partido?.hora)} h
                   </Typography>
-                </section>
+                </Box>
               </Box>
             </>
           ))}
