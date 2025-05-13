@@ -68,6 +68,16 @@ AÑADIR RESULTADO:
 - Valida que se tenga que meter ambos goles para tener un resultado.
 - Valida que los goles no puedan ser menor de 0.
 
+-----------------------------------------------------------------------------------------------------
 
+CLUBS:
 
+- Permite eliminar a los clubs y editarlos.
+- Tiene un botón para crear un club.
+
+CREAR CLUB:
+
+- Valida si existe otro nombre igual en la BD.
+- La fecha fundación no puede ser superior a junio de este año.
+- Valida la longitud de los campos.
 
