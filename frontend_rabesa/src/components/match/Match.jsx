@@ -20,6 +20,9 @@ import { TbSoccerField } from "react-icons/tb";
 import logoRabesa from "../../assets/img/logo_rabesa.jpg";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 function Match() {
   const [datosPartidos, setDatosPartidos] = useState([]);
@@ -236,21 +239,21 @@ function Match() {
                       flexDirection: "column",
                       justifyContent: "center",
                       alignItems: "center",
-                      width: { xs: "20%", md: "22%" },
+                      width: { xs: "25%", md: "22%" },
                     }}
                   >
                     <Box
                       component="img"
                       src={logoRabesa}
                       sx={{
-                        height: { xs: "60px", lg: "90px" },
-                        width: { xs: "50px", lg: "80px" },
+                        height: { xs: "70px", md: "90px" },
+                        width: { xs: "60px", md: "80px" },
                       }}
                       alt="Escudo Rabesa"
                     />
                     <Typography
                       sx={{
-                        fontSize: { xs: "14px", lg: "20px" },
+                        fontSize: { xs: "16px", md: "20px" },
                         fontFamily: "Open Sans",
                       }}
                       gutterBottom
@@ -260,14 +263,12 @@ function Match() {
                   </Box>
                   <Typography
                     sx={{
-                      width: "8%",
+                      width: "5%",
                       textAlign: { xs: "center", md: "left" },
-                      fontSize: { xs: "20px", lg: "28px" },
+                      fontSize: { xs: "20px", md: "28px" },
                       fontWeight: 600,
                       fontFamily: "Open Sans",
-                      color: "#3d64a8",
                     }}
-                    gutterBottom
                   >
                     {partido.resultado.split("-")[0]}
                   </Typography>
@@ -279,38 +280,17 @@ function Match() {
                       justifyContent: "center",
                       textAlign: "center",
                       padding: 0,
-                      width: { md: "30%" },
+                      // width: {xs: "15%", md: "30%" },
                     }}
                   >
                     <Typography
                       sx={{
-                        fontSize: { xs: "12px", lg: "16px" },
+                        fontSize: { xs: "20px", md: "24px" },
                         fontFamily: "Open Sans",
                         fontWeight: 600,
-                        color: "#3d64a8",
                       }}
                     >
-                      {formatearFecha(partido.fecha_partido)}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: { xs: "12px", lg: "16px" },
-                        fontFamily: "Open Sans",
-                        fontWeight: 600,
-                        color: "#3d64a8",
-                      }}
-                    >
-                      {partido.ubicacion}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: { xs: "12px", lg: "16px" },
-                        fontFamily: "Open Sans",
-                        fontWeight: 600,
-                        color: "#3d64a8",
-                      }}
-                    >
-                      {formatHora(partido?.hora)} h
+                      VS
                     </Typography>
 
                     {entrenador && (
@@ -370,14 +350,12 @@ function Match() {
                   </div>
                   <Typography
                     sx={{
-                      width: "8%",
+                      width: "5%",
                       textAlign: { xs: "center", md: "right" },
-                      fontSize: { xs: "20px", lg: "28px" },
+                      fontSize: { xs: "20px", md: "28px" },
                       fontWeight: 600,
                       fontFamily: "Open Sans",
-                      color: "#3d64a8",
                     }}
-                    gutterBottom
                   >
                     {partido.resultado.split("-")[1]}
                   </Typography>
@@ -387,21 +365,21 @@ function Match() {
                       flexDirection: "column",
                       justifyContent: "center",
                       alignItems: "center",
-                      width: { xs: "20%", md: "28%" },
+                      width: { xs: "25%", md: "28%" },
                     }}
                   >
                     <Box
                       component="img"
                       src={`http://localhost:3000/uploads/${partido.idrival_club?.imagen}`}
                       sx={{
-                        height: { xs: "50px", lg: "90px" },
-                        width: { xs: "50px", lg: "90px" },
+                        height: { xs: "60px", md: "90px" },
+                        width: { xs: "60px", md: "90px" },
                       }}
                       alt="Escudo del rival"
                     />
                     <Typography
                       sx={{
-                        fontSize: { xs: "14px", lg: "20px" },
+                        fontSize: { xs: "16px", md: "20px" },
                         fontFamily: "Open Sans",
                         textAlign: "center",
                       }}
@@ -410,6 +388,60 @@ function Match() {
                       {partido.idrival_club?.nombre}
                     </Typography>
                   </Box>
+                </section>
+                <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
+                <section>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "14px", lg: "16px" },
+                      fontFamily: "Open Sans",
+                      textAlign: "center",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      marginLeft: 1,
+                      marginBottom: 1,
+                    }}
+                  >
+                    <CalendarTodayIcon
+                      sx={{ fontSize: "18px", color: "#3d64a8" }}
+                    ></CalendarTodayIcon>
+                    {formatearFecha(partido.fecha_partido)}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "14px", lg: "16px" },
+                      fontFamily: "Open Sans",
+                      textAlign: "center",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      marginLeft: 1,
+                      marginBottom: 1,
+                    }}
+                  >
+                    <LocationOnIcon
+                      sx={{ fontSize: "18px", color: "#3d64a8" }}
+                    ></LocationOnIcon>
+                    {partido.ubicacion}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "14px", lg: "16px" },
+                      fontFamily: "Open Sans",
+                      textAlign: "center",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      marginLeft: 1,
+                      marginBottom: 1,
+                    }}
+                  >
+                    <ScheduleIcon
+                      sx={{ fontSize: "18px", color: "#3d64a8" }}
+                    ></ScheduleIcon>
+                    {formatHora(partido?.hora)} h
+                  </Typography>
                 </section>
               </Box>
             </>
