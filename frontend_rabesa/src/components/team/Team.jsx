@@ -116,15 +116,6 @@ function Team() {
     }
   };
 
-  function CrearJugadoraIcono() {
-    return (
-      <div>
-        <FaUserPlus size={30} style={{ marginRight: "8px" }} />
-        <FaFutbol size={30} />
-      </div>
-    );
-  }
-
   return (
     <>
       <audio ref={notificacion} src="/sonido/notificacion.mp3" preload="auto" />
@@ -382,7 +373,10 @@ function Team() {
           sx={{
             display: "grid",
             gridTemplateColumns: {
-              xs: "repeat(auto-fit, minmax(300px, 1fr))",
+              xs: "1fr",
+              sm: "repeat(1, 1fr)",
+              md: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
             },
             gap: 2,
             justifyContent: "center",
