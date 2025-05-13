@@ -232,7 +232,13 @@ function Team() {
           }}
         >
           {datosEntrenadores.map((entrenador) => (
-            <Card sx={{ width: "100%" }}>
+            <Card
+              sx={{
+                border: "1px solid #BDBDBD",
+                backgroundColor: "#FFFFFF",
+                boxShadow: "none"
+              }}
+            >
               <CardContent>
                 <Box
                   sx={{
@@ -385,7 +391,13 @@ function Team() {
           }}
         >
           {datosJugadoras.map((jugadora) => (
-            <Card>
+            <Card
+              sx={{
+                border: "1px solid #BDBDBD",
+                backgroundColor: "#FFFFFF",
+                boxShadow: "none"
+              }}
+            >
               <CardContent>
                 <Box
                   sx={{

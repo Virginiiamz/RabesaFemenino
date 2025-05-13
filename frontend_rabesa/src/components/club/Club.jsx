@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Divider,
   Toolbar,
   Tooltip,
   Typography,
@@ -146,6 +147,8 @@ function Club() {
           </Box>
         </div>
 
+        <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
+
         <Box
           sx={{
             display: "grid",
@@ -162,7 +165,14 @@ function Club() {
           }}
         >
           {datosClubs.map((club) => (
-            <Card sx={{ width: "100%" }}>
+            <Card
+              sx={{
+                width: "100%",
+                border: "1px solid #BDBDBD",
+                backgroundColor: "#FFFFFF",
+                boxShadow: "none"
+              }}
+            >
               <CardContent>
                 <Box
                   sx={{

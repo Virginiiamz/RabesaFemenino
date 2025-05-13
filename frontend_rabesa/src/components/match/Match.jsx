@@ -4,6 +4,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  Divider,
   Toolbar,
   Tooltip,
   Typography,
@@ -202,6 +203,8 @@ function Match() {
           </Box>
         </div>
 
+        <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
+
         <Box
           sx={{
             width: "100%",
@@ -215,7 +218,7 @@ function Match() {
               <Box
                 sx={{
                   border: "1px solid #BDBDBD",
-                  borderRadius: "8px",
+                  borderRadius: "4px",
                   backgroundColor: "#FFFFFF",
                   padding: "1.5rem 1rem",
                 }}
@@ -247,9 +250,8 @@ function Match() {
                     />
                     <Typography
                       sx={{
-                        fontSize: { xs: "16px", lg: "20px" },
+                        fontSize: { xs: "14px", lg: "20px" },
                         fontFamily: "Open Sans",
-                        fontWeight: 600,
                       }}
                       gutterBottom
                     >
@@ -263,6 +265,7 @@ function Match() {
                       fontSize: { xs: "20px", lg: "28px" },
                       fontWeight: 600,
                       fontFamily: "Open Sans",
+                      color: "#3d64a8",
                     }}
                     gutterBottom
                   >
@@ -281,27 +284,30 @@ function Match() {
                   >
                     <Typography
                       sx={{
-                        fontSize: { xs: "14px", lg: "16px" },
+                        fontSize: { xs: "12px", lg: "16px" },
                         fontFamily: "Open Sans",
                         fontWeight: 600,
+                        color: "#3d64a8",
                       }}
                     >
                       {formatearFecha(partido.fecha_partido)}
                     </Typography>
                     <Typography
                       sx={{
-                        fontSize: { xs: "14px", lg: "16px" },
+                        fontSize: { xs: "12px", lg: "16px" },
                         fontFamily: "Open Sans",
                         fontWeight: 600,
+                        color: "#3d64a8",
                       }}
                     >
                       {partido.ubicacion}
                     </Typography>
                     <Typography
                       sx={{
-                        fontSize: { xs: "14px", lg: "16px" },
+                        fontSize: { xs: "12px", lg: "16px" },
                         fontFamily: "Open Sans",
                         fontWeight: 600,
+                        color: "#3d64a8",
                       }}
                     >
                       {formatHora(partido?.hora)} h
@@ -369,6 +375,7 @@ function Match() {
                       fontSize: { xs: "20px", lg: "28px" },
                       fontWeight: 600,
                       fontFamily: "Open Sans",
+                      color: "#3d64a8",
                     }}
                     gutterBottom
                   >
@@ -394,9 +401,8 @@ function Match() {
                     />
                     <Typography
                       sx={{
-                        fontSize: { xs: "16px", lg: "20px" },
+                        fontSize: { xs: "14px", lg: "20px" },
                         fontFamily: "Open Sans",
-                        fontWeight: 600,
                         textAlign: "center",
                       }}
                       gutterBottom

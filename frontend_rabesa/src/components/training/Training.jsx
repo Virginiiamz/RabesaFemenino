@@ -355,6 +355,8 @@ function Training() {
             ) : null}
           </Box>
         </div>
+        
+        <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
 
         <Box
           sx={{
@@ -365,7 +367,15 @@ function Training() {
           }}
         >
           {datosEntrenamientos.length === 0 ? (
-            <Box sx={{border: "1px solid #BDBDBD", padding: "16px", borderRadius: "10px", textAlign: "center", backgroundColor: "white"}}>
+            <Box
+              sx={{
+                border: "1px solid #BDBDBD",
+                padding: "16px",
+                borderRadius: "10px",
+                textAlign: "center",
+                backgroundColor: "white",
+              }}
+            >
               <Typography
                 variant="body"
                 sx={{
