@@ -9,18 +9,18 @@ import {
   Typography,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import imagen_ejemplo from "../assets/img/imagen_ejemplo.jpg";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import PersonIcon from "@mui/icons-material/Person";
 import NumbersIcon from "@mui/icons-material/Numbers";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 import useUserStore from "../stores/useUserStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { apiUrl } from "../config";
 import { Link } from "react-router";
+import { useSnackbar } from "notistack";
 
 function Profile() {
   const { user } = useUserStore();
@@ -30,7 +30,14 @@ function Profile() {
     edad: 0,
     correo: "",
     contrasena: "",
+    esEntrenador: false,
   });
+
+  const [validacion, setValidacion] = useState({});
+
+  const { enqueueSnackbar } = useSnackbar();
+  const notificacion = useRef(null);
+  const notificacion_error = useRef(null);
 
   let entrenador = false;
 
@@ -54,7 +61,10 @@ function Profile() {
       if (response.ok) {
         let data = await response.json();
         setDatosUsuario(data.datos);
-        setFormData(data.datos);
+        setFormData({
+          ...data.datos,
+          esEntrenador: true,
+        });
       }
     }
 
@@ -73,7 +83,10 @@ function Profile() {
       if (response.ok) {
         let data = await response.json();
         setDatosUsuario(data.datos);
-        setFormData(data.datos);
+         setFormData({
+          ...data.datos,
+          esEntrenador: false,
+        });
       }
     }
 
@@ -84,9 +97,86 @@ function Profile() {
     }
   }, []);
 
+  const validarCampos = () => {
+    const nuevosErrores = {};
+
+    if (!formData.nombre.trim()) {
+      nuevosErrores.nombre = "El nombre es obligatorio";
+    } else if (formData.nombre.length < 4) {
+      nuevosErrores.nombre =
+        "El nombre debe tener una longitud mínima de 4 carácteres";
+    }
+
+    if (formData.edad < 16) {
+      nuevosErrores.edad = "La edad no puede ser menor de 16 años";
+    } else if (formData.edad > 66) {
+      nuevosErrores.edad = "La edad no puede ser mayor de 66 años";
+    }
+
+    setValidacion(nuevosErrores);
+
+    return Object.keys(nuevosErrores).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const esValido = validarCampos();
+
+    if (!esValido) return;
+
+    try {
+      const response = await fetch(apiUrl + "/usuario/updateProfile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Para aceptar cookies en la respuesta y enviarlas si las hay
+        body: JSON.stringify(formData),
+      });
+
+      if (response.status == 204) {
+        // playNotificationSound(notificacion);
+
+        // enqueueSnackbar("Entrenador modificado correctamente", {
+        //   variant: "success",
+        //   autoHideDuration: 3000,
+        //   anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        // });
+        // setTimeout(() => {
+        //   navigate("/home/team");
+        // }, 1000);
+        alert("Datos cambiados correctamente");
+      } else {
+        const data = await response.json();
+
+        // playNotificationSound(notificacion_error);
+
+        // enqueueSnackbar(data.mensaje, {
+        //   variant: "error",
+        //   autoHideDuration: 3000,
+        //   anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        // });
+      }
+    } catch (error) {
+      //   playNotificationSound(notificacion_error);
+      //   enqueueSnackbar("Error de red. Inténtalo de nuevo más tarde.", {
+      //     variant: "error",
+      //     autoHideDuration: 3000,
+      //     anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      //   });
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <>
-      {console.log(datosUsuario)}
       <Box
         component="main"
         sx={{
@@ -266,7 +356,7 @@ function Profile() {
             component="form"
             noValidate
             autoComplete="off"
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             sx={{ width: { xs: "100%", lg: "70%" } }}
           >
             <Box
@@ -342,7 +432,7 @@ function Profile() {
                     name="nombre"
                     type="text"
                     value={formData.nombre}
-                    // onChange={handleChange}
+                    onChange={handleChange}
                     placeholder="Introduce tu nombre completo"
                     InputProps={{
                       startAdornment: (
@@ -380,7 +470,7 @@ function Profile() {
                     type="email"
                     name="correo"
                     value={formData.correo}
-                    // onChange={handleChange}
+                    onChange={handleChange}
                     placeholder="Introduce tu correo electrónico"
                     InputProps={{
                       startAdornment: (
@@ -419,7 +509,7 @@ function Profile() {
                   name="edad"
                   type="number"
                   value={formData.edad}
-                  // onChange={handleChange}
+                  onChange={handleChange}
                   placeholder="Introduce tu edad"
                   InputProps={{
                     startAdornment: (
@@ -534,7 +624,7 @@ function Profile() {
                 name="contrasena"
                 type="password"
                 value={formData.contrasena}
-                // onChange={handleChange}
+                onChange={handleChange}
                 placeholder="Introduce una nueva contraseña"
                 InputProps={{
                   startAdornment: (
@@ -553,7 +643,7 @@ function Profile() {
             </Box>
             <Button
               size="large"
-              //   onClick={handleSubmit}
+              onClick={handleSubmit}
               sx={{
                 gap: 0.5,
                 color: "white",

@@ -11,11 +11,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 // Importar fichero de configuración con variables de entorno
 const config = require("../config/config.js");
+const { Op } = require("sequelize");
 
 // Cargar las definiciones del modelo en sequelize
 const models = initModels(sequelize);
 // Recuperar el modelo user
 const Usuario = models.usuario;
+const Jugadora = models.jugadoras;
+const Entrenador = models.entrenadores;
 
 class UsuarioController {
   async login(req, res) {
@@ -66,7 +69,7 @@ class UsuarioController {
       res.status(500).json(Respuesta.error(null, "Error interno del servidor"));
     }
   }
-  
+
   async createUsuario(req, res) {
     const { correo, contrasena, rol } = req.body;
 
@@ -115,6 +118,79 @@ class UsuarioController {
             null,
             "Error al registrar el usuario, intenta nuevamente"
           )
+        );
+    }
+  }
+
+  async modifyUser(req, res) {
+    const datos = req.body;
+
+    try {
+      const transaction = await sequelize.transaction();
+
+      const existingUser = await Usuario.findOne({
+        where: {
+          correo: datos.correo,
+          idusuario: { [Op.ne]: datos.idusuario },
+        },
+        transaction, // Incluir la transacción en la consulta
+      });
+
+      if (existingUser) {
+        await transaction.rollback();
+        return res
+          .status(400)
+          .json(
+            Respuesta.error(
+              null,
+              "Ya existe un usuario con ese correo electrónico."
+            )
+          );
+      }
+
+      if (datos.esEntrenador === false) {
+        await Jugadora.update(
+          { ...datos },
+          { where: { idjugadora: datos.idjugadora } }
+        );
+
+        if (datos.hasOwnProperty("contrasena")) {
+          const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
+          await Usuario.update(
+            { ...datos, contrasena: hashedPassword },
+            { where: { idusuario: datos.idusuario } }
+          );
+        } else {
+          await Usuario.update(
+            { ...datos },
+            { where: { idusuario: datos.idusuario } }
+          );
+        }
+      } else {
+        await Entrenador.update(
+          { ...datos },
+          { where: { identrenador: datos.identrenador } }
+        );
+
+        if (datos.hasOwnProperty("contrasena")) {
+          const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
+          await Usuario.update(
+            { ...datos, contrasena: hashedPassword },
+            { where: { idusuario: datos.idusuario } }
+          );
+        } else {
+          await Usuario.update(
+            { ...datos },
+            { where: { idusuario: datos.idusuario } }
+          );
+        }
+      }
+      res.status(204).send();
+    } catch (error) {
+      res
+        .status(500)
+        .json(
+          Respuesta.error(null, "Error al modificar los datos de tu perfil")
         );
     }
   }
