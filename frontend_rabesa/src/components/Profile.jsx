@@ -19,8 +19,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import useUserStore from "../stores/useUserStore";
 import { useEffect, useRef, useState } from "react";
 import { apiUrl } from "../config";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
 import { useSnackbar } from "notistack";
+import { playNotificationSound } from "../utils/Funciones";
 
 function Profile() {
   const { user } = useUserStore();
@@ -83,7 +84,7 @@ function Profile() {
       if (response.ok) {
         let data = await response.json();
         setDatosUsuario(data.datos);
-         setFormData({
+        setFormData({
           ...data.datos,
           esEntrenador: false,
         });
@@ -100,6 +101,16 @@ function Profile() {
   const validarCampos = () => {
     const nuevosErrores = {};
 
+    if (!formData.correo.trim()) {
+      nuevosErrores.correo = "El correo electrónico es obligatorio";
+    } else {
+      // Expresión regular para validar el formato del correo electrónico
+      const correoRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!correoRegex.test(formData.correo)) {
+        nuevosErrores.correo = "Por favor ingresa un correo electrónico válido";
+      }
+    }
+
     if (!formData.nombre.trim()) {
       nuevosErrores.nombre = "El nombre es obligatorio";
     } else if (formData.nombre.length < 4) {
@@ -107,10 +118,16 @@ function Profile() {
         "El nombre debe tener una longitud mínima de 4 carácteres";
     }
 
-    if (formData.edad < 16) {
-      nuevosErrores.edad = "La edad no puede ser menor de 16 años";
-    } else if (formData.edad > 66) {
-      nuevosErrores.edad = "La edad no puede ser mayor de 66 años";
+    if (formData.contrasena) {
+      if (formData.contrasena.length < 8) {
+        nuevosErrores.contrasena =
+          "La contraseña debe tener una longitud mínima de 8 carácteres";
+        formData.contrasena = null;
+      }
+    }
+
+    if (formData.edad < 18) {
+      nuevosErrores.edad = "La edad no puede ser menor de 18 años";
     }
 
     setValidacion(nuevosErrores);
@@ -136,35 +153,34 @@ function Profile() {
       });
 
       if (response.status == 204) {
-        // playNotificationSound(notificacion);
+        playNotificationSound(notificacion);
 
-        // enqueueSnackbar("Entrenador modificado correctamente", {
-        //   variant: "success",
-        //   autoHideDuration: 3000,
-        //   anchorOrigin: { vertical: "bottom", horizontal: "right" },
-        // });
-        // setTimeout(() => {
-        //   navigate("/home/team");
-        // }, 1000);
-        alert("Datos cambiados correctamente");
+        enqueueSnackbar("Perfil modificado correctamente", {
+          variant: "success",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
+        setTimeout(() => {
+          Navigate("/home/profile");
+        }, 1000);
       } else {
         const data = await response.json();
 
-        // playNotificationSound(notificacion_error);
+        playNotificationSound(notificacion_error);
 
-        // enqueueSnackbar(data.mensaje, {
-        //   variant: "error",
-        //   autoHideDuration: 3000,
-        //   anchorOrigin: { vertical: "bottom", horizontal: "right" },
-        // });
+        enqueueSnackbar(data.mensaje, {
+          variant: "error",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
       }
     } catch (error) {
-      //   playNotificationSound(notificacion_error);
-      //   enqueueSnackbar("Error de red. Inténtalo de nuevo más tarde.", {
-      //     variant: "error",
-      //     autoHideDuration: 3000,
-      //     anchorOrigin: { vertical: "bottom", horizontal: "right" },
-      //   });
+      playNotificationSound(notificacion_error);
+      enqueueSnackbar("Error de red. Inténtalo de nuevo más tarde.", {
+        variant: "error",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
     }
   };
 
@@ -177,6 +193,13 @@ function Profile() {
 
   return (
     <>
+      <audio ref={notificacion} src="/sonido/notificacion.mp3" preload="auto" />
+      <audio
+        ref={notificacion_error}
+        src="/sonido/notificacion_error.mp3"
+        preload="auto"
+      />
+
       <Box
         component="main"
         sx={{
@@ -447,8 +470,8 @@ function Profile() {
                       shrink: true,
                     }}
                     required={true}
-                    // error={!!validacion.correo}
-                    // helperText={validacion.correo}
+                    error={!!validacion.nombre}
+                    helperText={validacion.nombre}
                   />
                 </Box>
                 <Box sx={{ width: { xs: "100%", md: "50%" } }}>
@@ -485,8 +508,8 @@ function Profile() {
                       shrink: true,
                     }}
                     required={true}
-                    // error={!!validacion.contrasena}
-                    // helperText={validacion.contrasena}
+                    error={!!validacion.correo}
+                    helperText={validacion.correo}
                   />
                 </Box>
               </Box>
@@ -524,8 +547,8 @@ function Profile() {
                     shrink: true,
                   }}
                   required={true}
-                  // error={!!validacion.correo}
-                  // helperText={validacion.correo}
+                  error={!!validacion.edad}
+                  helperText={validacion.edad}
                 />
               </Box>
             </Box>
@@ -623,6 +646,7 @@ function Profile() {
                 variant="outlined"
                 name="contrasena"
                 type="password"
+                onBlur={validacion.contrasena}
                 value={formData.contrasena}
                 onChange={handleChange}
                 placeholder="Introduce una nueva contraseña"
@@ -637,8 +661,8 @@ function Profile() {
                   shrink: true,
                 }}
                 required={true}
-                // error={!!validacion.correo}
-                // helperText={validacion.correo}
+                error={!!validacion.contrasena}
+                helperText={validacion.contrasena}
               />
             </Box>
             <Button

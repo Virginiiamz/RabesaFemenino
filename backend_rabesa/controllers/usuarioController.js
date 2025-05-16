@@ -155,14 +155,16 @@ class UsuarioController {
         );
 
         if (datos.hasOwnProperty("contrasena")) {
-          const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
-          await Usuario.update(
-            { ...datos, contrasena: hashedPassword },
-            { where: { idusuario: datos.idusuario } }
-          );
+          if (datos.contrasena !== "") {
+            const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
+            await Usuario.update(
+              { ...datos, contrasena: hashedPassword, rol: "Jugadora" },
+              { where: { idusuario: datos.idusuario } }
+            );
+          }
         } else {
           await Usuario.update(
-            { ...datos },
+            { ...datos, rol: "Jugadora" },
             { where: { idusuario: datos.idusuario } }
           );
         }
@@ -173,14 +175,16 @@ class UsuarioController {
         );
 
         if (datos.hasOwnProperty("contrasena")) {
-          const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
-          await Usuario.update(
-            { ...datos, contrasena: hashedPassword },
-            { where: { idusuario: datos.idusuario } }
-          );
+          if (datos.contrasena !== "") {
+            const hashedPassword = await bcrypt.hash(datos.contrasena, 10);
+            await Usuario.update(
+              { ...datos, contrasena: hashedPassword, rol: "Entrenador" },
+              { where: { idusuario: datos.idusuario } }
+            );
+          }
         } else {
           await Usuario.update(
-            { ...datos },
+            { ...datos, rol: "Entrenador" },
             { where: { idusuario: datos.idusuario } }
           );
         }
