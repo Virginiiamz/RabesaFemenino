@@ -5,6 +5,7 @@ import {
   InputAdornment,
   TextField,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -15,10 +16,77 @@ import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import PersonIcon from "@mui/icons-material/Person";
 import NumbersIcon from "@mui/icons-material/Numbers";
+import LogoutIcon from '@mui/icons-material/Logout';
+import useUserStore from "../stores/useUserStore";
+import { useEffect, useState } from "react";
+import { apiUrl } from "../config";
+import { Link } from "react-router";
 
 function Profile() {
+  const { user } = useUserStore();
+  const [datosUsuario, setDatosUsuario] = useState([]);
+  const [formData, setFormData] = useState({
+    nombre: "",
+    edad: 0,
+    correo: "",
+    contrasena: "",
+  });
+
+  let entrenador = false;
+
+  if (user.rol == "Entrenador") {
+    entrenador = true;
+  }
+
+  useEffect(() => {
+    async function getEntrenadorByIdUsuario() {
+      let response = await fetch(
+        apiUrl + "/entrenadores/datos/" + user.idusuario,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        let data = await response.json();
+        setDatosUsuario(data.datos);
+        setFormData(data.datos);
+      }
+    }
+
+    async function getJugadoraByIdUsuario() {
+      let response = await fetch(
+        apiUrl + "/jugadoras/datos/" + user.idusuario,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        let data = await response.json();
+        setDatosUsuario(data.datos);
+        setFormData(data.datos);
+      }
+    }
+
+    if (entrenador) {
+      getEntrenadorByIdUsuario();
+    } else {
+      getJugadoraByIdUsuario();
+    }
+  }, []);
+
   return (
     <>
+      {console.log(datosUsuario)}
       <Box
         component="main"
         sx={{
@@ -50,6 +118,29 @@ function Profile() {
               Perfil de usuario
             </Typography>
           </Box>
+
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Link to="/">
+              <Button
+                sx={{
+                  gap: 0.5,
+                  color: "white",
+                  backgroundColor: "#00338e",
+                  fontFamily: "'Open sans'",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  "&:hover": {
+                    backgroundColor: "#AACBFF",
+                    color: "#00338e",
+                  },
+                }}
+              >
+                <Tooltip title="Cerrar sesión">
+                  <LogoutIcon></LogoutIcon>
+                </Tooltip>
+              </Button>
+            </Link>
+          </Box>
         </div>
         <Box sx={{ marginBottom: "10px" }}>
           <Typography variant="body1">
@@ -62,14 +153,14 @@ function Profile() {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            flexDirection: {xs: "column", lg: "row"},
+            flexDirection: { xs: "column", lg: "row" },
             gap: "3rem",
           }}
         >
           <Box
             sx={{
               border: "1px solid #BDBDBD",
-              width: {xs: "100%", lg: "30%"},
+              width: { xs: "100%", lg: "30%" },
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -81,7 +172,7 @@ function Profile() {
           >
             <div style={{ position: "relative", width: "fit-content" }}>
               <img
-                src={imagen_ejemplo}
+                src={`http://localhost:3000/uploads/${datosUsuario.imagen}`}
                 style={{
                   width: "150px",
                   height: "150px",
@@ -117,7 +208,7 @@ function Profile() {
                 marginTop: "1rem",
               }}
             >
-              Virginia Muñoz Castro
+              {datosUsuario.nombre}
             </Typography>
             <Typography
               sx={{
@@ -125,7 +216,9 @@ function Profile() {
                 fontFamily: "Open Sans",
               }}
             >
-              Delantera · #2
+              {!entrenador
+                ? datosUsuario.posicion + " · #" + datosUsuario.numero_camiseta
+                : datosUsuario.rol}
             </Typography>
             <Button
               size="large"
@@ -164,7 +257,7 @@ function Profile() {
                   fontFamily: "Open Sans",
                 }}
               >
-                17/11/2002
+                {new Date(datosUsuario.fecha_ingreso).toLocaleDateString()}
               </Typography>
             </Box>
           </Box>
@@ -174,7 +267,7 @@ function Profile() {
             noValidate
             autoComplete="off"
             // onSubmit={handleSubmit}
-            sx={{ width: {xs: "100%", lg: "70%"}, }}
+            sx={{ width: { xs: "100%", lg: "70%" } }}
           >
             <Box
               sx={{
@@ -248,7 +341,7 @@ function Profile() {
                     variant="outlined"
                     name="nombre"
                     type="text"
-                    // value={formData.correo}
+                    value={formData.nombre}
                     // onChange={handleChange}
                     placeholder="Introduce tu nombre completo"
                     InputProps={{
@@ -279,14 +372,14 @@ function Profile() {
                       color: "#3d64a8",
                     }}
                   >
-                    Edad
+                    Correo electrónico
                   </Typography>
                   <TextField
                     fullWidth
                     variant="outlined"
                     type="email"
                     name="correo"
-                    // value={formData.contrasena}
+                    value={formData.correo}
                     // onChange={handleChange}
                     placeholder="Introduce tu correo electrónico"
                     InputProps={{
@@ -325,7 +418,7 @@ function Profile() {
                   variant="outlined"
                   name="edad"
                   type="number"
-                  // value={formData.correo}
+                  value={formData.edad}
                   // onChange={handleChange}
                   placeholder="Introduce tu edad"
                   InputProps={{
@@ -407,10 +500,8 @@ function Profile() {
               <TextField
                 fullWidth
                 variant="outlined"
-                name="contrasena"
                 type="password"
-                // value={formData.correo}
-                // onChange={handleChange}
+                value="1234567891234567"
                 placeholder="Introduce tu contraseña actual"
                 InputProps={{
                   startAdornment: (
@@ -423,8 +514,7 @@ function Profile() {
                   shrink: true,
                 }}
                 required={true}
-                // error={!!validacion.correo}
-                // helperText={validacion.correo}
+                disabled={true}
               />
               <Typography
                 sx={{
@@ -441,9 +531,9 @@ function Profile() {
               <TextField
                 fullWidth
                 variant="outlined"
-                name="newContrasena"
+                name="contrasena"
                 type="password"
-                // value={formData.correo}
+                value={formData.contrasena}
                 // onChange={handleChange}
                 placeholder="Introduce una nueva contraseña"
                 InputProps={{
@@ -463,7 +553,7 @@ function Profile() {
             </Box>
             <Button
               size="large"
-            //   onClick={handleSubmit}
+              //   onClick={handleSubmit}
               sx={{
                 gap: 0.5,
                 color: "white",

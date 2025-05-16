@@ -70,74 +70,74 @@ class EntrenadorController {
     }
   }
 
-  async getEntrenadorByIdUsuario(req, res) {
-    const { idusuario } = req.params;
+    async getEntrenadorByIdUsuario(req, res) {
+      const { idusuario } = req.params;
 
-    // Validación básica del parámetro
-    if (!idusuario || isNaN(idusuario)) {
-      return res
-        .status(400)
-        .json(
-          Respuesta.error(null, "ID de usuario inválido o no proporcionado")
-        );
-    }
-
-    try {
-      // Buscar el entrenador asociado al usuario
-      const entrenador = await Entrenador.findOne({
-        where: { idusuario: idusuario },
-      });
-
-      if (!entrenador) {
+      // Validación básica del parámetro
+      if (!idusuario || isNaN(idusuario)) {
         return res
-          .status(404)
+          .status(400)
           .json(
-            Respuesta.error(
-              null,
-              "No se encontró entrenador asociado a este usuario"
-            )
+            Respuesta.error(null, "ID de usuario inválido o no proporcionado")
           );
       }
 
-      // Obtener datos del usuario
-      const usuario = await Usuario.findByPk(idusuario);
+      try {
+        // Buscar el entrenador asociado al usuario
+        const entrenador = await Entrenador.findOne({
+          where: { idusuario: idusuario },
+        });
 
-      if (!usuario) {
-        return res
-          .status(404)
-          .json(Respuesta.error(null, "Usuario no encontrado"));
-      }
+        if (!entrenador) {
+          return res
+            .status(404)
+            .json(
+              Respuesta.error(
+                null,
+                "No se encontró entrenador asociado a este usuario"
+              )
+            );
+        }
 
-      // Construir respuesta
-      const resultado = {
-        identrenador: entrenador.identrenador,
-        idusuario: usuario.idusuario,
-        nombre: entrenador.nombre,
-        edad: entrenador.edad,
-        rol: entrenador.rol,
-        fecha_ingreso: entrenador.fecha_ingreso,
-        imagen: entrenador.imagen,
-        idclub: entrenador.idclub,
-        correo: usuario.correo,
-      };
+        // Obtener datos del usuario
+        const usuario = await Usuario.findByPk(idusuario);
 
-      res.json(
-        Respuesta.exito(resultado, "Datos del entrenador recuperados con éxito")
-      );
-    } catch (err) {
-      logMensaje(`Error en getEntrenadorByIdUsuario: ${err.message}`);
-      console.error(err.stack); // Log del stack completo para debugging
+        if (!usuario) {
+          return res
+            .status(404)
+            .json(Respuesta.error(null, "Usuario no encontrado"));
+        }
 
-      res
-        .status(500)
-        .json(
-          Respuesta.error(
-            null,
-            `Error interno al recuperar datos del entrenador: ${err.message}`
-          )
+        // Construir respuesta
+        const resultado = {
+          identrenador: entrenador.identrenador,
+          idusuario: usuario.idusuario,
+          nombre: entrenador.nombre,
+          edad: entrenador.edad,
+          rol: entrenador.rol,
+          fecha_ingreso: entrenador.fecha_ingreso,
+          imagen: entrenador.imagen,
+          idclub: entrenador.idclub,
+          correo: usuario.correo,
+        };
+
+        res.json(
+          Respuesta.exito(resultado, "Datos del entrenador recuperados con éxito")
         );
+      } catch (err) {
+        logMensaje(`Error en getEntrenadorByIdUsuario: ${err.message}`);
+        console.error(err.stack); // Log del stack completo para debugging
+
+        res
+          .status(500)
+          .json(
+            Respuesta.error(
+              null,
+              `Error interno al recuperar datos del entrenador: ${err.message}`
+            )
+          );
+      }
     }
-  }
 
   async createEntrenador(req, res) {
     const { correo, contrasena, nombre, edad, rol, fecha_ingreso, idclub } =
