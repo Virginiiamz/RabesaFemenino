@@ -33,6 +33,7 @@ import "@fontsource/fira-sans/400.css"; // Alternativa
 import "@fontsource/fira-sans/500.css"; // Peso 500 (medium)
 import "@fontsource/fira-sans/700.css"; // Peso 700 (bold)
 import { SnackbarProvider } from "notistack";
+import Profile from "./components/Profile";
 
 // import PaginaError from "./pages/PaginaError";
 
@@ -194,6 +195,10 @@ let router = createBrowserRouter([
             allowedRoles={["Entrenador"]}
           />
         ),
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
     ],
   },

@@ -274,7 +274,7 @@ function Menu(props) {
             : "transparent",
         }}
       >
-        <Link to="/">
+        <Link to="profile">
           <ListItemIcon
             style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
           >
