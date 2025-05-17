@@ -370,7 +370,7 @@ function Match() {
                   >
                     <Box
                       component="img"
-                      src={`http://localhost:3000/uploads/${partido.idrival_club?.imagen}`}
+                      src={partido.idrival_club?.imagen}
                       sx={{
                         height: { xs: "60px", md: "90px" },
                         width: { xs: "60px", md: "90px" },

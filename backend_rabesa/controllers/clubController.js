@@ -6,12 +6,13 @@ const initModels = require("../models/init-models.js").initModels;
 // Crear la instancia de sequelize con la conexión a la base de datos
 const sequelize = require("../config/sequelize.js");
 
-const { Op, STRING } = require("sequelize");
+const { Op, STRING, where } = require("sequelize");
 
 // Cargar las definiciones del modelo en sequelize
 const models = initModels(sequelize);
 // Recuperar el modelo plato
 const Club = models.clubs;
+const Partido = models.partidos;
 
 class ClubController {
   async getAllClubs(req, res) {
@@ -88,7 +89,9 @@ class ClubController {
           .status(400)
           .json(Respuesta.error(null, "Ya existe un club con ese nombre."));
       } else {
-        const imagen = req.file ? req.file?.path : "https://res.cloudinary.com/dyctqhbye/image/upload/v1747483346/null1_do3gxb.jpg";
+        const imagen = req.file
+          ? req.file?.path
+          : "https://res.cloudinary.com/dyctqhbye/image/upload/v1747483346/null1_do3gxb.jpg";
 
         const club = {
           nombre: nombreSinEspacios,
@@ -120,6 +123,58 @@ class ClubController {
 
     try {
       const club = await Club.findByPk(idclub);
+
+      const partidos = await Partido.findAll({
+        where: { idrival: idclub },
+      });
+
+      for (const partido of partidos) {
+        if (partido.resultado != "") {
+          const puntos = partido.resultado.split("-");
+
+          if (puntos[0] > puntos[1]) {
+            const equipo = await Club.findOne({ where: { idclub: 1 } });
+
+            let puntosFinal = equipo.puntos - 3;
+
+            await Club.update(
+              { puntos: puntosFinal },
+              { where: { idclub: 1 } }
+            );
+          } else if (puntos[0] == puntos[1]) {
+            const rabesa = await Club.findOne({ where: { idclub: 1 } });
+            const equipoRival = await Club.findOne({
+              where: { idclub: partido.idrival },
+            });
+
+            let puntosRabesa = rabesa.puntos - 1;
+            let puntosRival = equipoRival.puntos - 1;
+
+            await Club.update(
+              { puntos: puntosRabesa },
+              { where: { idclub: 1 } }
+            );
+
+            await Club.update(
+              { puntos: puntosRival },
+              { where: { idclub: partido.idrival } }
+            );
+          } else {
+            const equipo = await Club.findOne({
+              where: { idclub: partido.idrival },
+            });
+
+            let puntosFinal = equipo.puntos - 3;
+
+            await Club.update(
+              { puntos: puntosFinal },
+              { where: { idclub: partido.idrival } }
+            );
+          }
+        }
+      };
+
+      // console.log(partidos);
 
       if (club) {
         const numFilas = await Club.destroy({
