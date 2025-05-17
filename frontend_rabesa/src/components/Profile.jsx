@@ -35,6 +35,8 @@ function Profile() {
   });
 
   const [validacion, setValidacion] = useState({});
+  const fileInputRef = useRef(null);
+  const [idProfile, setIdProfile] = useState(-1);
 
   const { enqueueSnackbar } = useSnackbar();
   const notificacion = useRef(null);
@@ -47,6 +49,19 @@ function Profile() {
   }
 
   useEffect(() => {
+    const showNotification = localStorage.getItem(
+      "showProfileUpdateNotification"
+    );
+    if (showNotification) {
+      playNotificationSound(notificacion);
+      enqueueSnackbar("Imagen de perfil actualizada correctamente", {
+        variant: "success",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+      localStorage.removeItem("showProfileUpdateNotification");
+    }
+
     async function getEntrenadorByIdUsuario() {
       let response = await fetch(
         apiUrl + "/entrenadores/datos/" + user.idusuario,
@@ -66,6 +81,7 @@ function Profile() {
           ...data.datos,
           esEntrenador: true,
         });
+        setIdProfile(data.datos.identrenador);
       }
     }
 
@@ -88,6 +104,7 @@ function Profile() {
           ...data.datos,
           esEntrenador: false,
         });
+        setIdProfile(data.datos.idjugadora);
       }
     }
 
@@ -189,6 +206,63 @@ function Profile() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleIconClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validación básica del tipo de archivo
+    if (!file.type.match("image.*")) {
+      enqueueSnackbar("Selecciona un archivo de imagen válido", {
+        variant: "error",
+        autoHideDuration: 3000,
+      });
+      return;
+    }
+
+    try {
+      const formDataToSend = new FormData();
+
+      formDataToSend.append("imagen", file);
+      formDataToSend.append(
+        formData.esEntrenador ? "identrenador" : "idjugadora",
+        idProfile
+      );
+
+      const response = await fetch(apiUrl + "/usuario/updatePhoto", {
+        method: "PUT",
+        credentials: "include",
+        body: formDataToSend,
+      });
+
+      if (response.status === 204) {
+        // Guardar en localStorage antes de recargar
+        localStorage.setItem("showProfileUpdateNotification", "true");
+        window.location.reload();
+      } else {
+        const data = await response.json();
+        playNotificationSound(notificacion_error);
+        enqueueSnackbar(data.mensaje || "Error al actualizar la imagen", {
+          variant: "error",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
+      }
+    } catch (error) {
+      playNotificationSound(notificacion_error);
+      enqueueSnackbar("Error de red. Inténtalo de nuevo más tarde.", {
+        variant: "error",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+    } finally {
+      event.target.value = ""; // Limpiar el input
+    }
   };
 
   return (
@@ -295,9 +369,18 @@ function Profile() {
                 }}
               />
 
+              {/* Input file oculto */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                style={{ display: "none" }}
+              />
+
               {/* Icono de cámara */}
               <div
-                // onClick={() => tuFuncion()}
+                onClick={handleIconClick}
                 style={{
                   position: "absolute",
                   bottom: "10px",
@@ -335,7 +418,7 @@ function Profile() {
             </Typography>
             <Button
               size="large"
-              //   onClick={handleSubmit}
+              onClick={handleIconClick}
               sx={{
                 gap: 0.5,
                 color: "#838383",

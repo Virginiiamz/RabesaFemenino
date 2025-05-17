@@ -198,6 +198,34 @@ class UsuarioController {
         );
     }
   }
+
+  async modifyImagen(req, res) {
+    const imagen = req.file ? req.file.filename : "null.webp";
+    const idField = req.body.identrenador ? "identrenador" : "idjugadora";
+    const idValue = req.body[idField];
+    const model = req.body.identrenador ? Entrenador : Jugadora;
+
+    try {
+      const [updated] = await model.update(
+        { imagen: imagen },
+        { where: { [idField]: idValue } }
+      );
+
+      if (!updated) {
+        return res
+          .status(404)
+          .json({ success: false, mensaje: "Usuario no encontrado" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).json({
+        success: false,
+        mensaje: "Error del servidor",
+      });
+    }
+  }
 }
 
 module.exports = new UsuarioController();

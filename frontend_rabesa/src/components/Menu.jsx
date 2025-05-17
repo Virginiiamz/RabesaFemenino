@@ -265,11 +265,11 @@ function Menu(props) {
         </Link>
       </MenuItem>
       <MenuItem
-        style={{
+       style={{
           margin: "0.5rem",
           paddingLeft: "0.5rem",
           borderRadius: "10px",
-          backgroundColor: location.pathname.includes("setting")
+          backgroundColor: location.pathname.includes("profile")
             ? "#AACBFF"
             : "transparent",
         }}
