@@ -42,6 +42,11 @@ function CreateMatch() {
   const notificacion = useRef(null);
   const notificacion_error = useRef(null);
 
+  const normalizarFecha = (fecha) =>
+    new Date(new Date(fecha).toISOString().split("T")[0]);
+
+  const hoy = normalizarFecha(new Date());
+
   useEffect(() => {
     async function getAllClubs() {
       let response = await fetch(apiUrl + "/clubs", {
@@ -80,9 +85,27 @@ function CreateMatch() {
       nuevosErrores.golesRival = "Los goles no pueden ser negativos";
     }
 
-    if (golesRabesa === "" && golesRival !== "" || golesRabesa !== "" && golesRival === "") {
+    if (
+      (golesRabesa === "" && golesRival !== "") ||
+      (golesRabesa !== "" && golesRival === "")
+    ) {
       nuevosErrores.golesRabesa = "Debes introducir los goles de ambos equipos";
       nuevosErrores.golesRival = "Debes introducir los goles de ambos equipos";
+    }
+
+    if (golesRabesa !== "" && golesRival !== "") {
+      const fechaPartido = normalizarFecha(formData.fecha_partido);
+      if (fechaPartido >= hoy) {
+        playNotificationSound(notificacion_error);
+
+        enqueueSnackbar("El partido todavía no se ha jugado", {
+          variant: "error",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
+
+        return;
+      }
     }
 
     if (formData.fecha_partido === "") {
