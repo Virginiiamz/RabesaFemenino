@@ -1,6 +1,9 @@
 import {
   Avatar,
   Box,
+  Card,
+  CardContent,
+  CardMedia,
   Divider,
   Grid,
   Paper,
@@ -796,78 +799,118 @@ function Dashboard() {
             </Typography>
           </div>
           {clasificacion.map((club) => (
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={4}
-              key={club.idclub}
-              sx={{ marginY: "1rem" }}
+            <Card
+              sx={{
+                width: "100%",
+                border: "1px solid #BDBDBD",
+                backgroundColor: "#FFFFFF",
+                boxShadow: "none",
+                marginBottom: "1rem",
+              }}
             >
-              <Paper
-                elevation={3}
-                sx={{ p: 3, display: "flex", alignItems: "center" }}
-              >
+              <CardContent>
                 <Box
-                  component={"img"}
-                  src={club?.imagen}
                   sx={{
-                    height: { xs: "60px", lg: "90px" },
-                    width: { xs: "50px", lg: "80px" },
-                    margin: "1rem",
+                    display: "flex",
+                    gap: 1.5,
+                    justifyContent: "space-between",
                   }}
-                />
-                <Box>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: "16px", lg: "20px" },
-                      fontFamily: "Open Sans",
-                      fontWeight: 600,
-                    }}
-                    gutterBottom
-                  >
-                    {club.nombre}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: "12px", lg: "16px" },
-                      fontFamily: "Open Sans",
-                    }}
-                    gutterBottom
-                  >
-                    Ciudad: {club.ciudad}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: "12px", lg: "16px" },
-                      fontFamily: "Open Sans",
-                    }}
-                    gutterBottom
-                  >
-                    Estadio: {club.estadio}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: "12px", lg: "16px" },
-                      fontFamily: "Open Sans",
-                    }}
-                    gutterBottom
-                  >
-                    Puntos: {club.puntos}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: { xs: "12px", lg: "16px" },
-                      fontFamily: "Open Sans",
-                    }}
-                    gutterBottom
-                  >
-                    Fundado:{" "}
-                    {new Date(club.fecha_fundacion).toLocaleDateString()}
-                  </Typography>
+                >
+                  <Box sx={{ display: "flex", gap: 1.5 }}>
+                    <CardMedia
+                      component="img"
+                      sx={{
+                        width: "90px",
+                        height: "90px",
+                        objectFit: "contain",
+                      }}
+                      alt={club.nombre}
+                      image={club.imagen}
+                    />
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: "#3d64a8",
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {club.nombre}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        {club.estadio}
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Box>
-              </Paper>
-            </Grid>
+                <Box
+                  sx={{
+                    margin: 1,
+                    display: "flex",
+                    gap: 4,
+                    alignItems: "start",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                      variant="subtitle2"
+                    >
+                      Ciudad
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      {club.ciudad}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                      variant="subtitle2"
+                    >
+                      Puntos
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      {club.puntos}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                      variant="subtitle2"
+                    >
+                      Fecha fundación
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      {new Date(club.fecha_fundacion).toLocaleDateString()}
+                    </Typography>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
           ))}
         </Box>
       </Box>
