@@ -36,38 +36,6 @@ class ClubController {
     }
   }
 
-  // async getAllEntrenamientosByFecha(req, res) {
-  //   try {
-  //     // Obtener la fecha actual del sistema (sin hora, solo fecha)
-  //     const hoy = new Date();
-  //     hoy.setHours(0, 0, 0, 0); // Establecer a medianoche para incluir todo el día
-
-  //     const data = await Entrenamiento.findAll({
-  //       where: {
-  //         fecha_entrenamiento: {
-  //           [Op.gte]: hoy, // Mayor o igual a hoy
-  //         },
-  //       },
-  //       order: [["fecha_entrenamiento", "ASC"]], // Opcional: ordenar por fecha ascendente
-  //     });
-
-  //     res.json(
-  //       Respuesta.exito(data, "Datos de entrenamientos futuros recuperados")
-  //     );
-  //   } catch (err) {
-  //     // Manejar errores durante la consulta
-  //     console.error(err);
-  //     res
-  //       .status(500)
-  //       .json(
-  //         Respuesta.error(
-  //           null,
-  //           `Error al recuperar los datos de los entrenamientos: ${req.originalUrl}`
-  //         )
-  //       );
-  //   }
-  // }
-
   async getClubById(req, res) {
     const idclub = req.params.idclub;
     try {
@@ -120,7 +88,7 @@ class ClubController {
           .status(400)
           .json(Respuesta.error(null, "Ya existe un club con ese nombre."));
       } else {
-        const imagen = req.file ? req.file.filename : "null1.jpg";
+        const imagen = req.file ? req.file?.path : "https://res.cloudinary.com/dyctqhbye/image/upload/v1747483346/null1_do3gxb.jpg";
 
         const club = {
           nombre: nombreSinEspacios,
@@ -202,7 +170,7 @@ class ClubController {
           .json(Respuesta.error(null, "Ya existe un club con ese nombre."));
       } else {
         if (req.file) {
-          datos.imagen = req.file.filename;
+          datos.imagen = req.file?.path;
         } else {
           const club = await Club.findByPk(idclub);
 

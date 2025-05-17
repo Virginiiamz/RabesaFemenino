@@ -359,7 +359,7 @@ function Profile() {
           >
             <div style={{ position: "relative", width: "fit-content" }}>
               <img
-                src={`http://localhost:3000/uploads/${datosUsuario.imagen}`}
+                src={datosUsuario.imagen}
                 style={{
                   width: "150px",
                   height: "150px",

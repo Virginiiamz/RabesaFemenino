@@ -257,7 +257,7 @@ function Team() {
                         objectFit: "cover",
                       }}
                       alt={entrenador.nombre}
-                      image={`http://localhost:3000/uploads/${entrenador.imagen}`}
+                      image={entrenador.imagen}
                     />
                     <Box sx={{}}>
                       <Typography
@@ -416,7 +416,7 @@ function Team() {
                         objectFit: "cover",
                       }}
                       alt={jugadora.nombre}
-                      image={`http://localhost:3000/uploads/${jugadora.imagen}`}
+                      image={jugadora.imagen}
                     />
                     <Box sx={{}}>
                       <Typography

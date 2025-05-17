@@ -665,7 +665,7 @@ function Dashboard() {
                 >
                   <Box
                     component="img"
-                    src={`http://localhost:3000/uploads/${partidoSemana.idrival_club?.imagen}`}
+                    src={partidoSemana.idrival_club?.imagen}
                     sx={{
                       height: { xs: "60px", lg: "90px" },
                       width: { xs: "60px", lg: "90px" },
@@ -810,11 +810,10 @@ function Dashboard() {
               >
                 <Box
                   component={"img"}
-                  src={`http://localhost:3000/uploads/${club?.imagen}`}
+                  src={club?.imagen}
                   sx={{
-                    height: { xs: "50px", lg: "80px" },
+                    height: { xs: "60px", lg: "90px" },
                     width: { xs: "50px", lg: "80px" },
-                    objectFit: "cover",
                     margin: "1rem",
                   }}
                 />

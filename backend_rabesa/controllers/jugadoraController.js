@@ -326,7 +326,9 @@ class JugadoraController {
       );
 
       // 4. Crear jugadora (dentro de la transacción)
-      const imagen = req.file ? req.file.filename : "null.webp";
+      const imagen = req.file
+        ? req.file?.path
+        : "https://res.cloudinary.com/dyctqhbye/image/upload/v1747483340/null_gkeffq.webp";
       const nuevaJugadora = await Jugadora.create(
         {
           nombre,
@@ -442,7 +444,6 @@ class JugadoraController {
       );
 
       res.status(204).send();
-      
     } catch (err) {
       logMensaje("Error :" + err);
       res

@@ -70,74 +70,74 @@ class EntrenadorController {
     }
   }
 
-    async getEntrenadorByIdUsuario(req, res) {
-      const { idusuario } = req.params;
+  async getEntrenadorByIdUsuario(req, res) {
+    const { idusuario } = req.params;
 
-      // Validación básica del parámetro
-      if (!idusuario || isNaN(idusuario)) {
-        return res
-          .status(400)
-          .json(
-            Respuesta.error(null, "ID de usuario inválido o no proporcionado")
-          );
-      }
-
-      try {
-        // Buscar el entrenador asociado al usuario
-        const entrenador = await Entrenador.findOne({
-          where: { idusuario: idusuario },
-        });
-
-        if (!entrenador) {
-          return res
-            .status(404)
-            .json(
-              Respuesta.error(
-                null,
-                "No se encontró entrenador asociado a este usuario"
-              )
-            );
-        }
-
-        // Obtener datos del usuario
-        const usuario = await Usuario.findByPk(idusuario);
-
-        if (!usuario) {
-          return res
-            .status(404)
-            .json(Respuesta.error(null, "Usuario no encontrado"));
-        }
-
-        // Construir respuesta
-        const resultado = {
-          identrenador: entrenador.identrenador,
-          idusuario: usuario.idusuario,
-          nombre: entrenador.nombre,
-          edad: entrenador.edad,
-          rol: entrenador.rol,
-          fecha_ingreso: entrenador.fecha_ingreso,
-          imagen: entrenador.imagen,
-          idclub: entrenador.idclub,
-          correo: usuario.correo,
-        };
-
-        res.json(
-          Respuesta.exito(resultado, "Datos del entrenador recuperados con éxito")
+    // Validación básica del parámetro
+    if (!idusuario || isNaN(idusuario)) {
+      return res
+        .status(400)
+        .json(
+          Respuesta.error(null, "ID de usuario inválido o no proporcionado")
         );
-      } catch (err) {
-        logMensaje(`Error en getEntrenadorByIdUsuario: ${err.message}`);
-        console.error(err.stack); // Log del stack completo para debugging
+    }
 
-        res
-          .status(500)
+    try {
+      // Buscar el entrenador asociado al usuario
+      const entrenador = await Entrenador.findOne({
+        where: { idusuario: idusuario },
+      });
+
+      if (!entrenador) {
+        return res
+          .status(404)
           .json(
             Respuesta.error(
               null,
-              `Error interno al recuperar datos del entrenador: ${err.message}`
+              "No se encontró entrenador asociado a este usuario"
             )
           );
       }
+
+      // Obtener datos del usuario
+      const usuario = await Usuario.findByPk(idusuario);
+
+      if (!usuario) {
+        return res
+          .status(404)
+          .json(Respuesta.error(null, "Usuario no encontrado"));
+      }
+
+      // Construir respuesta
+      const resultado = {
+        identrenador: entrenador.identrenador,
+        idusuario: usuario.idusuario,
+        nombre: entrenador.nombre,
+        edad: entrenador.edad,
+        rol: entrenador.rol,
+        fecha_ingreso: entrenador.fecha_ingreso,
+        imagen: entrenador.imagen,
+        idclub: entrenador.idclub,
+        correo: usuario.correo,
+      };
+
+      res.json(
+        Respuesta.exito(resultado, "Datos del entrenador recuperados con éxito")
+      );
+    } catch (err) {
+      logMensaje(`Error en getEntrenadorByIdUsuario: ${err.message}`);
+      console.error(err.stack); // Log del stack completo para debugging
+
+      res
+        .status(500)
+        .json(
+          Respuesta.error(
+            null,
+            `Error interno al recuperar datos del entrenador: ${err.message}`
+          )
+        );
     }
+  }
 
   async createEntrenador(req, res) {
     const { correo, contrasena, nombre, edad, rol, fecha_ingreso, idclub } =
@@ -165,7 +165,7 @@ class EntrenadorController {
       }
 
       const fechaIngreso = new Date(fecha_ingreso);
-      fechaIngreso.setHours(0, 0, 0, 0); 
+      fechaIngreso.setHours(0, 0, 0, 0);
 
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
@@ -218,9 +218,9 @@ class EntrenadorController {
 
       const idusuario = newUser.dataValues.idusuario;
 
-      console.log("idUsuario: " + idusuario);
-
-      const imagen = req.file ? req.file.filename : "null.webp";
+      const imagen = req.file
+        ? req.file?.path
+        : "https://res.cloudinary.com/dyctqhbye/image/upload/v1747483340/null_gkeffq.webp";
 
       const entrenador = {
         nombre,

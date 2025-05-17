@@ -200,10 +200,14 @@ class UsuarioController {
   }
 
   async modifyImagen(req, res) {
-    const imagen = req.file ? req.file.filename : "null.webp";
     const idField = req.body.identrenador ? "identrenador" : "idjugadora";
     const idValue = req.body[idField];
     const model = req.body.identrenador ? Entrenador : Jugadora;
+
+    const imagen = req.file?.path;
+    console.log("[DEBUG] Imagen Cloudinary URL:", imagen);
+
+    console.log("[DEBUG] req.file completo:", req.file);
 
     try {
       const [updated] = await model.update(

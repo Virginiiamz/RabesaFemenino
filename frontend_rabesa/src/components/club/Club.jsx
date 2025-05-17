@@ -190,7 +190,7 @@ function Club() {
                         objectFit: "cover",
                       }}
                       alt={entrenador.nombre}
-                      image={`http://localhost:3000/uploads/${club.imagen}`}
+                      image={club.imagen}
                     />
                     <Box sx={{}}>
                       <Typography

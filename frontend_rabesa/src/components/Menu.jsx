@@ -326,7 +326,7 @@ function Menu(props) {
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
           <img
-            src={`http://localhost:3000/uploads/${datosUsuario.imagen}`}
+            src={datosUsuario.imagen}
             style={{
               height: "40px",
               width: "40px",
