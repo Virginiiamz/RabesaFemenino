@@ -230,6 +230,14 @@ class UsuarioController {
       });
     }
   }
+
+  async logout(req, res) {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+    res.status(200).json(Respuesta.exito(null, "Cierre de sesión exitoso"));
+  }
 }
 
 module.exports = new UsuarioController();

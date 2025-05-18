@@ -1,8 +1,9 @@
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import Menu from "./Menu";
 import { Box } from "@mui/material";
 
 function Home() {
+
   return (
     <Box sx={{ display: "flex" }}>
       <Menu /> {/* Menú lateral */}

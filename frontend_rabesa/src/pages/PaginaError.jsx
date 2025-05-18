@@ -1,5 +1,5 @@
-import Menu from "./components/Menu";
-import { Box, Button, Typography } from "@mui/material";
+import Menu from "../components/Menu";
+import { Box, Button, Toolbar, Typography } from "@mui/material";
 
 /**
  * Componente de página de error.
@@ -9,6 +9,15 @@ import { Box, Button, Typography } from "@mui/material";
 function PaginaError() {
   return (
     <>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+        }}
+      >
+        <Toolbar />
+      </Box>
       <Menu />
       <Typography variant="h4" align="center" sx={{ mt: 2 }}>
         No hemos encontrado la página que buscas

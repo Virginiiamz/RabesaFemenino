@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 
@@ -34,14 +34,15 @@ import "@fontsource/fira-sans/500.css"; // Peso 500 (medium)
 import "@fontsource/fira-sans/700.css"; // Peso 700 (bold)
 import { SnackbarProvider } from "notistack";
 import Profile from "./components/Profile";
+import { apiUrl } from "./config";
 
-// import PaginaError from "./pages/PaginaError";
+import PaginaError from "./pages/PaginaError";
 
 let router = createBrowserRouter([
-  // errorElement: <PaginaError />,
   {
     path: "/",
     element: <Login />, // Ruta principal para el login
+    errorElement: <PaginaError />,
   },
   {
     path: "/home", // Ruta independiente para la página de inicio
@@ -49,11 +50,21 @@ let router = createBrowserRouter([
     children: [
       {
         path: "dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute
+            element={<Dashboard />}
+            allowedRoles={["Entrenador", "Jugadora"]}
+          />
+        ),
       },
       {
         path: "team",
-        element: <Team />,
+        element: (
+          <ProtectedRoute
+            element={<Team />}
+            allowedRoles={["Entrenador", "Jugadora"]}
+          />
+        ),
       },
       {
         path: "/home/crear-entrenador",
@@ -93,19 +104,39 @@ let router = createBrowserRouter([
       },
       {
         path: "training",
-        element: <Training />,
+        element: (
+          <ProtectedRoute
+            element={<Training />}
+            allowedRoles={["Entrenador", "Jugadora"]}
+          />
+        ),
       },
       {
         path: "/home/training/asistidos",
-        element: <AssistedTraining />,
+        element: (
+          <ProtectedRoute
+            element={<AssistedTraining />}
+            allowedRoles={["Jugadora"]}
+          />
+        ),
       },
       {
         path: "/home/training/no-asistidos",
-        element: <NoAssistedTraining />,
+        element: (
+          <ProtectedRoute
+            element={<NoAssistedTraining />}
+            allowedRoles={["Jugadora"]}
+          />
+        ),
       },
       {
         path: "/home/buscar-entrenamientos",
-        element: <SearchTraining />,
+        element: (
+          <ProtectedRoute
+            element={<SearchTraining />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
       },
       {
         path: "/home/crear-entrenamiento",
@@ -145,7 +176,12 @@ let router = createBrowserRouter([
       },
       {
         path: "partidos",
-        element: <Match />,
+        element: (
+          <ProtectedRoute
+            element={<Match />}
+            allowedRoles={["Entrenador", "Jugadora"]}
+          />
+        ),
       },
       {
         path: "/home/crear-partido",
@@ -176,7 +212,12 @@ let router = createBrowserRouter([
       },
       {
         path: "club",
-        element: <Club />,
+        element: (
+          <ProtectedRoute
+            element={<Club />}
+            allowedRoles={["Entrenador", "Jugadora"]}
+          />
+        ),
       },
       {
         path: "/home/crear-club",
@@ -198,7 +239,12 @@ let router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: (
+          <ProtectedRoute
+            element={<Profile />}
+            allowedRoles={["Entrenador", "Jugadora"]}
+          />
+        ),
       },
     ],
   },

@@ -39,6 +39,6 @@ router.put(
   },
   usuarioController.modifyImagen
 );
-// router.post("/logout", userController.logout);
+router.post("/logout", usuarioController.logout);
 
 module.exports = router;

@@ -1,3 +1,58 @@
+// useUserStore.jsx
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+
+/**
+ * Hook personalizado para gestionar el estado del usuario.
+ * Utiliza la biblioteca Zustand para la gestión del estado y persistencia en sessionStorage.
+ */
+const useUserStore = create(
+  persist(
+    (set, get) => ({
+      user: { rol: "None" }, // Estado inicial sin usuario
+
+      /**
+       * Establece los datos del usuario.
+       * @param {Object} userData - Datos del usuario.
+       */
+      setUser: (userData) => set({ user: userData }),
+
+      /**
+       * Limpia los datos del usuario, estableciendo el rol a "None".
+       */
+      clearUser: () => set({ user: { rol: "None" } }),
+
+      // Métodos de validación
+
+      /**
+       * Verifica si el usuario ha iniciado sesión.
+       * @returns {boolean} - Verdadero si el usuario ha iniciado sesión, falso en caso contrario.
+       */
+      isLoggedIn: () => get().user?.rol && get().user.rol !== "None",
+
+      /**
+       * Verifica si el usuario tiene rol de administrador.
+       * @returns {boolean} - Verdadero si el usuario es administrador, falso en caso contrario.
+       */
+      isAdmin: () => get().user?.rol === "Entrenador",
+
+      /**
+       * Verifica si el usuario tiene rol de usuario.
+       * @returns {boolean} - Verdadero si el usuario es usuario, falso en caso contrario.
+       */
+      isUser: () => get().user?.rol === "Jugadora",
+    }),
+    {
+      name: "user-storage", // Clave en sessionStorage
+      storage: createJSONStorage(() => sessionStorage), // Para cambiar a sessionStorage
+    }
+  )
+);
+
+export default useUserStore;
+
+-------------------------------
+
 import {
   Box,
   Button,
@@ -794,3 +849,267 @@ function Profile() {
   );
 }
 export default Profile;
+
+----------------------------------
+//main.jsx
+
+let router = createBrowserRouter([
+  // errorElement: <PaginaError />,
+  {
+    path: "/",
+    element: <Login />, // Ruta principal para el login
+  },
+  {
+    path: "/home", // Ruta independiente para la página de inicio
+    element: <Home />,
+    children: [
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "team",
+        element: <Team />,
+      },
+      {
+        path: "/home/crear-entrenador",
+        element: (
+          <ProtectedRoute
+            element={<CreateTrainer />}
+            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+          />
+        ),
+      },
+      {
+        path: "/home/modificar-entrenador/:identrenador",
+        element: (
+          <ProtectedRoute
+            element={<ModifyTrainer />}
+            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+          />
+        ),
+      },
+      {
+        path: "/home/crear-jugadora",
+        element: (
+          <ProtectedRoute
+            element={<CreatePlayer />}
+            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+          />
+        ),
+      },
+      {
+        path: "/home/modificar-jugadora/:idjugadora",
+        element: (
+          <ProtectedRoute
+            element={<ModifyPlayer />}
+            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+          />
+        ),
+      },
+      {
+        path: "training",
+        element: <Training />,
+      },
+      {
+        path: "/home/training/asistidos",
+        element: <AssistedTraining />,
+      },
+      {
+        path: "/home/training/no-asistidos",
+        element: <NoAssistedTraining />,
+      },
+      {
+        path: "/home/buscar-entrenamientos",
+        element: <SearchTraining />,
+      },
+      {
+        path: "/home/crear-entrenamiento",
+        element: (
+          <ProtectedRoute
+            element={<CreateTraining />}
+            allowedRoles={["Entrenador"]} // Solo entrenadores y admins pueden acceder
+          />
+        ),
+      },
+      {
+        path: "/home/modificar-entrenamiento/:identrenamiento",
+        element: (
+          <ProtectedRoute
+            element={<ModifyTraining />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "/home/training/mostrar-entrenamiento/:identrenamiento",
+        element: (
+          <ProtectedRoute
+            element={<ShowTraining />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "/home/crear-confirmacion/:identrenamiento/:tipoconfirmacion",
+        element: (
+          <ProtectedRoute
+            element={<CreateVerification />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "partidos",
+        element: <Match />,
+      },
+      {
+        path: "/home/crear-partido",
+        element: (
+          <ProtectedRoute
+            element={<CreateMatch />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "/home/modificar-partido/:idpartido",
+        element: (
+          <ProtectedRoute
+            element={<ModifyMatch />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "/home/partido/anadir-resultado/:idpartido",
+        element: (
+          <ProtectedRoute
+            element={<AddResult />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "club",
+        element: <Club />,
+      },
+      {
+        path: "/home/crear-club",
+        element: (
+          <ProtectedRoute
+            element={<CreateClub />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "/home/modificar-club/:idclub",
+        element: (
+          <ProtectedRoute
+            element={<ModifyClub />}
+            allowedRoles={["Entrenador"]}
+          />
+        ),
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+    ],
+  },
+  {
+    path: "unauthorized",
+    element: <Unauthorized />,
+  },
+]);
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <SnackbarProvider
+      maxSnack={3}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      autoHideDuration={3000}
+    >
+      <RouterProvider router={router} />
+    </SnackbarProvider>
+  </StrictMode>
+);
+
+---------------------------
+
+// authMiddleware.js
+// Importar librería de manejo de JWT
+const jwt = require("jsonwebtoken");
+
+// Importar libreria para manejo de ficheros de configuración dependiendo de la variable de entorno NODE_ENV
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV || "development"}`,
+});
+
+// Importar fichero de configuración con variables de entorno
+const config = require("../config/config.js");
+const { logMensaje } = require("../utils/logger.js");
+
+// Middleware para verificar el token JWT
+const verifyToken = (req, res, next) => {
+  // Obtener el token del encabezado si es el caso
+  //  const token = req.headers['authorization']?.split(' ')[1];
+
+  // Obtener el token de la cookie
+  const token = req.cookies.token;
+  // console.log("Token: ", token);
+  if (!token) {
+    return res
+      .status(401)
+      .json({ ok: false, datos: null, mensaje: "Token no proporcionado" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, config.secretKey); // Verifica el token
+    req.user = decoded; // Adjunta los datos del usuario al objeto req (se agrega la propiedad al objeto req)
+    next(); // Continúa al siguiente middleware o controlador
+  } catch (err) {
+    logMensaje(`Error al verificar el token: ${err.message}`);
+    return res
+      .status(403)
+      .json({ ok: false, datos: null, mensaje: "Token inválido o expirado" });
+  }
+};
+
+// Middleware para verificar si el usuario tiene un rol específico
+const verificarRol = (rolesPermitidos) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ ok: false, mensaje: "No autorizado.", datos: null });
+    }
+
+    if (!rolesPermitidos.includes(req.user.role)) {
+      return res.status(403).json({
+        ok: false,
+        mensaje: "Acceso denegado. No tienes permisos suficientes.",
+        datos: null,
+      });
+    }
+
+    next(); // Permite el acceso si el rol es válido
+  };
+};
+
+module.exports = { verifyToken, verificarRol };
+
+--------------------------
+
+async logout(req, res) {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+    res.status(200).json(Respuesta.exito(null, "Cierre de sesión exitoso"));
+  }
+

@@ -1,3 +1,4 @@
+// authMiddleware.js
 // Importar librería de manejo de JWT
 const jwt = require("jsonwebtoken");
 
@@ -39,10 +40,12 @@ const verifyToken = (req, res, next) => {
 // Middleware para verificar si el usuario tiene un rol específico
 const verificarRol = (rolesPermitidos) => {
   return (req, res, next) => {
-    if (!req.user) {
-      return res
-        .status(401)
-        .json({ ok: false, mensaje: "No autorizado.", datos: null });
+    if (!req.user || !req.user.role) {
+      return res.status(401).json({
+        ok: false,
+        mensaje: "No autorizado.",
+        datos: null,
+      });
     }
 
     if (!rolesPermitidos.includes(req.user.role)) {
