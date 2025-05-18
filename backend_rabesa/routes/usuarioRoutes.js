@@ -6,7 +6,14 @@ const usuarioController = require("../controllers/usuarioController");
 const { verifyToken } = require("../middlewares/authMiddleware");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const { initModels } = require("../models/init-models");
+const sequelize = require("../config/sequelize");
 require("dotenv").config();
+
+// Cargar las definiciones del modelo en sequelize
+const models = initModels(sequelize);
+// Recuperar el modelo user
+const Usuario = models.usuario;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -27,6 +34,34 @@ const storage = new CloudinaryStorage({
 });
 
 const upload = multer({ storage });
+
+router.get("/verificar", async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ mensaje: "No hay token" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const usuario = await Usuario.findById(decoded.id).select("-contrasena");
+
+    if (!usuario) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado" });
+    }
+
+    res.json({
+      mensaje: "Sesión válida",
+      datos: {
+        correo: usuario.correo,
+        rol: usuario.rol,
+        idusuario: usuario.idusuario, // Ajusta según tu modelo
+      },
+    });
+  } catch (error) {
+    console.error("Error en verificar:", error);
+    res.status(401).json({ mensaje: "Token inválido" });
+  }
+});
 
 router.post("/login", usuarioController.login);
 router.put("/updateProfile", usuarioController.modifyUser);

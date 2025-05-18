@@ -4,8 +4,51 @@ import { useNavigate, Outlet, Navigate } from "react-router";
 import { apiUrl } from "../config";
 
 const ProtectedRoute = ({ element, allowedRoles }) => {
-  const { user, isLoggedIn } = useUserStore();
+  const { user, isLoggedIn, setUser } = useUserStore();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Verificar usuario solo si no está cargando y no hay usuario
+    const verificarUsuario = async () => {
+      setLoading(true); // Indica que estamos verificando
+      try {
+        const response = await fetch(`${apiUrl}/usuario/verificar`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await response.json();
+        console.log("Respuesta de verificar:", data);
+
+        if (
+          response.ok &&
+          data.datos &&
+          data.datos.rol &&
+          data.datos.rol !== "None"
+        ) {
+          setUser(data.datos);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error al verificar usuario:", error);
+        setUser(null);
+      } finally {
+        setLoading(false); // Termina la carga
+      }
+    };
+
+    if (!user && loading) {
+      verificarUsuario();
+    } else {
+      setLoading(false);
+    }
+  }, [user, setUser, loading]); // Dependencias correctas
+
+  if (user && window.location.pathname === "/") {
+    return <Navigate to="/home/dashboard" replace />;
+  }
 
   if (!user) {
     // User no logueado

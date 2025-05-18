@@ -48,7 +48,7 @@ class UsuarioController {
           rol: user.rol,
         },
         config.secretKey,
-        { expiresIn: "1h" }
+        { expiresIn: "30min" }
       );
 
       // Configurar la cookie con el token
@@ -56,7 +56,7 @@ class UsuarioController {
         httpOnly: true, // Evita que JavaScript acceda a la cookie
         secure: process.env.NODE_ENV === "production", // Solo en HTTPS en producción
         sameSite: process.env.NODE_ENV === "production" ? "strict" : "Lax", // Protección CSRF // Lax en desarrollo
-        maxAge: 3600000, // 1 hora en milisegundos
+        maxAge: 30 * 60 * 1000, // 30 minutos en milisegundos
         // domain: "localhost",
       });
 

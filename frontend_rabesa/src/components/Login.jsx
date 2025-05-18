@@ -20,7 +20,7 @@ function Login() {
     correo: "",
     contrasena: "",
   });
-  const { setUser } = useUserStore();
+  const { setUser, clearUser } = useUserStore();
   const [validacion, setValidacion] = useState({
     correo: false,
     contraseña: false,
@@ -89,12 +89,25 @@ function Login() {
           anchorOrigin: { vertical: "bottom", horizontal: "right" },
         });
 
+        console.log("Respuesta login:", data.datos);
         setUser(data.datos);
+        console.log("En localStorage:", localStorage.getItem("user-storage"));
 
         // Redirige tras el login exitoso
         setTimeout(() => {
           navigate("/home/dashboard");
         }, 1000);
+
+        // Guardar token si lo usas
+        localStorage.setItem("token", data.token);
+
+        // Autologout después de 10 segundos
+        setTimeout(() => {
+          console.log("⏱️ Sesión expirada, limpiando token y usuario");
+          localStorage.removeItem("token");
+          clearUser();
+          navigate("/login");
+        }, 30 * 60 * 1000);
       } else {
         playNotificationSound(notificacionError);
 

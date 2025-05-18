@@ -40,7 +40,7 @@ const verifyToken = (req, res, next) => {
 // Middleware para verificar si el usuario tiene un rol específico
 const verificarRol = (rolesPermitidos) => {
   return (req, res, next) => {
-    if (!req.user || !req.user.role) {
+    if (!req.user || !req.user.rol) {
       return res.status(401).json({
         ok: false,
         mensaje: "No autorizado.",
@@ -48,7 +48,7 @@ const verificarRol = (rolesPermitidos) => {
       });
     }
 
-    if (!rolesPermitidos.includes(req.user.role)) {
+    if (!rolesPermitidos.includes(req.user.rol)) {
       return res.status(403).json({
         ok: false,
         mensaje: "Acceso denegado. No tienes permisos suficientes.",

@@ -1,8 +1,15 @@
 import { Outlet, useNavigate } from "react-router";
 import Menu from "./Menu";
 import { Box } from "@mui/material";
+import useUserStore from "../stores/useUserStore";
 
 function Home() {
+  const hasHydrated = useUserStore.persist.hasHydrated();
+
+  // Mientras no sepamos el estado real del store, mostramos un loader
+  if (!hasHydrated) {
+    return <div>Cargando sesión…</div>;
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
