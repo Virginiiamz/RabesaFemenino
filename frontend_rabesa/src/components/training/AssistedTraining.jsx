@@ -143,7 +143,7 @@ function AssistedTraining() {
           autoHideDuration: 3000,
           anchorOrigin: { vertical: "bottom", horizontal: "right" },
         });
-      } 
+      }
     } catch (error) {
       enqueueSnackbar("Error al cancelar la asistencia", {
         variant: "error",
@@ -207,6 +207,8 @@ function AssistedTraining() {
             </Button>
           </Link>
         </Box>
+
+        <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
         <Box
           sx={{
             width: "100%",
@@ -222,7 +224,7 @@ function AssistedTraining() {
                 display: "flex",
                 border: "1px solid #BDBDBD",
                 padding: "16px",
-                borderRadius: "8px",
+                borderRadius: "4px",
                 width: "100%",
                 backgroundColor: "#FFFFFF",
                 gap: 3,
@@ -420,6 +422,23 @@ function AssistedTraining() {
             </Box>
           ))}
         </Box>
+
+        {datosConfirmados.length == 0 ? (
+          <Box
+            sx={{
+              border: "1px solid #BDBDBD",
+              paddingX: "16px",
+              paddingTop: "16px",
+              borderRadius: "4px",
+              width: "100%",
+              backgroundColor: "#FFFFFF",
+            }}
+          >
+            <Typography sx={{ marginBottom: "0.7rem", textAlign: "center" }}>
+              No hay ningún entrenamiento confirmado
+            </Typography>
+          </Box>
+        ) : null}
       </Box>
     </>
   );

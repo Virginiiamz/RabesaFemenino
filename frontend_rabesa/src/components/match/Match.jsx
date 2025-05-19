@@ -208,6 +208,23 @@ function Match() {
 
         <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
 
+        {datosPartidos.length == 0? (
+          <Box
+            sx={{
+              border: "1px solid #BDBDBD",
+              paddingTop: "16px",
+              borderRadius: "4px",
+              width: "100%",
+              backgroundColor: "#FFFFFF",
+              margin: "0px",
+            }}
+          >
+            <Typography sx={{ marginBottom: "0.7rem", textAlign: "center" }}>
+              No hay ningún partido creado
+            </Typography>
+          </Box>
+        ) : null}
+
         <Box
           sx={{
             width: "100%",

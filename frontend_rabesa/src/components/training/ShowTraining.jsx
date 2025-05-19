@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Divider,
   ImageListItem,
   Modal,
   Toolbar,
@@ -220,6 +221,25 @@ function ShowTraining() {
           </Box>
         </Box>
 
+        <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
+
+        {datosAsistencia.length == 0 && datosNoAsistencia.length == 0 ? (
+          <Box
+            sx={{
+              border: "1px solid #BDBDBD",
+              paddingTop: "16px",
+              borderRadius: "4px",
+              width: "100%",
+              backgroundColor: "#FFFFFF",
+              margin: "0px",
+            }}
+          >
+            <Typography sx={{ marginBottom: "0.7rem", textAlign: "center" }}>
+              No hay ninguna confirmación en este entrenamiento
+            </Typography>
+          </Box>
+        ) : null}
+
         <Box
           sx={{
             width: "100%",
@@ -235,96 +255,152 @@ function ShowTraining() {
               display: "flex",
               flexDirection: "column",
               gap: 2,
-              backgroundColor: "white",
-              border: "1px solid #BDBDBD",
               padding: "16px",
-              borderRadius: "8px",
+              borderRadius: "4px",
             }}
           >
-            <Typography
-              sx={{
-                color: "#3d64a8",
-                fontFamily: "'Open sans'",
-                fontWeight: 600,
-              }}
-            >
-              Asistencia confirmadas
-            </Typography>
-            {datosAsistencia.map((asistencia) => (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  borderBottom: "1px solid #BDBDBD",
-                  alignItems: "center",
+            {datosAsistencia.length != 0 ? (
+              <Typography
+                sx={{
+                  color: "#3d64a8",
+                  fontFamily: "'Open sans'",
+                  fontWeight: 600,
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 1,
-                  }}
-                >
-                  <img
-                    src={`http://localhost:3000/uploads/${asistencia.idjugadora_jugadora.imagen}`}
-                    style={{
-                      borderRadius: "70%",
-                      height: "60px",
-                      width: "60px",
-                      marginTop: "0.5rem",
-                      marginBottom: "0.5rem",
-                      objectFit: "cover",
+                Asistencia confirmadas
+              </Typography>
+            ) : null}
+            {datosAsistencia.map((asistencia) => (
+              <Card
+                sx={{
+                  border: "1px solid #BDBDBD",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "none",
+                }}
+              >
+                <CardContent>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1.5,
+                      justifyContent: "space-between",
                     }}
-                  ></img>
-                  <Box sx={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        color: "#3d64a8",
-                        marginBottom: "0.3rem",
-                        marginLeft: "0.4rem"
-                      }}
-                    >
-                      <Typography variant="body1">
-                        {asistencia.idjugadora_jugadora.nombre}
-                      </Typography>
+                  >
+                    <Box sx={{ display: "flex", gap: 1.5 }}>
+                      <CardMedia
+                        component="img"
+                        sx={{
+                          borderRadius: "100%",
+                          width: "70px",
+                          height: "70px",
+                          objectFit: "cover",
+                        }}
+                        alt={asistencia.idjugadora_jugadora.nombre}
+                        image={asistencia.idjugadora_jugadora.imagen}
+                      />
+                      <Box sx={{}}>
+                        <Typography
+                          sx={{
+                            color: "#3d64a8",
+                            fontFamily: "'Open sans'",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {asistencia.idjugadora_jugadora.nombre}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "text.secondary" }}
+                        >
+                          {asistencia.idjugadora_jugadora.posicion}
+                        </Typography>
+                      </Box>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        color: "#3d64a8",
-                      }}
-                    >
-                      <PlaceIcon></PlaceIcon>
-                      <Typography variant="body1">
-                        {asistencia.idjugadora_jugadora.posicion}
-                      </Typography>
+                    <Box sx={{ display: "flex" }}>
+                      <>
+                        <Box
+                          onClick={() =>
+                            handleDelete(asistencia.idasistencia, "asistencia")
+                          }
+                          sx={{ cursor: "pointer" }}
+                        >
+                          <Tooltip title="Eliminar confirmación">
+                            <CancelIcon
+                              sx={{
+                                color: "#3d64a8",
+                                fontSize: { xs: "24px", md: "24px" },
+                              }}
+                            ></CancelIcon>
+                          </Tooltip>
+                        </Box>
+                      </>
                     </Box>
                   </Box>
-                </Box>
-                <Box>
                   <Box
-                    onClick={() =>
-                      handleDelete(asistencia.idasistencia, "asistencia")
-                    }
-                    sx={{ cursor: "pointer", alignSelf: "flex-end" }}
+                    sx={{
+                      margin: 1,
+                      display: "flex",
+                      gap: 4,
+                      alignItems: "start",
+                    }}
                   >
-                    <Tooltip title="Eliminar confirmación">
-                      <CancelIcon
+                    <Box>
+                      <Typography
                         sx={{
                           color: "#3d64a8",
-                          fontSize: { xs: "24px", md: "24px" },
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
                         }}
-                      ></CancelIcon>
-                    </Tooltip>
+                        variant="subtitle2"
+                      >
+                        Edad
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        {asistencia.idjugadora_jugadora.edad}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: "#3d64a8",
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
+                        }}
+                        variant="subtitle2"
+                      >
+                        Dorsal
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        {asistencia.idjugadora_jugadora.numero_camiseta}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: "#3d64a8",
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
+                        }}
+                        variant="subtitle2"
+                      >
+                        Estado
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        {asistencia.idjugadora_jugadora.estado}
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-              </div>
+                </CardContent>
+              </Card>
             ))}
           </Box>
           <Box
@@ -333,97 +409,155 @@ function ShowTraining() {
               display: "flex",
               flexDirection: "column",
               gap: 2,
-              backgroundColor: "white",
-              border: "1px solid #BDBDBD",
               padding: "16px",
-              borderRadius: "8px",
+              borderRadius: "4px",
             }}
           >
-            <Typography
-              sx={{
-                color: "#3d64a8",
-                fontFamily: "'Open sans'",
-                fontWeight: 600,
-              }}
-            >
-              Asistencia rechazadas
-            </Typography>
-            {datosNoAsistencia.map((asistencia) => (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  borderBottom: "1px solid #BDBDBD",
-                  alignItems: "center",
+            {datosNoAsistencia.length != 0 ? (
+              <Typography
+                sx={{
+                  color: "#3d64a8",
+                  fontFamily: "'Open sans'",
+                  fontWeight: 600,
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 1,
-                  }}
-                >
-                  <img
-                    src={`http://localhost:3000/uploads/${asistencia.idjugadora_jugadora.imagen}`}
-                    style={{
-                      borderRadius: "70%",
-                      height: "60px",
-                      width: "60px",
-                      marginTop: "0.5rem",
-                      marginBottom: "0.5rem",
-                      objectFit: "cover",
+                Asistencia rechazadas
+              </Typography>
+            ) : null}
+            {datosNoAsistencia.map((asistencia) => (
+              <Card
+                sx={{
+                  border: "1px solid #BDBDBD",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "none",
+                }}
+              >
+                <CardContent>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1.5,
+                      justifyContent: "space-between",
                     }}
-                  ></img>
-                  <Box sx={{ marginTop: "0.5rem", marginBottom: "0.5rem" }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "0.4rem",
-                        alignItems: "center",
-                        color: "#3d64a8",
-                        marginBottom: "0.3rem",
-                        marginLeft: "0.4rem"
-                      }}
-                    >
-                      <Typography variant="body1">
-                        {asistencia.idjugadora_jugadora.nombre}
-                      </Typography>
+                  >
+                    <Box sx={{ display: "flex", gap: 1.5 }}>
+                      <CardMedia
+                        component="img"
+                        sx={{
+                          borderRadius: "100%",
+                          width: "70px",
+                          height: "70px",
+                          objectFit: "cover",
+                        }}
+                        alt={asistencia.idjugadora_jugadora.nombre}
+                        image={asistencia.idjugadora_jugadora.imagen}
+                      />
+                      <Box sx={{}}>
+                        <Typography
+                          sx={{
+                            color: "#3d64a8",
+                            fontFamily: "'Open sans'",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {asistencia.idjugadora_jugadora.nombre}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "text.secondary" }}
+                        >
+                          {asistencia.idjugadora_jugadora.posicion}
+                        </Typography>
+                      </Box>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        color: "#3d64a8",
-                      }}
-                    >
-                      <PlaceIcon></PlaceIcon>
-                      <Typography variant="body1">
-                        {asistencia.idjugadora_jugadora.posicion}
-                      </Typography>
+                    <Box sx={{ display: "flex" }}>
+                      <>
+                        <Box
+                          onClick={() =>
+                            handleDelete(
+                              asistencia.idasistencia,
+                              "noAsistencia"
+                            )
+                          }
+                          sx={{ cursor: "pointer" }}
+                        >
+                          <Tooltip title="Eliminar confirmación">
+                            <CancelIcon
+                              sx={{
+                                color: "#3d64a8",
+                                fontSize: { xs: "24px", md: "24px" },
+                              }}
+                            ></CancelIcon>
+                          </Tooltip>
+                        </Box>
+                      </>
                     </Box>
                   </Box>
-                </Box>
-                <Box>
                   <Box
-                    onClick={() =>
-                      handleDelete(asistencia.idasistencia, "noAsistencia")
-                    }
-                    sx={{ cursor: "pointer", alignSelf: "flex-end" }}
+                    sx={{
+                      margin: 1,
+                      display: "flex",
+                      gap: 4,
+                      alignItems: "start",
+                    }}
                   >
-                    <Tooltip title="Eliminar confirmación">
-                      <CancelIcon
+                    <Box>
+                      <Typography
                         sx={{
                           color: "#3d64a8",
-                          fontSize: { xs: "24px", md: "24px" },
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
                         }}
-                      ></CancelIcon>
-                    </Tooltip>
+                        variant="subtitle2"
+                      >
+                        Edad
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        {asistencia.idjugadora_jugadora.edad}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: "#3d64a8",
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
+                        }}
+                        variant="subtitle2"
+                      >
+                        Dorsal
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        {asistencia.idjugadora_jugadora.numero_camiseta}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography
+                        sx={{
+                          color: "#3d64a8",
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
+                        }}
+                        variant="subtitle2"
+                      >
+                        Estado
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        {asistencia.idjugadora_jugadora.estado}
+                      </Typography>
+                    </Box>
                   </Box>
-                </Box>
-              </div>
+                </CardContent>
+              </Card>
             ))}
           </Box>
         </Box>

@@ -1,6 +1,10 @@
 import {
   Box,
   Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Divider,
   FormControl,
   InputLabel,
   MenuItem,
@@ -16,6 +20,8 @@ import { FaUserPlus, FaUserTimes } from "react-icons/fa";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { playNotificationSound } from "../../utils/Funciones";
 import { enqueueSnackbar } from "notistack";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PlaceIcon from "@mui/icons-material/Place";
 
 function CreateVerification() {
   const { identrenamiento, tipoconfirmacion } = useParams();
@@ -58,9 +64,9 @@ function CreateVerification() {
     getAllJugadoraNoConfirmadasByEntrenamiento();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let { idjugadora, identrenamiento, estado } = formData;
+  const handleSubmit = async (idjugadora) => {
+    // e.preventDefault();
+    let { identrenamiento, estado } = formData;
 
     if (tipoconfirmacion == true) {
       estado = true;
@@ -100,7 +106,7 @@ function CreateVerification() {
           anchorOrigin: { vertical: "bottom", horizontal: "right" },
         });
         setTimeout(() => {
-          navigate(`/home/training/mostrar-entrenamiento/${identrenamiento}`);
+          navigate(0);
         }, 1000);
       } else {
         playNotificationSound(notificacionError);
@@ -230,58 +236,154 @@ function CreateVerification() {
           </Link>
         </Box>
 
+
+        <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
+
         <Box
-          component="form"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            border: "1px solid #BDBDBD",
-            backgroundColor: "white",
-            borderRadius: "10px",
-            padding: "20px",
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(1, 1fr)",
+              md: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
+            },
+            gap: 2,
+            justifyContent: "center",
             width: "100%",
-            gap: "1rem",
+            marginY: 2,
           }}
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit}
         >
-          <FormControl fullWidth required>
-            <InputLabel id="select-jugadora">Jugadora</InputLabel>
-            <Select
-              labelId="select-jugadora"
-              id="select-jugadora"
-              value={formData.idjugadora}
-              label="Jugadora"
-              onChange={handleChange}
-              name="idjugadora"
+          {datosJugadoras.map((jugadora) => (
+            <Card
+              sx={{
+                border: "1px solid #BDBDBD",
+                backgroundColor: "#FFFFFF",
+                boxShadow: "none",
+              }}
             >
-              {datosJugadoras.map((jugadora) => (
-                <MenuItem key={jugadora.idjugadora} value={jugadora.idjugadora}>
-                  {jugadora.nombre}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button
-            sx={{
-              gap: 0.5,
-              color: "white",
-              backgroundColor: "#00338e",
-              fontFamily: "'Open sans'",
-              fontSize: "14px",
-              fontWeight: 600,
-              width: "12rem",
-              "&:hover": {
-                backgroundColor: "#AACBFF",
-                color: "#00338e",
-              },
-            }}
-            variant="contained"
-            type="submit"
-          >
-            Guardar asistencia
-          </Button>
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1.5,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 1.5 }}>
+                    <CardMedia
+                      component="img"
+                      sx={{
+                        borderRadius: "100%",
+                        width: "70px",
+                        height: "70px",
+                        objectFit: "cover",
+                      }}
+                      alt={jugadora.nombre}
+                      image={jugadora.imagen}
+                    />
+                    <Box sx={{}}>
+                      <Typography
+                        sx={{
+                          color: "#3d64a8",
+                          fontFamily: "'Open sans'",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {jugadora.nombre}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        {jugadora.posicion}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: "flex" }}>
+                    <>
+                      <Box
+                        onClick={() => handleSubmit(jugadora.idjugadora)}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        <Tooltip title="Confirmar asistencia">
+                          <CheckCircleIcon
+                            sx={{
+                              color: "#3d64a8",
+                              fontSize: { xs: "24px", md: "24px" },
+                            }}
+                          ></CheckCircleIcon>
+                        </Tooltip>
+                      </Box>
+                    </>
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    margin: 1,
+                    display: "flex",
+                    gap: 4,
+                    alignItems: "start",
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                      variant="subtitle2"
+                    >
+                      Edad
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      {jugadora.edad}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                      variant="subtitle2"
+                    >
+                      Dorsal
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      {jugadora.numero_camiseta}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography
+                      sx={{
+                        color: "#3d64a8",
+                        fontFamily: "'Open sans'",
+                        fontWeight: 600,
+                      }}
+                      variant="subtitle2"
+                    >
+                      Estado
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary" }}
+                    >
+                      {jugadora.estado}
+                    </Typography>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
         </Box>
       </Box>
     </>

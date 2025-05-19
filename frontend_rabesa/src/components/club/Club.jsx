@@ -149,6 +149,23 @@ function Club() {
 
         <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
 
+        {datosClubs.length == 0 ? (
+          <Box
+            sx={{
+              border: "1px solid #BDBDBD",
+              paddingTop: "16px",
+              borderRadius: "4px",
+              width: "100%",
+              backgroundColor: "#FFFFFF",
+              margin: "0px",
+            }}
+          >
+            <Typography sx={{ marginBottom: "0.7rem", textAlign: "center" }}>
+              No hay ningún club creado de la liga
+            </Typography>
+          </Box>
+        ) : null}
+
         <Box
           sx={{
             display: "grid",
@@ -170,7 +187,7 @@ function Club() {
                 width: "100%",
                 border: "1px solid #BDBDBD",
                 backgroundColor: "#FFFFFF",
-                boxShadow: "none"
+                boxShadow: "none",
               }}
             >
               <CardContent>

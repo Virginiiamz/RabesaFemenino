@@ -209,16 +209,37 @@ function Team() {
         </div>
 
         <Divider sx={{ my: 2, backgroundColor: "#3d64a8" }} />
-        <Typography
-          sx={{
-            fontSize: "18px",
-            color: "#00338e",
-            fontWeight: 600,
-            fontFamily: "'Open sans'",
-          }}
-        >
-          Entrenadores
-        </Typography>
+
+        {datosEntrenadores.length == 0 && datosJugadoras == 0 ? (
+          <Box
+            sx={{
+              border: "1px solid #BDBDBD",
+              paddingTop: "16px",
+              borderRadius: "4px",
+              width: "100%",
+              backgroundColor: "#FFFFFF",
+              margin: "0px",
+            }}
+          >
+            <Typography sx={{ marginBottom: "0.7rem", textAlign: "center" }}>
+              No hay ningún miembro del equipo creado
+            </Typography>
+          </Box>
+        ) : null}
+
+        {datosEntrenadores.length != 0 ? (
+          <Typography
+            sx={{
+              fontSize: "18px",
+              color: "#00338e",
+              fontWeight: 600,
+              fontFamily: "'Open sans'",
+            }}
+          >
+            Entrenadores
+          </Typography>
+        ) : null}
+
         <Box
           sx={{
             display: "grid",
@@ -236,7 +257,7 @@ function Team() {
               sx={{
                 border: "1px solid #BDBDBD",
                 backgroundColor: "#FFFFFF",
-                boxShadow: "none"
+                boxShadow: "none",
               }}
             >
               <CardContent>
@@ -364,17 +385,20 @@ function Team() {
             </Card>
           ))}
         </Box>
-        <Typography
-          sx={{
-            fontSize: "18px",
-            marginY: 1,
-            color: "#00338e",
-            fontWeight: 600,
-            fontFamily: "'Open sans'",
-          }}
-        >
-          Jugadoras
-        </Typography>
+        {datosJugadoras.length != 0 ? (
+          <Typography
+            sx={{
+              fontSize: "18px",
+              marginY: 1,
+              color: "#00338e",
+              fontWeight: 600,
+              fontFamily: "'Open sans'",
+            }}
+          >
+            Jugadoras
+          </Typography>
+        ) : null}
+
         <Box
           sx={{
             display: "grid",
@@ -395,7 +419,7 @@ function Team() {
               sx={{
                 border: "1px solid #BDBDBD",
                 backgroundColor: "#FFFFFF",
-                boxShadow: "none"
+                boxShadow: "none",
               }}
             >
               <CardContent>
