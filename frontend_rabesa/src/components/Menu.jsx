@@ -344,7 +344,7 @@ function Menu(props) {
             variant="h7"
             component="div"
           >
-            {datosUsuario.correo}
+            {datosUsuario.nombre}
           </Typography>
         </Toolbar>
       </AppBar>
