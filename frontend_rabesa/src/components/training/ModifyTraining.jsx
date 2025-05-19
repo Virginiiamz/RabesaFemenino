@@ -3,6 +3,7 @@ import {
   Button,
   FormControl,
   Grid,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -19,6 +20,8 @@ import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { playNotificationSound } from "../../utils/Funciones";
 import { enqueueSnackbar } from "notistack";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import TimerIcon from "@mui/icons-material/Timer";
 
 function ModifyTraining() {
   const navigate = useNavigate();
@@ -32,6 +35,7 @@ function ModifyTraining() {
   });
   const notificacionError = useRef(null);
   const notificacion = useRef(null);
+  const [validacion, setValidacion] = useState({});
 
   useEffect(() => {
     async function getEntrenamientoById() {
@@ -50,6 +54,30 @@ function ModifyTraining() {
 
     getEntrenamientoById();
   }, []);
+
+  const validarCampos = () => {
+    const nuevosErrores = {};
+
+    if (formData.tipo === "Default") {
+      nuevosErrores.tipo = "El tipo de entrenamiento es obligatorio";
+    }
+
+    if (!formData.fecha_entrenamiento) {
+      nuevosErrores.fecha_entrenamiento =
+        "La fecha de entrenamiento es obligatoria";
+    }
+
+    if (!formData.hora_inicio) {
+      nuevosErrores.hora_inicio = "La hora de inicio es obligatoria";
+    }
+    if (!formData.hora_final) {
+      nuevosErrores.hora_final = "La hora de fin es obligatoria";
+    }
+
+    setValidacion(nuevosErrores);
+
+    return Object.keys(nuevosErrores).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -117,6 +145,10 @@ function ModifyTraining() {
         return;
       }
     }
+
+    const esValido = validarCampos();
+
+    if (!esValido) return;
 
     try {
       const response = await fetch(
@@ -246,34 +278,58 @@ function ModifyTraining() {
             flexDirection: "column",
             border: "1px solid #BDBDBD",
             backgroundColor: "white",
-            borderRadius: "10px",
+            borderRadius: "4px",
             padding: "20px",
             width: "100%",
           }}
           sx={{ width: "100%" }}
         >
+          <Typography
+            sx={{
+              color: "#3d64a8",
+              fontFamily: "'Open sans'",
+              fontWeight: 600,
+            }}
+          >
+            Información del entrenamiento
+          </Typography>
           <Box
             sx={{
               width: "100%",
               maxWidth: "100%", // Asegura que no haya limitación de ancho
-              padding: 2, // Añade un poco de espacio interno
+              marginTop: 2
             }}
           >
             <Grid container spacing={3} sx={{ width: "100%" }}>
               {/* Primera fila - Tipo y Descripción */}
               <Grid item xs={12} md={6}>
-                <FormControl fullWidth required>
-                  <InputLabel id="select-tipo">Tipo</InputLabel>
+                <FormControl
+                  fullWidth
+                  required
+                  error={!!validacion.tipo}
+                  helperText={validacion.tipo}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "'Open sans'",
+                      fontWeight: 600,
+                      fontSize: "13px",
+                      marginBottom: 1,
+                      color: "#3d64a8",
+                    }}
+                  >
+                    Tipo entrenamiento *
+                  </Typography>
                   <Select
-                    labelId="select-tipo"
-                    id="select-tipo"
                     name="tipo"
                     value={formData.tipo}
-                    label="Tipo"
                     onChange={handleChange}
                     fullWidth
                     required
                   >
+                    <MenuItem value="Default" disabled>
+                      Seleccione un tipo de entrenamiento
+                    </MenuItem>
                     <MenuItem value="Técnico">Técnico</MenuItem>
                     <MenuItem value="Táctico">Táctico</MenuItem>
                     <MenuItem value="Físico">Físico</MenuItem>
@@ -282,94 +338,140 @@ function ModifyTraining() {
                       Mental y psicológico
                     </MenuItem>
                   </Select>
-                  {/* {validacion.tipo && (
-                    <FormHelperText error>Campo obligatorio</FormHelperText>
-                  )} */}
                 </FormControl>
+                {validacion.tipo && (
+                  <FormHelperText error>
+                    El tipo de entrenamiento es obligatorio
+                  </FormHelperText>
+                )}
               </Grid>
 
               <Grid item xs={12} md={6}>
+                <Typography
+                  sx={{
+                    fontFamily: "'Open sans'",
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    marginBottom: 1,
+                    color: "#3d64a8",
+                  }}
+                >
+                  Fecha de entrenamiento *
+                </Typography>
                 <TextField
                   fullWidth
-                  label="Fecha de entrenamiento"
                   type="date"
-                  variant="outlined"
                   name="fecha_entrenamiento"
                   value={formData.fecha_entrenamiento}
                   onChange={handleChange}
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <CalendarTodayIcon
+                          sx={{ color: "#a6a6a6", fontSize: "20px" }}
+                        />
+                      </InputAdornment>
+                    ),
+                  }}
                   required={true}
-                  // error={
-                  //   validacion.fecha_entrenamiento || validacion.fecha_atrasada
-                  // }
+                  error={!!validacion.fecha_entrenamiento}
+                  helperText={validacion.fecha_entrenamiento}
                 />
-                {/* {validacion.fecha_entrenamiento && (
-                  <FormHelperText error>Campo obligatorio</FormHelperText>
-                )}
-                {validacion.fecha_atrasada && (
-                  <FormHelperText error>
-                    No puede ser una fecha ya pasada
-                  </FormHelperText>
-                )} */}
               </Grid>
 
               {/* Tercera fila - Horas */}
               <Grid item xs={12} md={6}>
+                <Typography
+                  sx={{
+                    fontFamily: "'Open sans'",
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    marginBottom: 1,
+                    color: "#3d64a8",
+                  }}
+                >
+                  Hora inicio *
+                </Typography>
                 <TextField
                   fullWidth
-                  label="Hora inicio"
                   type="time"
-                  variant="outlined"
                   name="hora_inicio"
                   value={formData.hora_inicio}
                   onChange={handleChange}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <TimerIcon
+                          sx={{ color: "#a6a6a6", fontSize: "20px" }}
+                        />
+                      </InputAdornment>
+                    ),
+                  }}
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  inputProps={{
-                    step: 300, // intervalos de 5 minutos
-                  }}
                   required={true}
-                  // error={validacion.hora_inicio}
+                  error={!!validacion.hora_inicio}
+                  helperText={validacion.hora_inicio}
                 />
-                {/* {validacion.hora_inicio && (
-                  <FormHelperText error>Campo obligatorio</FormHelperText>
-                )} */}
               </Grid>
 
               <Grid item xs={12} md={6}>
+                <Typography
+                  sx={{
+                    fontFamily: "'Open sans'",
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    marginBottom: 1,
+                    color: "#3d64a8",
+                  }}
+                >
+                  Hora final *
+                </Typography>
                 <TextField
                   fullWidth
-                  label="Hora final"
                   type="time"
-                  variant="outlined"
                   name="hora_final"
                   value={formData.hora_final}
                   onChange={handleChange}
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  inputProps={{
-                    step: 300, // intervalos de 5 minutos
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <TimerIcon
+                          sx={{ color: "#a6a6a6", fontSize: "20px" }}
+                        />
+                      </InputAdornment>
+                    ),
                   }}
                   required={true}
-                  // error={validacion.hora_final}
+                  error={!!validacion.hora_final}
+                  helperText={validacion.hora_final}
                 />
-                {/* {validacion.hora_final && (
-                  <FormHelperText error>Campo obligatorio</FormHelperText>
-                )} */}
               </Grid>
 
               {/* Segunda fila - Fecha */}
               <Grid item xs={12}>
+                <Typography
+                  sx={{
+                    fontFamily: "'Open sans'",
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    marginBottom: 1,
+                    color: "#3d64a8",
+                  }}
+                >
+                  Descripción *
+                </Typography>
                 <TextField
                   fullWidth
                   multiline
                   rows={4}
-                  variant="outlined"
-                  label="Descripción"
                   name="informacion"
                   value={formData.informacion}
                   onChange={handleChange}

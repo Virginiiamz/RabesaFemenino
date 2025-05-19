@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   FormHelperText,
+  InputAdornment,
   InputLabel,
   TextField,
   Typography,
@@ -13,6 +14,8 @@ import useUserStore from "../stores/useUserStore";
 import logoRabesa from "../assets/img/logo_rabesa.jpg";
 import { playNotificationSound } from "../utils/Funciones";
 import { enqueueSnackbar } from "notistack";
+import MailIcon from "@mui/icons-material/Mail";
+import LockIcon from "@mui/icons-material/Lock";
 
 function Login() {
   const navigate = useNavigate();
@@ -190,7 +193,15 @@ function Login() {
             autoComplete="off"
             onSubmit={handleSubmit}
           >
-            <p style={{ margin: 0, color: "black" }}>Correo electrónico:</p>
+            <Typography
+              sx={{
+                fontFamily: "'Open sans'",
+                fontSize: "15px",
+                color: "black",
+              }}
+            >
+              Correo electrónico *
+            </Typography>
             <TextField
               hiddenLabel
               id="outlined-basic"
@@ -198,15 +209,34 @@ function Login() {
               name="correo"
               color=""
               value={formData.correo}
+              placeholder="Introduce tu correo electrónico"
               onChange={handleChange}
               sx={{ fontFamily: "'Open sans'" }}
               required
               error={validacion.correo && !formData.correo}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MailIcon sx={{ color: "#a6a6a6", fontSize: "20px" }} />
+                  </InputAdornment>
+                ),
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             {validacion.correo && !formData.correo && (
               <FormHelperText error>Campo obligatorio</FormHelperText>
             )}
-            <p style={{ margin: 0, color: "black" }}>Contraseña:</p>
+            <Typography
+              sx={{
+                fontFamily: "'Open sans'",
+                fontSize: "15px",
+                color: "black",
+              }}
+            >
+              Contraseña *
+            </Typography>
             <TextField
               hiddenLabel
               id="outlined-basic"
@@ -215,9 +245,20 @@ function Login() {
               name="contrasena"
               value={formData.contrasena}
               onChange={handleChange}
+              placeholder="Introduce tu contraseña"
               sx={{ fontFamily: "'Open sans'" }}
               required
               error={validacion.contraseña && !formData.contrasena}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon sx={{ color: "#a6a6a6", fontSize: "20px" }} />
+                  </InputAdornment>
+                ),
+              }}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             {validacion.contraseña && !formData.contrasena && (
               <FormHelperText error>Campo obligatorio</FormHelperText>

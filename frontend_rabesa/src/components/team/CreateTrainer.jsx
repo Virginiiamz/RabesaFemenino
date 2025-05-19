@@ -272,7 +272,7 @@ function CreateTrainer() {
             flexDirection: "column",
             border: "1px solid #BDBDBD",
             backgroundColor: "white",
-            borderRadius: "10px",
+            borderRadius: "4px",
             padding: "20px",
             width: "100%",
           }}

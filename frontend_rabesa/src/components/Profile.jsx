@@ -275,9 +275,17 @@ function Profile() {
 
       if (response.ok) {
         const data = await response.json();
-        alert(data.mensaje);
+        playNotificationSound(notificacion);
+
+        enqueueSnackbar(data.mensaje, {
+          variant: "success",
+          autoHideDuration: 3000,
+          anchorOrigin: { vertical: "bottom", horizontal: "right" },
+        });
         clearUser();
-        navigate("/");
+        setTimeout(() => {
+          Navigate("/");
+        }, 1000);
       }
     } catch (error) {
       console.error("Error en logout", error);
@@ -326,25 +334,25 @@ function Profile() {
           </Box>
 
           <Box sx={{ display: "flex", gap: 1 }}>
-              <Button
-                sx={{
-                  gap: 0.5,
-                  color: "white",
-                  backgroundColor: "#00338e",
-                  fontFamily: "'Open sans'",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  "&:hover": {
-                    backgroundColor: "#AACBFF",
-                    color: "#00338e",
-                  },
-                }}
-                onClick={logout}
-              >
-                <Tooltip title="Cerrar sesión">
-                  <LogoutIcon></LogoutIcon>
-                </Tooltip>
-              </Button>
+            <Button
+              sx={{
+                gap: 0.5,
+                color: "white",
+                backgroundColor: "#00338e",
+                fontFamily: "'Open sans'",
+                fontSize: "14px",
+                fontWeight: 600,
+                "&:hover": {
+                  backgroundColor: "#AACBFF",
+                  color: "#00338e",
+                },
+              }}
+              onClick={logout}
+            >
+              <Tooltip title="Cerrar sesión">
+                <LogoutIcon></LogoutIcon>
+              </Tooltip>
+            </Button>
           </Box>
         </div>
         <Box sx={{ marginBottom: "10px" }}>

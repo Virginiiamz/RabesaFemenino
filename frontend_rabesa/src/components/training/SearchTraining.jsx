@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   Divider,
+  InputAdornment,
   TextField,
   Toolbar,
   Tooltip,
@@ -224,7 +225,7 @@ function SearchTraining() {
             flexDirection: "column",
             border: "1px solid #BDBDBD",
             backgroundColor: "white",
-            borderRadius: "10px",
+            borderRadius: "4px",
             padding: "20px",
             width: "100%",
             gap: "1rem",
@@ -239,27 +240,65 @@ function SearchTraining() {
               gap: "1rem",
             }}
           >
-            <TextField
-              id="outlined-basic"
-              label="Fecha desde"
-              variant="outlined"
-              name="fechadesde"
-              value={formData.fechadesde}
-              type="date"
-              onChange={handleChange}
-              sx={{ width: { xs: "100%", md: "50%" } }}
-            />
+            <Box sx={{ width: "100%" }}>
+              <Typography
+                sx={{
+                  fontFamily: "'Open sans'",
+                  fontWeight: 600,
+                  fontSize: "13px",
+                  marginBottom: 1,
+                  color: "#3d64a8",
+                }}
+              >
+                Fecha desde
+              </Typography>
+              <TextField
+                name="fechadesde"
+                value={formData.fechadesde}
+                type="date"
+                onChange={handleChange}
+                sx={{ width: "100%" }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <CalendarTodayIcon
+                        sx={{ color: "#a6a6a6", fontSize: "20px" }}
+                      />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
 
-            <TextField
-              id="outlined-basic"
-              label="Fecha hasta"
-              variant="outlined"
-              name="fechahasta"
-              value={formData.fechahasta}
-              type="date"
-              onChange={handleChange}
-              sx={{ width: { xs: "100%", md: "50%" } }}
-            />
+            <Box sx={{ width: "100%" }}>
+              <Typography
+                sx={{
+                  fontFamily: "'Open sans'",
+                  fontWeight: 600,
+                  fontSize: "13px",
+                  marginBottom: 1,
+                  color: "#3d64a8",
+                }}
+              >
+                Fecha hasta
+              </Typography>
+              <TextField
+                name="fechahasta"
+                value={formData.fechahasta}
+                type="date"
+                onChange={handleChange}
+                sx={{ width: "100%" }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <CalendarTodayIcon
+                        sx={{ color: "#a6a6a6", fontSize: "20px" }}
+                      />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
           </Box>
 
           <Button
