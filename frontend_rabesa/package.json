@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "npm run start",
+    "start": "npx serve -s build -l 3000",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
