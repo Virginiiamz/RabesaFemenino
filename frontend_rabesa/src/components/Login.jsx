@@ -165,6 +165,7 @@ function Login() {
             gap: "1rem",
             width: "100%",
             maxWidth: "400px",
+            margin: "1rem",
           }}
         >
           <img
@@ -213,7 +214,7 @@ function Login() {
               value={formData.correo}
               placeholder="Introduce tu correo electrónico"
               onChange={handleChange}
-              sx={{ fontFamily: "'Open sans'" }}
+              sx={{ fontFamily: "'Open sans'", width: "100%" }}
               required
               error={validacion.correo && !formData.correo}
               InputProps={{
@@ -248,7 +249,7 @@ function Login() {
               value={formData.contrasena}
               onChange={handleChange}
               placeholder="Introduce tu contraseña"
-              sx={{ fontFamily: "'Open sans'" }}
+              sx={{ fontFamily: "'Open sans'", width: "100%" }}
               required
               error={validacion.contraseña && !formData.contrasena}
               InputProps={{
