@@ -147,11 +147,13 @@ function Login() {
 
       <Box
         sx={{
-          height: "100vh",
+          minHeight: "100vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           backgroundColor: "#F1F8FF",
+          px: 2, // padding horizontal para móviles
+          boxSizing: "border-box",
         }}
       >
         <Box
@@ -164,21 +166,20 @@ function Login() {
             padding: "20px",
             gap: "1rem",
             width: "100%",
-            maxWidth: "400px",
-            margin: "1rem",
+            maxWidth: "400px", // tope para escritorio
+            boxSizing: "border-box",
           }}
         >
           <img
             src={logoRabesa}
             style={{ width: "4rem", alignSelf: "center" }}
-          ></img>
+            alt="Logo Rabesa"
+          />
           <Typography
             sx={{
               fontFamily: "'Open sans'",
               fontSize: "22px",
               color: "black",
-              padding: "0px",
-              margin: "0px",
               textAlign: "center",
             }}
           >
@@ -189,8 +190,8 @@ function Login() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "0.5rem",
-              width: "50ch",
+              gap: "0.75rem",
+              width: "100%",
             }}
             noValidate
             autoComplete="off"
@@ -207,14 +208,12 @@ function Login() {
             </Typography>
             <TextField
               hiddenLabel
-              id="outlined-basic"
               variant="outlined"
               name="correo"
-              color=""
-              value={formData.correo}
               placeholder="Introduce tu correo electrónico"
+              value={formData.correo}
               onChange={handleChange}
-              sx={{ fontFamily: "'Open sans'", width: "100%" }}
+              fullWidth
               required
               error={validacion.correo && !formData.correo}
               InputProps={{
@@ -224,13 +223,11 @@ function Login() {
                   </InputAdornment>
                 ),
               }}
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
             {validacion.correo && !formData.correo && (
               <FormHelperText error>Campo obligatorio</FormHelperText>
             )}
+
             <Typography
               sx={{
                 fontFamily: "'Open sans'",
@@ -242,14 +239,13 @@ function Login() {
             </Typography>
             <TextField
               hiddenLabel
-              id="outlined-basic"
               variant="outlined"
               type="password"
               name="contrasena"
+              placeholder="Introduce tu contraseña"
               value={formData.contrasena}
               onChange={handleChange}
-              placeholder="Introduce tu contraseña"
-              sx={{ fontFamily: "'Open sans'", width: "100%" }}
+              fullWidth
               required
               error={validacion.contraseña && !formData.contrasena}
               InputProps={{
@@ -259,13 +255,11 @@ function Login() {
                   </InputAdornment>
                 ),
               }}
-              InputLabelProps={{
-                shrink: true,
-              }}
             />
             {validacion.contraseña && !formData.contrasena && (
               <FormHelperText error>Campo obligatorio</FormHelperText>
             )}
+
             <Button
               sx={{
                 color: "white",
@@ -273,9 +267,11 @@ function Login() {
                 fontFamily: "'Open sans'",
                 fontSize: "14px",
                 fontWeight: 600,
-                width: "10rem",
-                marginTop: "1rem",
-                marginBottom: "0.5rem",
+                mt: 2,
+                mb: 1,
+                alignSelf: "center",
+                width: "100%",
+                maxWidth: "160px",
                 "&:hover": {
                   backgroundColor: "#AACBFF",
                   color: "#00338e",
