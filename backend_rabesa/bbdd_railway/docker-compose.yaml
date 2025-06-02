@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=yamabiko.proxy.rlwy.net:34243
+      - PMA_PORT=34243
+      - PMA_USER=root
+      - PMA_PASSWORD=DoCqrfFwsYeXDTLtZpSTHSyjpvgJEtVZ
