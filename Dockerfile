@@ -13,7 +13,7 @@ WORKDIR /app
 COPY backend_rabesa/ .
 
 # Copiamos el frontend ya compilado en la carpeta pública
-COPY --from=build-frontend /app/frontend/build ./public
+COPY --from=build-frontend ./frontend_rabesa/dist ./backend_rabesa/public/
 
 RUN npm install --force
 
