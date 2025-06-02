@@ -1,0 +1,5 @@
+node_modules
+*.log
+.env
+frontend_rabesa/node_modules
+backend_rabesa/node_modules
