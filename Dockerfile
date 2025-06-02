@@ -5,10 +5,10 @@ FROM node:18
 WORKDIR /
 
 # Copia el backend al contenedor
-COPY backend_rabesa/ .
+COPY ./backend_rabesa/ .
 
 # Copia el frontend compilado a la carpeta "public" del backend
-COPY frontend_rabesa/dist ./public
+COPY ./frontend_rabesa/dist ./public
 
 # Instala las dependencias del backend
 RUN npm install --force
