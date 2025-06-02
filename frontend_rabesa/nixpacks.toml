@@ -1,0 +1,11 @@
+[phases.setup]
+  nixpkgs = ["nodejs"]
+
+[phases.install]
+  cmds = ["npm install --force"]
+
+[phases.build]
+  cmds = ["npm run build"]
+
+[phases.start]
+  cmds = ["npx serve -s build -l 3000"]
