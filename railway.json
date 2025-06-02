@@ -12,11 +12,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "backend"
+      "dest": "backend_rabesa"
     },
     {
       "src": "/(.*)",
-      "dest": "frontend"
+      "dest": "frontend_rabesa"
     }
   ]
 }
