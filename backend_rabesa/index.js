@@ -48,7 +48,7 @@ app.use(cookieParser());
 // Configurar rutas de la API Rest
 // app.use("/api/platos", platoRoutes);
 // app.use("/api/pedidos", pedidoRoutes);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/entrenadores", entrenadorRoutes);
 app.use("/api/usuario", usuarioRoutes);
 app.use("/api/jugadoras", jugadoraRoutes);
@@ -58,26 +58,13 @@ app.use("/api/partidos", partidoRoutes);
 app.use("/api/clubs", clubRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
+// Configurar el middleware para servir archivos estáticos desde el directorio 'public\old_js_vainilla'
+app.use(express.static(path.join(__dirname, "public")));
+
 //Ruta para manejar las solicitudes al archivo index.html
-
-// app.get('/', (req, res) => {
-// if (process.env.NODE_ENV !== "production") {
-//   console.log("Sirviendo ficheros de desarrollo");
-//   // Configurar el middleware para servir archivos estáticos desde el directorio public/dev en desarrollo
-//   app.use(express.static(path.join(__dirname, "public/dev")));
-
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "public/dev", "index.html"));
-//   });
-// } else {
-//   console.log("Sirviendo ficheros de producción");
-//   // Configurar el middleware para servir archivos estáticos desde el directorio public/dev en producción
-//   app.use(express.static(path.join(__dirname, "public/prod")));
-
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "public/prod", "index.html"));
-//   });
-// }
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 // Iniciar el servidor solo si no estamos en modo de prueba
 // en modo de prueba, el servidor se inicia en el archivo de prueba
