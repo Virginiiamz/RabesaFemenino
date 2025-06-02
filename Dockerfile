@@ -1,20 +1,27 @@
-# Usa Node.js como base
+# Etapa 1: Construcción del frontend
+FROM node:18 AS build-frontend
+WORKDIR /app
+COPY frontend_rabesa/ .
+RUN npm install --force
+RUN npm run build
+
+# Etapa 2: Backend + frontend compilado
 FROM node:18
 
-# Establece el directorio de trabajo en el contenedor
-WORKDIR /
+# Crear carpeta de trabajo para el backend
+WORKDIR /app
 
-# Copia el backend al contenedor
-COPY ./backend_rabesa/ .
+# Copiar todo el backend
+COPY backend_rabesa/ .
 
-# Copia el frontend compilado a la carpeta "public" del backend
-COPY ./frontend_rabesa/dist ./public
+# Copiar el frontend compilado al backend/public
+COPY --from=build-frontend /app/dist ./public
 
-# Instala las dependencias del backend
+# Instalar dependencias del backend
 RUN npm install --force
 
-# Expone el puerto que usa tu servidor (ajústalo si es otro)
+# Expone el puerto que tu servidor usa (ajusta si usas otro)
 EXPOSE 3000
 
-# Comando para iniciar el backend
-CMD ["npm", "start"]
+# Ejecutar el servidor
+CMD ["node", "index.js"]
