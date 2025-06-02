@@ -8,4 +8,4 @@
   cmds = ["npm run build"]
 
 [phases.start]
-  cmds = ["npx serve -s build -l 3000"]
+  cmds = ["npm run start"]
