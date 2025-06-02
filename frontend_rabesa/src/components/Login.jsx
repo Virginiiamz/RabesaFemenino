@@ -155,7 +155,7 @@ function Login() {
         }}
       >
         <Box
-          style={{
+          sx={{
             display: "flex",
             flexDirection: "column",
             border: "1px solid #BDBDBD",
@@ -163,6 +163,8 @@ function Login() {
             borderRadius: "10px",
             padding: "20px",
             gap: "1rem",
+            width: "100%",
+            maxWidth: "400px",
           }}
         >
           <img
