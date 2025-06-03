@@ -60,16 +60,16 @@ function Login() {
       return;
     }
 
-    // if (formData.contrasena.length < 8) {
-    //   playNotificationSound(notificacionError);
+    if (formData.contrasena.length < 8) {
+      playNotificationSound(notificacionError);
 
-    //   enqueueSnackbar("La contraseña debe tener al menos 8 caracteres", {
-    //     variant: "error",
-    //     autoHideDuration: 3000,
-    //     anchorOrigin: { vertical: "bottom", horizontal: "right" },
-    //   });
-    //   return;
-    // }
+      enqueueSnackbar("La contraseña debe tener al menos 8 caracteres", {
+        variant: "error",
+        autoHideDuration: 3000,
+        anchorOrigin: { vertical: "bottom", horizontal: "right" },
+      });
+      return;
+    }
 
     try {
       const response = await fetch(apiUrl + "/usuario/login", {
